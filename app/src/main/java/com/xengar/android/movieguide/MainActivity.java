@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
+        getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
     }
 
     @Override
@@ -105,27 +106,37 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
+        if (id == R.id.nav_top_rated_movies) {
+            // Handle selecting top rated movies action
             MainFragment fragment = new MainFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
-        } else if (id == R.id.nav_gallery) {
+            getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
+        } else if (id == R.id.nav_upcomming_movies) {
             GalleryFragment fragment = new GalleryFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+            getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
+        } else if (id == R.id.nav_now_playing_movies) {
+            getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
+        } else if (id == R.id.nav_popular_movies) {
+            getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
+        } else if (id == R.id.nav_popular_tv_shows) {
+            getSupportActionBar().setTitle(R.string.menu_option_popular_tv_shows);
+        } else if (id == R.id.nav_top_rated_tv_shows) {
+            getSupportActionBar().setTitle(R.string.menu_option_top_rated_tv_shows);
+        } else if (id == R.id.nav_on_the_air_tv_shows) {
+            getSupportActionBar().setTitle(R.string.menu_option_on_the_air_tv_shows);
+        } else if (id == R.id.nav_airing_today_tv_shows) {
+            getSupportActionBar().setTitle(R.string.menu_option_airing_today_tv_shows);
         } else if (id == R.id.nav_share) {
-
+            getSupportActionBar().setTitle(R.string.app_name);
         } else if (id == R.id.nav_send) {
-
+            getSupportActionBar().setTitle(R.string.app_name);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
