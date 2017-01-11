@@ -1,10 +1,27 @@
 # MovieGuide
+
 Android cinema guide.
+MovieGuide is an android application designed as a projector in the cinema industry.
+Take an adventure discovering the collection of movies, production details and audience reviews.
+The app uses TMDb API and content for posters and movie information.
 
 
-###License
+## Requirements
+- Android Design Support Library
+- Android Support Library v7
+- The Movie Database API  https://www.themoviedb.org/documentation/api
+- Google Youtube API  https://developers.google.com/youtube/v3/
 
-Copyright 2016 Angel Garcia
+
+## Getting Started
+The app uses The Movie Database API and Google Youtube API.
+Get your API keys in order to run the app.
+Create a new resources file (using this path:/app/src/main/res/values/api_keys.xml) and put "THE_MOVIE_DB_API_TOKEN" and "YOUTUBE_DATA_API_V3" keys values in it as strings.
+
+
+## License
+
+Copyright 2017 Angel Garcia
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
