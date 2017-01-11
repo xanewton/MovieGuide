@@ -17,24 +17,51 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_option_top_rated_movies" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_option_upcomming_movies" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_option_now_playing_movies" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_option_popular_movies" />
-    </group>
+    <item android:title="@string/menu_title_movies">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_top_rated_movies"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="@string/menu_option_top_rated" />
+                <item
+                    android:id="@+id/nav_upcomming_movies"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/menu_option_upcomming" />
+                <item
+                    android:id="@+id/nav_now_playing_movies"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_option_now_playing" />
+                <item
+                    android:id="@+id/nav_popular_movies"
+                    android:icon="@drawable/ic_menu_manage"
+                    android:title="@string/menu_option_popular" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="@string/menu_title_tv_shows">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_popular_tv_shows"
+                    android:icon="@drawable/ic_menu_camera"
+                    android:title="@string/menu_option_popular" />
+                <item
+                    android:id="@+id/nav_top_rated_tv_shows"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/menu_option_top_rated" />
+                <item
+                    android:id="@+id/nav_on_the_air_tv_shows"
+                    android:icon="@drawable/ic_menu_slideshow"
+                    android:title="@string/menu_option_on_the_air" />
+                <item
+                    android:id="@+id/nav_airing_today_tv_shows"
+                    android:icon="@drawable/ic_menu_manage"
+                    android:title="@string/menu_option_airing_today" />
+            </group>
+        </menu>
+    </item>
 
     <item android:title="Communicate">
         <menu>
