@@ -132,21 +132,21 @@ public class UniversalFragment extends Fragment {
             FetchFavoriteMovieTask task = new FetchFavoriteMovieTask(adapter, getActivity().getContentResolver(), posterBaseUri);
             task.execute();*/
         } else if (itemType.equals("NowPlayingMovies")) {
-            gridview.setOnScrollListener(new MovieViewScrollListener("NowPlayingMovies"));
+            gridview.setOnScrollListener(new ItemViewScrollListener("NowPlayingMovies"));
         } else if (itemType.equals("TopRatedMovies")) {
-            gridview.setOnScrollListener(new MovieViewScrollListener("TopRatedMovies"));
+            gridview.setOnScrollListener(new ItemViewScrollListener("TopRatedMovies"));
         } else if (itemType.equals("UpcomingMovies")) {
-            gridview.setOnScrollListener(new MovieViewScrollListener("UpcomingMovies"));
+            gridview.setOnScrollListener(new ItemViewScrollListener("UpcomingMovies"));
         } else {
-            gridview.setOnScrollListener(new MovieViewScrollListener("PopularMovies"));
+            gridview.setOnScrollListener(new ItemViewScrollListener("PopularMovies"));
         }
     }
 
 
     /**
-     * MovieViewScrollListener
+     * ItemViewScrollListener
      */
-    private class MovieViewScrollListener
+    private class ItemViewScrollListener
             implements AbsListView.OnScrollListener, FetchItemListener {
 
         private static final int PAGE_SIZE = 20;
@@ -154,7 +154,7 @@ public class UniversalFragment extends Fragment {
         private String itemType = null;
 
         //Constructor
-        public MovieViewScrollListener(String itemType){
+        public ItemViewScrollListener(String itemType){
             this.itemType = itemType;
         }
 
