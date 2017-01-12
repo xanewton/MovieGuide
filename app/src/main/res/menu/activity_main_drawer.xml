@@ -36,6 +36,10 @@
                     android:id="@+id/nav_popular_movies"
                     android:icon="@drawable/ic_movie_filter_black_24dp"
                     android:title="@string/menu_option_popular" />
+                <item
+                    android:id="@+id/nav_favorite_movies"
+                    android:icon="@drawable/ic_favorite_black_24dp"
+                    android:title="@string/menu_option_favorite" />
             </group>
         </menu>
     </item>
