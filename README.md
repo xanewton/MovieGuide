@@ -1,9 +1,8 @@
 # MovieGuide
 
-Android cinema guide.
-MovieGuide is an android application designed as a projector in the cinema industry.
+MovieGuide is an android application designed to show reviews for Movies and TV Shows.
 Take an adventure discovering the collection of movies, production details and audience reviews.
-The app uses TMDb API and content for posters and movie information.
+The app uses TMDb API and content for posters and information.
 
 
 ## Requirements
