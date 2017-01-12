@@ -17,20 +17,25 @@ package com.xengar.android.movieguide;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.xengar.android.movieguide.sync.OnItemClickListener;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, OnItemClickListener {
 
+    private static final String SHARED_PREF_NAME = "com.xengar.android.movieguide";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private Toolbar toolbar = null;
     private NavigationView navigationView = null;
 
@@ -60,7 +65,10 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Set the initial fragment
-        MainFragment fragment = new MainFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("pref_sorting", "top_rated");
+        MovieGuideUniversalFragment fragment = new MovieGuideUniversalFragment();
+        fragment.setArguments(bundle);
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -107,40 +115,63 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_top_rated_movies) {
+            // Set sorting preference
+            Bundle bundle = new Bundle();
+            bundle.putString("pref_sorting", "top_rated");
+
             // Handle selecting top rated movies action
-            MainFragment fragment = new MainFragment();
+            MovieGuideUniversalFragment fragment = new MovieGuideUniversalFragment();
+            fragment.setArguments(bundle);
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
             getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
+
         } else if (id == R.id.nav_upcomming_movies) {
             GalleryFragment fragment = new GalleryFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
             getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
+
         } else if (id == R.id.nav_now_playing_movies) {
             getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
+
         } else if (id == R.id.nav_popular_movies) {
             getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
+
         } else if (id == R.id.nav_popular_tv_shows) {
             getSupportActionBar().setTitle(R.string.menu_option_popular_tv_shows);
+
         } else if (id == R.id.nav_top_rated_tv_shows) {
             getSupportActionBar().setTitle(R.string.menu_option_top_rated_tv_shows);
+
         } else if (id == R.id.nav_on_the_air_tv_shows) {
             getSupportActionBar().setTitle(R.string.menu_option_on_the_air_tv_shows);
+
         } else if (id == R.id.nav_airing_today_tv_shows) {
             getSupportActionBar().setTitle(R.string.menu_option_airing_today_tv_shows);
+
         } else if (id == R.id.nav_share) {
             getSupportActionBar().setTitle(R.string.app_name);
+
         } else if (id == R.id.nav_send) {
             getSupportActionBar().setTitle(R.string.app_name);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onMovieClick(int movieId) {
+        Log.v(TAG, "onMovieClick movieId = " + movieId);
+        // TODO: Add details for item
     }
 }

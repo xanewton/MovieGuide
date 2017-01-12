@@ -11,7 +11,7 @@ The app uses TMDb API and content for posters and movie information.
 - Android Support Library v7
 - The Movie Database API  https://www.themoviedb.org/documentation/api
 - Google Youtube API  https://developers.google.com/youtube/v3/
-
+- Picasso library https://github.com/square/picasso
 
 ## Getting Started
 The app uses The Movie Database API and Google Youtube API.
