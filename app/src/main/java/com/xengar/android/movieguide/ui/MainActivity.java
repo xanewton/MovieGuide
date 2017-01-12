@@ -133,9 +133,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_on_the_air_tv_shows) {
             getSupportActionBar().setTitle(R.string.menu_option_on_the_air_tv_shows);
 
-        } else if (id == R.id.nav_airing_today_tv_shows) {
-            getSupportActionBar().setTitle(R.string.menu_option_airing_today_tv_shows);
-
         } else if (id == R.id.nav_share) {
             getSupportActionBar().setTitle(R.string.app_name);
 

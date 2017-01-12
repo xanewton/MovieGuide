@@ -55,10 +55,6 @@
                     android:id="@+id/nav_on_the_air_tv_shows"
                     android:icon="@drawable/ic_menu_slideshow"
                     android:title="@string/menu_option_on_the_air" />
-                <item
-                    android:id="@+id/nav_airing_today_tv_shows"
-                    android:icon="@drawable/ic_menu_manage"
-                    android:title="@string/menu_option_airing_today" />
             </group>
         </menu>
     </item>
