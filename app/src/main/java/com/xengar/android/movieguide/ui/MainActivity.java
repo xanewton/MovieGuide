@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xengar.android.movieguide;
+package com.xengar.android.movieguide.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 
 public class MainActivity extends AppCompatActivity
