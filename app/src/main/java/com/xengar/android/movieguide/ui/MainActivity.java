@@ -109,19 +109,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_top_rated_movies) {
-            launchFragment("top_rated");
+            launchFragment("TopRatedMovies");
             getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
 
         } else if (id == R.id.nav_upcomming_movies) {
-            launchFragment("upcoming");
+            launchFragment("UpcomingMovies");
             getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
 
         } else if (id == R.id.nav_now_playing_movies) {
-            launchFragment("current.desc");
+            launchFragment("NowPlayingMovies");
             getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
 
         } else if (id == R.id.nav_popular_movies) {
-            launchFragment("popularity.desc");
+            launchFragment("PopularMovies");
             getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
 
         } else if (id == R.id.nav_popular_tv_shows) {
@@ -157,10 +157,10 @@ public class MainActivity extends AppCompatActivity
     private void launchFragment(String sorting) {
         // Set sorting preference
         Bundle bundle = new Bundle();
-        bundle.putString("pref_sorting", sorting);
+        bundle.putString("itemType", sorting);
 
         // Handle selecting item action
-        MovieGuideUniversalFragment fragment = new MovieGuideUniversalFragment();
+        UniversalFragment fragment = new UniversalFragment();
         fragment.setArguments(bundle);
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();

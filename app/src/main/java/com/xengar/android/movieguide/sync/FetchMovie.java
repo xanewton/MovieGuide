@@ -29,14 +29,14 @@ public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
     private final ImageAdapter adapter;
     private final String apiKey;
     private final String sortOrder;
-    private final String category;
-    private String loadCategory;
+    private final String itemType;
+    private String requestType;
 
     // Constructor
-    public FetchMovie(String category, ImageAdapter adapter,
+    public FetchMovie(String itemType, ImageAdapter adapter,
                       FetchItemListener fetchMovieListener, String apiKey,
                       String posterBaseUri, String sortOrder) {
-        this.category = category;
+        this.itemType = itemType;
         this.fetchMovieListener = fetchMovieListener;
         this.posterBaseUri = posterBaseUri;
         this.adapter = adapter;
@@ -44,18 +44,18 @@ public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
         this.sortOrder = sortOrder;
 
         // assign the category to query
-        switch (category){
-            case "TopRatedMovie":
-                this.loadCategory = MOVIE_TOP_RATED + "?page=";
+        switch (itemType){
+            case "TopRatedMovies":
+                this.requestType = MOVIE_TOP_RATED + "?page=";
                 break;
-            case "NowPlayingMovie":
-                this.loadCategory = MOVIE_NOW_PLAYING + "?page=";
+            case "NowPlayingMovies":
+                this.requestType = MOVIE_NOW_PLAYING + "?page=";
                 break;
-            case "UpcomingMovie":
-                this.loadCategory = MOVIE_UPCOMING + "?page=";
+            case "UpcomingMovies":
+                this.requestType = MOVIE_UPCOMING + "?page=";
                 break;
-            case "PopularMovie":
-                this.loadCategory = DISCOVER_MOVIE + "?sort_by=" + sortOrder + "&page=";
+            case "PopularMovies":
+                this.requestType = DISCOVER_MOVIE + "?sort_by=" + sortOrder + "&page=";
                 break;
         }
     }
@@ -78,7 +78,7 @@ public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
     protected ArrayList<MovieData> doInBackground(Integer... params) {
         ArrayList<MovieData> moviePosters = new ArrayList<>();
         try {
-            JSONObject jObj = JSONLoader.load(loadCategory + params[0], apiKey);
+            JSONObject jObj = JSONLoader.load(requestType + params[0], apiKey);
             if (jObj == null) {
                 Log.w(TAG, "Can not load the data from remote service");
                 return null;
