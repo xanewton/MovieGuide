@@ -115,33 +115,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_top_rated_movies) {
-            // Set sorting preference
-            Bundle bundle = new Bundle();
-            bundle.putString("pref_sorting", "top_rated");
-
-            // Handle selecting top rated movies action
-            MovieGuideUniversalFragment fragment = new MovieGuideUniversalFragment();
-            fragment.setArguments(bundle);
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            launchFragment("top_rated");
             getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
 
         } else if (id == R.id.nav_upcomming_movies) {
-            GalleryFragment fragment = new GalleryFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction =
-                    getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            launchFragment("upcoming");
             getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
 
         } else if (id == R.id.nav_now_playing_movies) {
+            launchFragment("current.desc");
             getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
 
         } else if (id == R.id.nav_popular_movies) {
+            launchFragment("popularity.desc");
             getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
 
         } else if (id == R.id.nav_popular_tv_shows) {
@@ -167,6 +153,26 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Launches the selected fragment.
+     *
+     * @param sorting The sorting order to be put in the bundle
+     */
+    private void launchFragment(String sorting) {
+        // Set sorting preference
+        Bundle bundle = new Bundle();
+        bundle.putString("pref_sorting", sorting);
+
+        // Handle selecting item action
+        MovieGuideUniversalFragment fragment = new MovieGuideUniversalFragment();
+        fragment.setArguments(bundle);
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override

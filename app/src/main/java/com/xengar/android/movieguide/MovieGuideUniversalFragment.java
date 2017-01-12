@@ -32,7 +32,7 @@ import android.widget.Toast;
 
 import com.xengar.android.movieguide.adapters.ImageAdapter;
 import com.xengar.android.movieguide.sync.FetchItemListener;
-import com.xengar.android.movieguide.sync.FetchTopRatedMovie;
+import com.xengar.android.movieguide.sync.FetchMovie;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 
 
@@ -125,25 +125,31 @@ public class MovieGuideUniversalFragment extends Fragment {
             FetchFavoriteMovieTask task = new FetchFavoriteMovieTask(adapter, getActivity().getContentResolver(), posterBaseUri);
             task.execute();*/
         } else if (sortOrderUpdate.equals("current.desc")) {
-            //gridview.setOnScrollListener(new NowPlayingMovieViewScrollListener());
+            gridview.setOnScrollListener(new MovieViewScrollListener("NowPlayingMovie"));
         } else if (sortOrder.equals("top_rated")) {
-            gridview.setOnScrollListener(new TopRatedMovieViewScrollListener());
+            gridview.setOnScrollListener(new MovieViewScrollListener("TopRatedMovie"));
         } else if (sortOrderUpdate.equals("upcoming")) {
-            //gridview.setOnScrollListener(new UpcomingMovieViewScrollListener());
+            gridview.setOnScrollListener(new MovieViewScrollListener("UpcomingMovie"));
         } else {
-            //gridview.setOnScrollListener(new PopularMovieViewScrollListener());
+            gridview.setOnScrollListener(new MovieViewScrollListener("PopularMovie"));
         }
     }
 
 
     /**
-     * TopRatedMovieViewScrollListener
+     * MovieViewScrollListener
      */
-    private class TopRatedMovieViewScrollListener
+    private class MovieViewScrollListener
             implements AbsListView.OnScrollListener, FetchItemListener {
 
         private static final int PAGE_SIZE = 20;
         private boolean loadingState = false;
+        private String category = null;
+
+        //Constructor
+        public MovieViewScrollListener(String category){
+            this.category = category;
+        }
 
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -155,8 +161,8 @@ public class MovieGuideUniversalFragment extends Fragment {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
                 if (!loadingState) {
-                    FetchTopRatedMovie fetchTopRated =
-                            new FetchTopRatedMovie(adapter, this, apiKey, posterBaseUri);
+                    FetchMovie fetchTopRated =
+                            new FetchMovie(category, adapter, this, apiKey, posterBaseUri, sortOrder);
                     fetchTopRated.execute(totalItemCount / PAGE_SIZE + 1);
                     loadingState = true;
                 }
