@@ -121,11 +121,8 @@ public class UniversalFragment extends Fragment {
             return;
         }
 
-        if (itemType.equals("favorites")) {
-            getActivity().findViewById(R.id.fab).setVisibility(View.GONE);
-        } else {
-            getActivity().findViewById(R.id.fab).setVisibility(View.VISIBLE);
-        }
+        // Hide Floating Action Button
+        getActivity().findViewById(R.id.fab).setVisibility(View.GONE);
 
         if (itemType.equals("favorites")) {
             /*adapter.clearData();

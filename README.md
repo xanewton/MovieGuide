@@ -1,5 +1,8 @@
 # MovieGuide
 
+![alt tag](https://github.com/an-garcia/EnglishVerbs/blob/master/readmeImages/Screenshot_1484265087.png)
+![alt tag](https://github.com/an-garcia/EnglishVerbs/blob/master/readmeImages/Screenshot_1484265101.png)
+
 MovieGuide is an android application designed to show reviews for Movies and TV Shows.
 Take an adventure discovering the collection of movies, production details and audience reviews.
 The app uses TMDb API and content for posters and information.
