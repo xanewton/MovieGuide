@@ -1,5 +1,5 @@
 <!--
-     Copyright (C) 2016 Angel Garcia
+     Copyright (C) 2017 Angel Garcia
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -18,20 +18,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.xengar.android.movieguide.MainFragment">
+    tools:context="com.xengar.android.movieguide.MovieGuideUniversalFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <Button
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MAIN"
-        android:padding="8dp"
-        android:textColor="#FFFFFFFF"
-        android:background="@color/colorAccent"
-        android:textSize="28sp"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        />
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnWidth="@dimen/movie_guide_gridview_column_width"
+        android:horizontalSpacing="@dimen/movie_guide_gridview_horizontal_spacing"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="@dimen/movie_guide_gridview_vertical_spacing" />
 
 </RelativeLayout>
