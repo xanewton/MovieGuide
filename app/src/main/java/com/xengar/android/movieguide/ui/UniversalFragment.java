@@ -39,10 +39,11 @@ import com.xengar.android.movieguide.sync.OnItemClickListener;
 
 /**
  * A placeholder fragment containing a simple view.
+ * UniversalFragment for processing movies and TV shows
  */
-public class MovieGuideUniversalFragment extends Fragment {
+public class UniversalFragment extends Fragment {
 
-    private static final String TAG = MovieGuideUniversalFragment.class.getSimpleName();
+    private static final String TAG = UniversalFragment.class.getSimpleName();
     private static final String SHARED_PREF_NAME = "com.xengar.android.movieguide";
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
 
@@ -51,10 +52,10 @@ public class MovieGuideUniversalFragment extends Fragment {
     private GridView gridview;
     private String apiKey;
     private String posterBaseUri;
-    private String sortOrderUpdate;
+    private String itemType;
 
 
-    public MovieGuideUniversalFragment() {
+    public UniversalFragment() {
         // Required empty public constructor
     }
 
@@ -63,7 +64,13 @@ public class MovieGuideUniversalFragment extends Fragment {
         super.onCreate(savedInstanceState);
         adapter = new ImageAdapter(getActivity());
         setRetainInstance(true);
-        sortOrderUpdate = getArguments().getString("pref_sorting", getString(R.string.pref_sort_default));
+
+        itemType = getArguments().getString("itemType", "UpcomingMovies");
+        if (itemType.equals("PopularMovies")) {
+            sortOrder = "popularity.desc";
+        } else if (itemType.equals("NowPlayingMovies")) {
+            sortOrder = "current.desc";
+        }
     }
 
 
@@ -106,7 +113,7 @@ public class MovieGuideUniversalFragment extends Fragment {
         super.onResume();
 
         boolean isConnected = checkInternetConnection();
-        if (!isConnected && !sortOrderUpdate.equals("favorites")) {
+        if (!isConnected && !itemType.equals("favorites")) {
             Log.e(TAG, "Network is not available");
             Toast toast = Toast.makeText(getActivity().getApplicationContext(),
                     R.string.network_not_available_message, Toast.LENGTH_LONG);
@@ -114,25 +121,24 @@ public class MovieGuideUniversalFragment extends Fragment {
             return;
         }
 
-        sortOrder = sortOrderUpdate;
-        if (sortOrderUpdate.equals("favorites")) {
+        if (itemType.equals("favorites")) {
             getActivity().findViewById(R.id.fab).setVisibility(View.GONE);
         } else {
             getActivity().findViewById(R.id.fab).setVisibility(View.VISIBLE);
         }
 
-        if (sortOrderUpdate.equals("favorites")) {
+        if (itemType.equals("favorites")) {
             /*adapter.clearData();
             FetchFavoriteMovieTask task = new FetchFavoriteMovieTask(adapter, getActivity().getContentResolver(), posterBaseUri);
             task.execute();*/
-        } else if (sortOrderUpdate.equals("current.desc")) {
-            gridview.setOnScrollListener(new MovieViewScrollListener("NowPlayingMovie"));
-        } else if (sortOrder.equals("top_rated")) {
-            gridview.setOnScrollListener(new MovieViewScrollListener("TopRatedMovie"));
-        } else if (sortOrderUpdate.equals("upcoming")) {
-            gridview.setOnScrollListener(new MovieViewScrollListener("UpcomingMovie"));
+        } else if (itemType.equals("NowPlayingMovies")) {
+            gridview.setOnScrollListener(new MovieViewScrollListener("NowPlayingMovies"));
+        } else if (itemType.equals("TopRatedMovies")) {
+            gridview.setOnScrollListener(new MovieViewScrollListener("TopRatedMovies"));
+        } else if (itemType.equals("UpcomingMovies")) {
+            gridview.setOnScrollListener(new MovieViewScrollListener("UpcomingMovies"));
         } else {
-            gridview.setOnScrollListener(new MovieViewScrollListener("PopularMovie"));
+            gridview.setOnScrollListener(new MovieViewScrollListener("PopularMovies"));
         }
     }
 
@@ -145,11 +151,11 @@ public class MovieGuideUniversalFragment extends Fragment {
 
         private static final int PAGE_SIZE = 20;
         private boolean loadingState = false;
-        private String category = null;
+        private String itemType = null;
 
         //Constructor
-        public MovieViewScrollListener(String category){
-            this.category = category;
+        public MovieViewScrollListener(String itemType){
+            this.itemType = itemType;
         }
 
         @Override
@@ -163,7 +169,7 @@ public class MovieGuideUniversalFragment extends Fragment {
 
                 if (!loadingState) {
                     FetchMovie fetchTopRated =
-                            new FetchMovie(category, adapter, this, apiKey, posterBaseUri, sortOrder);
+                            new FetchMovie(itemType, adapter, this, apiKey, posterBaseUri, sortOrder);
                     fetchTopRated.execute(totalItemCount / PAGE_SIZE + 1);
                     loadingState = true;
                 }
