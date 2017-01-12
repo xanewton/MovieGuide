@@ -124,6 +124,10 @@ public class MainActivity extends AppCompatActivity
             launchFragment("PopularMovies");
             getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
 
+        } else if (id == R.id.nav_favorite_movies) {
+            // TODO: Show list of favorites
+            getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
+
         } else if (id == R.id.nav_popular_tv_shows) {
             getSupportActionBar().setTitle(R.string.menu_option_popular_tv_shows);
 
