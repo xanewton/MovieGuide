@@ -43,7 +43,7 @@ import com.xengar.android.movieguide.sync.OnItemClickListener;
 public class MovieGuideUniversalFragment extends Fragment {
 
     private static final String TAG = MovieGuideUniversalFragment.class.getSimpleName();
-    private static final String SHARED_PREF_NAME = "com.xengar.android.magiclantern";
+    private static final String SHARED_PREF_NAME = "com.xengar.android.movieguide";
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
 
     private ImageAdapter adapter;

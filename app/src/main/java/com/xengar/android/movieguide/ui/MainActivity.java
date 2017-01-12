@@ -66,15 +66,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Set the initial fragment
-        Bundle bundle = new Bundle();
-        bundle.putString("pref_sorting", "top_rated");
-        MovieGuideUniversalFragment fragment = new MovieGuideUniversalFragment();
-        fragment.setArguments(bundle);
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.commit();
-        getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
+        launchFragment("upcoming");
+        getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
     }
 
     @Override
