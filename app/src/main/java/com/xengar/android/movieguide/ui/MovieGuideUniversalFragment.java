@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xengar.android.movieguide;
+package com.xengar.android.movieguide.ui;
 
 
 import android.content.Context;
@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
 import com.xengar.android.movieguide.sync.FetchItemListener;
 import com.xengar.android.movieguide.sync.FetchMovie;
