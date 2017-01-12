@@ -22,11 +22,11 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_top_rated_movies"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_star_black_24dp"
                     android:title="@string/menu_option_top_rated" />
                 <item
                     android:id="@+id/nav_upcomming_movies"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_local_play_black_24dp"
                     android:title="@string/menu_option_upcomming" />
                 <item
                     android:id="@+id/nav_now_playing_movies"
@@ -34,7 +34,7 @@
                     android:title="@string/menu_option_now_playing" />
                 <item
                     android:id="@+id/nav_popular_movies"
-                    android:icon="@drawable/ic_menu_manage"
+                    android:icon="@drawable/ic_movie_filter_black_24dp"
                     android:title="@string/menu_option_popular" />
             </group>
         </menu>
@@ -45,11 +45,11 @@
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/nav_popular_tv_shows"
-                    android:icon="@drawable/ic_menu_camera"
+                    android:icon="@drawable/ic_movie_filter_black_24dp"
                     android:title="@string/menu_option_popular" />
                 <item
                     android:id="@+id/nav_top_rated_tv_shows"
-                    android:icon="@drawable/ic_menu_gallery"
+                    android:icon="@drawable/ic_star_black_24dp"
                     android:title="@string/menu_option_top_rated" />
                 <item
                     android:id="@+id/nav_on_the_air_tv_shows"
