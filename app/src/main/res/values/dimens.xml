@@ -31,4 +31,7 @@
 
     <!-- Needed if we aren't including the Material Design Library -->
     <dimen name="appbar_elevation">4dp</dimen>
+
+    <dimen name="detail_backdrop_height">256dp</dimen>
+    <dimen name="card_margin">16dp</dimen>
 </resources>

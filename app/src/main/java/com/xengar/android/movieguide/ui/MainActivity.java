@@ -15,6 +15,8 @@
  */
 package com.xengar.android.movieguide.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -174,5 +176,11 @@ public class MainActivity extends AppCompatActivity
     public void onMovieClick(int movieId) {
         Log.v(TAG, "onMovieClick movieId = " + movieId);
         // TODO: Add details for item
+
+        Context context = getApplicationContext();
+        Intent intent = new Intent(context, MovieDetailActivity.class);
+        intent.putExtra(MovieDetailActivity.EXTRA_NAME, "Sample Movie");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }
