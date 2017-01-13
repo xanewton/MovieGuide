@@ -14,6 +14,7 @@ The app uses TMDb API and content for posters and information.
 - The Movie Database API  https://www.themoviedb.org/documentation/api https://developers.themoviedb.org/3/getting-started
 - Google Youtube API  https://developers.google.com/youtube/v3/
 - Picasso library https://github.com/square/picasso
+- Glide library https://github.com/bumptech/glide
 
 ## Getting Started
 The app uses The Movie Database API and Google Youtube API.
