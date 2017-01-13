@@ -18,6 +18,7 @@ package com.xengar.android.movieguide.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,27 +28,58 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.xengar.android.movieguide.R;
 
-public class MovieDetailActivity extends AppCompatActivity {
+/**
+ * MovieDetails
+ */
+public class MovieDetailsActivity extends AppCompatActivity {
 
     public static final String EXTRA_NAME = "cheese_name";
+    private String movieTitle = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_detail);
+        setContentView(R.layout.activity_movie_details);
 
         Intent intent = getIntent();
-        final String cheeseName = intent.getStringExtra(EXTRA_NAME);
+        movieTitle = intent.getStringExtra(EXTRA_NAME);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(cheeseName);
+        defineCollapsingToolbarLayoutBehaviour();
 
         loadBackdrop();
+    }
+
+    /**
+     * Changes the CollapsingToolbarLayout to hide the title when the image is visible.
+     */
+    private void defineCollapsingToolbarLayoutBehaviour() {
+        final CollapsingToolbarLayout collapsingToolbar =
+                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle(" ");
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbar.setTitle(movieTitle);
+                    isShow = true;
+                } else if(isShow) {
+                    // there should a space between double quote otherwise it wont work
+                    collapsingToolbar.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
     }
 
     private void loadBackdrop() {

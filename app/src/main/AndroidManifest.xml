@@ -39,7 +39,7 @@
         </activity>
 
         <activity
-            android:name=".ui.MovieDetailActivity"
+            android:name=".ui.MovieDetailsActivity"
             android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
