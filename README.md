@@ -4,8 +4,8 @@
 ![alt tag](https://github.com/an-garcia/MovieGuide/blob/master/readmeImages/Screenshot_1484265101.png)
 
 MovieGuide is an android application designed to show reviews for Movies and TV Shows.
-Take an adventure discovering the collection of movies, production details and audience reviews.
-The app uses TMDb API and content for posters and information.
+Discover a collection of movies, TV Shows, production details and audience reviews.
+The app uses TMDb API for posters and information.
 
 
 ## Requirements
