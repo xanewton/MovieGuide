@@ -178,8 +178,8 @@ public class MainActivity extends AppCompatActivity
         // TODO: Add details for item
 
         Context context = getApplicationContext();
-        Intent intent = new Intent(context, MovieDetailActivity.class);
-        intent.putExtra(MovieDetailActivity.EXTRA_NAME, "Sample Movie");
+        Intent intent = new Intent(context, MovieDetailsActivity.class);
+        intent.putExtra(MovieDetailsActivity.EXTRA_NAME, "Sample Movie");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
