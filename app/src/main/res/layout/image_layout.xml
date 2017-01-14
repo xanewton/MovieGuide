@@ -33,7 +33,7 @@
         android:fontFamily="Arial"
         android:gravity="center_vertical|center_horizontal"
         android:paddingBottom="42dp"
-        android:textColor="@color/detail_view_text_color"
+        android:textColor="@color/movie_details_text_color"
         android:textSize="@dimen/detail_text_view_title_poster_text_size"
         android:textStyle="bold" />
 
