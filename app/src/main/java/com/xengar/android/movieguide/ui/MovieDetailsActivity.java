@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -35,6 +34,7 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,10 +48,12 @@ import com.xengar.android.movieguide.data.MovieDetails;
 import com.xengar.android.movieguide.data.MovieDetailsData;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Collections;
+import java.util.Locale;
 
 import static android.app.DownloadManager.COLUMN_STATUS;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
@@ -71,7 +73,7 @@ import static com.xengar.android.movieguide.utils.JSONUtils.getStringValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getUriValue;
 
 /**
- * MovieDetails
+ * MovieDetails Activity
  */
 public class MovieDetailsActivity extends AppCompatActivity {
 
@@ -98,8 +100,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ImageView starRating;
     private NestedScrollView scrollView;
     private ImageView backgroundPoster;
-    //private TextView textLanguage;
-    //private TextView textStatus;
+    private ImageView moviePoster;
+    private TextView movieDate;
+    private TextView movieDuration;
+    private TextView movieVoteAverage;
+    private TextView textLanguage;
+    private TextView textStatus;
+    private TextView textGenres;
+    private TextView textCountries;
+    private TextView textProdCompanies;
+    private TextView textIMDbId;
+    private TextView moviePlot;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -119,15 +130,22 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         loadBackgroundPoster();
 
-
         title = (TextView) findViewById(R.id.title);
         rating = (LinearLayout) findViewById(R.id.rating);
         textRating = (TextView) findViewById(R.id.text_rating);
         starRating = (ImageView) findViewById(R.id.star_rating);
         scrollView = (NestedScrollView) findViewById(R.id.nested_scroll_view);
         backgroundPoster = (ImageView) findViewById(R.id.background_poster);
-        //textLanguage = (TextView) view.findViewById(R.id.text_language);
-        //textStatus = (TextView) view.findViewById(R.id.status);
+        moviePoster = (ImageView) findViewById(R.id.movie_poster);
+        movieDate = (TextView) findViewById(R.id.movie_date);
+        movieDuration = (TextView) findViewById(R.id.movie_duration);
+        textLanguage = (TextView) findViewById(R.id.text_language);
+        textStatus = (TextView) findViewById(R.id.status);
+        textProdCompanies = (TextView) findViewById(R.id.prod_companies);
+        textGenres = (TextView) findViewById(R.id.genre);
+        textCountries = (TextView) findViewById(R.id.countries);
+        textIMDbId = (TextView) findViewById(R.id.imdb_id);
+        moviePlot = (TextView) findViewById(R.id.movie_plot);
     }
 
     /**
@@ -184,16 +202,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     /**
      * Fills the Movie Details in screen.
-     *
      * @param container
      */
     private void populateDetails(final MovieDetailsData container) {
-
-        if (container != null) {
-            movieTitle = container.getMovieTitle();
-            collapsingToolbar.setTitle(movieTitle);
-        }
-
 
         final Palette.PaletteAsyncListener paletteAsyncListener = new Palette.PaletteAsyncListener() {
             @SuppressLint("NewApi")
@@ -206,17 +217,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 Palette.Swatch textSwatch = palette.getMutedSwatch();
                 Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
 
-                Log.v(TAG, "textSwatch = " + textSwatch);
-                Log.v(TAG, "bgSwatch = " + bgSwatch);
                 if (textSwatch != null && bgSwatch != null) {
                     title.setTextColor(textSwatch.getTitleTextColor());
                     title.setBackgroundColor(textSwatch.getRgb());
                     textRating.setTextColor(bgSwatch.getTitleTextColor());
                     rating.setBackgroundColor(bgSwatch.getRgb());
                     starRating.setBackgroundColor(bgSwatch.getTitleTextColor());
-
-                    Log.v(TAG, "textSwatch.getTitleTextColor() = " + Integer.toHexString(textSwatch.getTitleTextColor()));
-                    Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(textSwatch.getRgb()));
                 } else if (bgSwatch != null) {
                     title.setBackgroundColor(bgSwatch.getRgb());
                     title.setTextColor(bgSwatch.getBodyTextColor());
@@ -234,7 +240,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     title.setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
                     textRating.setTextColor(getResources().getColor(R.color.textcolorSec, null));
                     rating.setBackgroundColor(getResources().getColor(R.color.colorBackground, null));
-                    PorterDuff.Mode mode = PorterDuff.Mode.SRC;
                 }
             }
         };
@@ -245,12 +250,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 if (backgroundPoster != null) {
                     Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
                     Palette.from(bitmapBg).generate(paletteAsyncListener);
-                } /*else if (moviePoster != null) {
+                } else if (moviePoster != null) {
                     Bitmap bitmapBg = ((BitmapDrawable) moviePoster.getDrawable()).getBitmap();
                     Palette.from(bitmapBg).generate(paletteAsyncListener);
-                }*/
+                }
             }
-
             @Override
             public void onError() {
                 Log.v(TAG, "Callback error");
@@ -259,8 +263,38 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         };
 
+        if (container == null) {
+            return;
+        }
+        PopulateDetailsTitle(container);
+        PopulateDetailsPoster(container, callback);
+        PopulateDetailsDateDurationRating(container);
+        PopulateDetailsLanguage(container);
+        PopulateDetailsGenres(container);
+        PopulateDetailsCountries(container);
+        PopulateDetailsProdCompanies(container);
+        PopulateDetailsStatus(container);
+        PopulateDetailsPlot(container);
+    }
+
+    /**
+     * Populates Title in screen.
+     * @param container
+     */
+    private void PopulateDetailsTitle(final MovieDetailsData container) {
+        movieTitle = container.getMovieTitle();
+        collapsingToolbar.setTitle(movieTitle);
+        title.setText(movieTitle);
+    }
+
+    /**
+     * Populates poster in screen.
+     * @param container
+     * @param callback
+     */
+    private void PopulateDetailsPoster(final MovieDetailsData container, Callback callback) {
         Picasso pic = Picasso.with(this);
-/*
+
         if (container.getMoviePoster() == null) {
             pic.load(R.drawable.no_movie_poster)
                     .fit().centerCrop()
@@ -270,7 +304,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     .fit().centerCrop()
                     .error(R.drawable.no_movie_poster)
                     .into(moviePoster);
-        }*/
+        }
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             if (container.getBackgroundPath() == null) {
@@ -295,7 +329,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
                         .into(backgroundPoster, callback);
             }
         }
-/*
+    }
+
+    /**
+     * Populates date, duration and rating in screen.
+     * @param container
+     */
+    private void PopulateDetailsDateDurationRating(final MovieDetailsData container) {
         if (StringUtils.isNotBlank(container.getYear())) {
             movieDate.setText(container.getYear());
         } else {
@@ -303,17 +343,25 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         if (container.getDuration() != null) {
-            movieDuration.setText(container.getDuration() + getString(R.string.details_view_text_minutes));
+            movieDuration.setText(container.getDuration()
+                    + getString(R.string.details_view_text_minutes));
         } else {
             movieDuration.setVisibility(View.GONE);
         }
 
-        if (container.getVote_average() != null) {
-            textRating.setText(container.getVote_average() + getString(R.string.details_view_text_vote_average_divider));
+        if (container.getVoteAverage() != null) {
+            textRating.setText(container.getVoteAverage()
+                    + getString(R.string.details_view_text_vote_average_divider));
         } else {
             movieVoteAverage.setVisibility(View.GONE);
         }
+    }
 
+    /**
+     * Populates language in screen.
+     * @param container
+     */
+    private void PopulateDetailsLanguage(final MovieDetailsData container) {
         if (container.getOriginalLanguage() != null) {
             String name = "";
             Locale[] locales = Locale.getAvailableLocales();
@@ -333,15 +381,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         else {
             textLanguage.setVisibility(View.GONE);
         }
+    }
 
-        if (container.getStatus() != null) {
-            textStatus.setText(container.getStatus());
-            textStatus.setVisibility(View.VISIBLE);
-        }
-        else {
-            textStatus.setVisibility(View.GONE);
-        }
-
+    /**
+     * Populates genres in screen.
+     * @param container
+     */
+    private void PopulateDetailsGenres(final MovieDetailsData container) {
         if(!container.getGenres().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for(String genre: container.getGenres() ) {
@@ -355,7 +401,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         else{
             textGenres.setVisibility(View.GONE);
         }
+    }
 
+    /**
+     * Populates countries in screen.
+     * @param container
+     */
+    private void PopulateDetailsCountries(final MovieDetailsData container) {
         if(!container.getOriginalCountries().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for(String country: container.getOriginalCountries() ) {
@@ -369,7 +421,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         else{
             textCountries.setVisibility(View.GONE);
         }
+    }
 
+    /**
+     * Populates Production Companies in screen.
+     * @param container
+     */
+    private void PopulateDetailsProdCompanies(final MovieDetailsData container) {
         if(!container.getProductionCompanies().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for(String podCompany: container.getProductionCompanies() ) {
@@ -383,78 +441,41 @@ public class MovieDetailsActivity extends AppCompatActivity {
         else{
             textProdCompanies.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * Populates status and IMDbId in screen.
+     * @param container
+     */
+    private void PopulateDetailsStatus(final MovieDetailsData container) {
+        if (container.getStatus() != null) {
+            textStatus.setText(container.getStatus());
+            textStatus.setVisibility(View.VISIBLE);
+        }
+        else {
+            textStatus.setVisibility(View.GONE);
+        }
 
         if(container.getImdbUri() != null  && container.getImdbUri().isEmpty()) {
-            StringBuilder builder = new StringBuilder();
-
-            builder.append(IMDB_URI);
-            builder.append("/");
-            builder.append(container.getImdbUri());
-
-            textIMDbId.setText(builder.toString());
+            String builder = IMDB_URI + "/" +  container.getImdbUri();
+            textIMDbId.setText(builder);
             textIMDbId.setVisibility(View.VISIBLE);
         }
         else{
             textIMDbId.setVisibility(View.GONE);
         }
+    }
 
+    /**
+     * Populates Movie plot in screen.
+     * @param container
+     */
+    private void PopulateDetailsPlot(final MovieDetailsData container) {
         if (StringUtils.isBlank(container.getPlot())) {
             moviePlot.setText(R.string.details_view_no_description);
         } else {
-            if (container.getPlot().length() > 80) {
-                moviePlot.setText(Html.fromHtml(container.getPlot().substring(0, 80) + SHORT_TEXT_PREVIEW));
-                isSeeMore = true;
-            } else {
-                String string = container.getPlot();
-                moviePlot.setText(Html.fromHtml(string + END_TEXT_PREVIEW));
-                isSeeMore = false;
-            }
-        }*/
-/*
-        moviePlotlayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (StringUtils.isBlank(container.getPlot())) {
-                    moviePlot.setText(R.string.details_view_no_description);
-                }
-                else {
-                    Log.v(TAG, "moviePlot.getText().length() " + moviePlot.getText().length());
-                    if (isSeeMore) {
-                        String string = container.getPlot();
-                        moviePlot.setText(Html.fromHtml(string + LONG_TEXT_PREVIEW));
-                    } else {
-                        if (container.getPlot().length() > 80) {
-                            moviePlot.setText(Html.fromHtml(container.getPlot().substring(0, 80) + SHORT_TEXT_PREVIEW));
-                        } else {
-                            String string = container.getPlot();
-                            moviePlot.setText(Html.fromHtml(string + END_TEXT_PREVIEW));
-                        }
-                    }
-                    isSeeMore = !isSeeMore;
-                }
-            }
-        });*/
-
-        title.setText(container.getMovieTitle());
-        /*
-        markAsFavButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ContentValues values = new ContentValues();
-                values.put(COLUMN_NAME_MOVIE_ID, movieID);
-                values.put(COLUMN_DURATION, container.getDuration());
-                values.put(COLUMN_MOVIE_PLOT, container.getPlot());
-                values.put(COLUMN_NAME_TITLE, container.getMovieTitle());
-                values.put(COLUMN_POSTER_PATH, container.getMoviePoster());
-                values.put(COLUMN_VOTE_AVERAGE, container.getVoteAverage());
-                values.put(COLUMN_YEAR, container.getYear());
-                values.put(COLUMN_BACKGROUND_PATH, container.getBackgroundPath());
-                values.put(COLUMN_ORIGINAL_LANGUAGE, container.getOriginalLanguage());
-                getContentResolver().insert(URI, values);
-                markAsFavButton.setVisibility(View.GONE);
-                deleteFromFavButton.setVisibility(View.VISIBLE);
-            }
-        }); */
+            moviePlot.setText(container.getPlot());
+        }
     }
 
 
