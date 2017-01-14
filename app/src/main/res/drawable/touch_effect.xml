@@ -14,18 +14,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
  -->
-<resources>
-    <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#FF000000</color>
-    <color name="colorAccent">#FF28496B</color>
-
-    <color name="colorBackground">#4f8293</color>
-
-    <color name="movie_details_text_color">#c63b3b</color>
-    <color name="movie_details_background_color">#FF094C6B</color>
-    <color name="textcolor">#024c61</color>
-    <color name="textcolorPrimary">#fde4a9</color>
-    <color name="textcolorSec">#8f2626</color>
-    <color name="textcolorTitle">#f1e8d7</color>
-    <color name="trailerColor">#E8EAF6</color>
-</resources>
+<ripple
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#FFFFFF">
+    <item android:drawable="@color/trailerColor" />
+</ripple>

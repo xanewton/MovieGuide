@@ -34,25 +34,33 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.FavoriteMoviesProvider;
 import com.xengar.android.movieguide.data.MovieDetails;
 import com.xengar.android.movieguide.data.MovieDetailsData;
+import com.xengar.android.movieguide.data.TrailerData;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import static android.app.DownloadManager.COLUMN_STATUS;
@@ -75,7 +83,8 @@ import static com.xengar.android.movieguide.utils.JSONUtils.getUriValue;
 /**
  * MovieDetails Activity
  */
-public class MovieDetailsActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity
+        implements YouTubePlayer.OnInitializedListener {
 
     public static final String EXTRA_MOVIE_ID = "MovieID";
     private static final Uri URI =
@@ -89,6 +98,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
     private MovieDetailsData detailsData;
     private MovieDetails data = null;
+    private List<TrailerData> trailerData;
     private int movieID;
     private String movieTitle = " ";
     private CollapsingToolbarLayout collapsingToolbar;
@@ -111,6 +121,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private TextView textProdCompanies;
     private TextView textIMDbId;
     private TextView moviePlot;
+
+    private YouTubePlayerFragment youTubePlayerFragment;
+    private YouTubePlayer youTubePlayer;
+    private LinearLayout trailerList;
+    private MenuItem item = null;
+    private boolean isTrailerLoaded = false;
+    private Intent sharedIntent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,6 +163,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
         textCountries = (TextView) findViewById(R.id.countries);
         textIMDbId = (TextView) findViewById(R.id.imdb_id);
         moviePlot = (TextView) findViewById(R.id.movie_plot);
+        trailerList = (LinearLayout) findViewById(R.id.movie_trailers);
+
+        youTubePlayerFragment = YouTubePlayerFragment.newInstance();
+        getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
     }
 
     /**
@@ -191,12 +212,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
      * Gets the movie data.
      */
     private void fetchMovieData() {
+        if (trailerList != null)
+            trailerList.removeAllViews();
+
         if (data == null) {
-            FetchMovieTask task = new FetchMovieTask(FetchMovieTask.MOVIE_DETAILS);
-            task.execute(movieID);
+            FetchMovieTask detailsTask = new FetchMovieTask(FetchMovieTask.MOVIE_DETAILS);
+            detailsTask.execute(movieID);
+            FetchMovieTask trailersTask = new FetchMovieTask(FetchMovieTask.MOVIE_TRAILERS);
+            trailersTask.execute(movieID);
         } else {
             Log.v(TAG, "data = " + data.getDetailsData());
             populateDetails(detailsData = data.getDetailsData());
+            populateTrailerList(trailerData = data.getTrailersData());
         }
     }
 
@@ -478,6 +505,83 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Populates the trailers list in screen.
+     * @param data
+     */
+    private void populateTrailerList(List<TrailerData> data) {
+        Log.v(TAG, "populateTrailerList - data = " + data);
+
+        for (final TrailerData trailer : data) {
+            View view = getLayoutInflater().inflate(R.layout.movie_trailer_list_item, null);
+            view.setTag(trailer);
+            TextView trailerName = (TextView) view.findViewById(R.id.trailer_name);
+            trailerName.setText(trailer.getTrailerName());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TrailerData data = (TrailerData) v.getTag();
+                    youTubePlayer.loadVideo(data.getTrailerUri().getQueryParameter("v"));
+
+                }
+            });
+            trailerList.addView(view);
+        }
+        Log.v(TAG, "data " + data);
+        if (data != null && !data.isEmpty()) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            Uri uri = data.get(0).getTrailerUri();
+            shareIntent.putExtra(Intent.EXTRA_TEXT, uri.toString());
+            if (item == null) {
+                this.sharedIntent = shareIntent;
+            } else {
+                sharedIntent = null;
+                item.setVisible(true);
+            }
+        } else if (item != null) {
+            item.setVisible(false);
+        }
+        isTrailerLoaded = true;
+
+        if (data != null && !data.isEmpty()) {
+            youTubePlayerFragment.initialize(getString(R.string.YOUTUBE_DATA_API_V3), this);
+        } else {
+            findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
+            findViewById(R.id.movie_trailers).setVisibility(View.GONE);
+        }
+    }
+
+    public List<TrailerData> getTrailerData() {
+        return trailerData;
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider,
+                                        YouTubeInitializationResult youTubeInitializationResult) {
+    }
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider,
+                                        YouTubePlayer youTubePlayer, boolean wasRestored) {
+        if (!wasRestored) {
+            Log.v(TAG, "trailerData " + trailerData);
+            if (trailerData != null && !trailerData.isEmpty()) {
+                Uri uri = trailerData.get(0).getTrailerUri();
+
+                Log.v(TAG, "trailerData " + trailerData.size());
+                String trailerCode = uri.getQueryParameter("v");
+                if (trailerCode != null) {
+                    this.youTubePlayer = youTubePlayer;
+                    youTubePlayer.cueVideo(trailerCode);
+                }
+            } else {
+                getFragmentManager().beginTransaction().remove(youTubePlayerFragment).commit();
+            }
+
+        }
+    }
+
 
     /**
      * Fetch task to get data
@@ -485,6 +589,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private class FetchMovieTask extends AsyncTask<Integer, Void, JSONObject> {
 
         public static final String MOVIE_DETAILS = "MovieDetails";
+        public static final String MOVIE_TRAILERS = "MovieTrailers";
+        private static final String TRAILER_BASE_URI = "http://www.youtube.com/watch?v=";
         private String requestType = null;
 
         // Constructor
@@ -499,6 +605,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 case MOVIE_DETAILS:
                     request = "/movie/" + params[0];
                     break;
+                case MOVIE_TRAILERS:
+                    request = "/movie/" + params[0] + "/videos";
+                    break;
             }
 
             JSONObject jObj = JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
@@ -512,6 +621,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
             switch(requestType){
                 case MOVIE_DETAILS:
                     processMovieDetails(jObj);
+                    break;
+                case MOVIE_TRAILERS:
+                    processMovieTrailers(jObj);
                     break;
             }
         }
@@ -561,6 +673,27 @@ public class MovieDetailsActivity extends AppCompatActivity {
                             cursor.getString(11), Collections.<String>emptyList());
                     populateDetails(detailsData);
                 }
+            }
+        }
+
+        /**
+         * Process the Movie Trailers data.
+         */
+        private void processMovieTrailers(JSONObject jObj) {
+            if (jObj != null) {
+                trailerData = new ArrayList<TrailerData>();
+                try {
+                    JSONArray array = jObj.getJSONArray("results");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        trailerData.add(new TrailerData(
+                                            Uri.parse(TRAILER_BASE_URI + object.getString("key")),
+                                            object.getString("name")));
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "", e);
+                }
+                populateTrailerList(trailerData);
             }
         }
     }

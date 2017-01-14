@@ -44,5 +44,8 @@
     <dimen name="movie_details_title_min_height">50dp</dimen>
     <dimen name="movie_details_title_text_size">25sp</dimen>
 
+    <dimen name="movie_details_trailer_list_item_minSize">35dp</dimen>
+    <dimen name="movie_details_trailer_image_view_layout_width">30dp</dimen>
+    <dimen name="movie_details_trailer_image_view_layout_height">30dp</dimen>
 
 </resources>

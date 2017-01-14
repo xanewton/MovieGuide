@@ -15,27 +15,25 @@
  */
 package com.xengar.android.movieguide.data;
 
-import java.util.List;
+import android.net.Uri;
 
 /**
- * Components of a Detail Data View for a Movie
+ * TrailerData
  */
-public class MovieDetails {
-    private final MovieDetailsData detailsData;
-    private final List<TrailerData> trailersData;
+public class TrailerData {
+    private Uri trailerUri;
+    private String trailerName;
 
-    // Constructor
-    public MovieDetails(MovieDetailsData detailsData, List<TrailerData> trailersData) {
-        this.detailsData = detailsData;
-        this.trailersData = trailersData;
+    public TrailerData(Uri trailerUri, String trailerName) {
+        this.trailerUri = trailerUri;
+        this.trailerName = trailerName;
     }
 
-    // Getters
-    public MovieDetailsData getDetailsData() {
-        return detailsData;
+    public Uri getTrailerUri() {
+        return trailerUri;
     }
 
-    public List<TrailerData> getTrailersData() {
-        return trailersData;
+    public String getTrailerName() {
+        return trailerName;
     }
 }
