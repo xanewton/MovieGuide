@@ -8,4 +8,5 @@
 
     <dimen name="movie_details_background_poster_min_height">350dp</dimen>
     <dimen name="movie_details_youtube_fragment_padding">35dp</dimen>
+
 </resources>

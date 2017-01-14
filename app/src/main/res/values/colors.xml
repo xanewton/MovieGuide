@@ -23,6 +23,8 @@
 
     <color name="movie_details_text_color">#c63b3b</color>
     <color name="movie_details_background_color">#FF094C6B</color>
+    <color name="textcolor">#024c61</color>
     <color name="textcolorPrimary">#fde4a9</color>
     <color name="textcolorSec">#8f2626</color>
+    <color name="textcolorTitle">#f1e8d7</color>
 </resources>
