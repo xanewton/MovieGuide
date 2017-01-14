@@ -45,6 +45,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
         </activity>
+
+        <provider
+            android:name=".data.FavoriteMoviesProvider"
+            android:authorities="com.xengar.android.movieguide"
+            android:enabled="true"
+            android:exported="true" />
+
     </application>
 
 </manifest>
