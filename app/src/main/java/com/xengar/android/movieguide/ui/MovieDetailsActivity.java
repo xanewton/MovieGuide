@@ -16,21 +16,32 @@
 
 package com.xengar.android.movieguide.ui;
 
+import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.FavoriteMoviesProvider;
 import com.xengar.android.movieguide.data.MovieDetails;
@@ -80,6 +91,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private String movieTitle = " ";
     private CollapsingToolbarLayout collapsingToolbar;
 
+    // Details components
+    private TextView title;
+    private LinearLayout rating;
+    private TextView textRating;
+    private ImageView starRating;
+    private NestedScrollView scrollView;
+    private ImageView backgroundPoster;
+    //private TextView textLanguage;
+    //private TextView textStatus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,7 +117,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
         fetchMovieData();
         defineCollapsingToolbarLayoutBehaviour();
 
-        loadBackdrop();
+        loadBackgroundPoster();
+
+
+        title = (TextView) findViewById(R.id.title);
+        rating = (LinearLayout) findViewById(R.id.rating);
+        textRating = (TextView) findViewById(R.id.text_rating);
+        starRating = (ImageView) findViewById(R.id.star_rating);
+        scrollView = (NestedScrollView) findViewById(R.id.nested_scroll_view);
+        backgroundPoster = (ImageView) findViewById(R.id.background_poster);
+        //textLanguage = (TextView) view.findViewById(R.id.text_language);
+        //textStatus = (TextView) view.findViewById(R.id.status);
     }
 
     /**
@@ -128,9 +158,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void loadBackdrop() {
-        final ImageView imageView = (ImageView) findViewById(R.id.backdrop);
-        Glide.with(this).load(R.drawable.cheese_2).centerCrop().into(imageView);
+    private void loadBackgroundPoster() {
+        final ImageView imageView = (ImageView) findViewById(R.id.background_poster);
+        Glide.with(this).load(R.drawable.no_background_poster).centerCrop().into(imageView);
     }
 
     @Override
@@ -164,6 +194,267 @@ public class MovieDetailsActivity extends AppCompatActivity {
             collapsingToolbar.setTitle(movieTitle);
         }
 
+
+        final Palette.PaletteAsyncListener paletteAsyncListener = new Palette.PaletteAsyncListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public void onGenerated(Palette palette) {
+                if (this == null)
+                    return;
+                Log.v(TAG, "textSwatch.PaletteAsyncListener");
+
+                Palette.Swatch textSwatch = palette.getMutedSwatch();
+                Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
+
+                Log.v(TAG, "textSwatch = " + textSwatch);
+                Log.v(TAG, "bgSwatch = " + bgSwatch);
+                if (textSwatch != null && bgSwatch != null) {
+                    title.setTextColor(textSwatch.getTitleTextColor());
+                    title.setBackgroundColor(textSwatch.getRgb());
+                    textRating.setTextColor(bgSwatch.getTitleTextColor());
+                    rating.setBackgroundColor(bgSwatch.getRgb());
+                    starRating.setBackgroundColor(bgSwatch.getTitleTextColor());
+
+                    Log.v(TAG, "textSwatch.getTitleTextColor() = " + Integer.toHexString(textSwatch.getTitleTextColor()));
+                    Log.v(TAG, "textSwatch.getRgb() = " + Integer.toHexString(textSwatch.getRgb()));
+                } else if (bgSwatch != null) {
+                    title.setBackgroundColor(bgSwatch.getRgb());
+                    title.setTextColor(bgSwatch.getBodyTextColor());
+                    rating.setBackgroundColor(bgSwatch.getBodyTextColor());
+                    textRating.setTextColor(bgSwatch.getRgb());
+                    starRating.setBackgroundColor(bgSwatch.getRgb());
+                } else if (textSwatch != null) {
+                    title.setBackgroundColor(textSwatch.getRgb());
+                    title.setTextColor(textSwatch.getBodyTextColor());
+                    rating.setBackgroundColor(textSwatch.getBodyTextColor());
+                    textRating.setTextColor(textSwatch.getRgb());
+                    starRating.setBackgroundColor(textSwatch.getRgb());
+                } else {
+                    title.setTextColor(getResources().getColor(R.color.textcolorPrimary, null));
+                    title.setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
+                    textRating.setTextColor(getResources().getColor(R.color.textcolorSec, null));
+                    rating.setBackgroundColor(getResources().getColor(R.color.colorBackground, null));
+                    PorterDuff.Mode mode = PorterDuff.Mode.SRC;
+                }
+            }
+        };
+
+        Callback callback = new Callback() {
+            @Override
+            public void onSuccess() {
+                if (backgroundPoster != null) {
+                    Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
+                    Palette.from(bitmapBg).generate(paletteAsyncListener);
+                } /*else if (moviePoster != null) {
+                    Bitmap bitmapBg = ((BitmapDrawable) moviePoster.getDrawable()).getBitmap();
+                    Palette.from(bitmapBg).generate(paletteAsyncListener);
+                }*/
+            }
+
+            @Override
+            public void onError() {
+                Log.v(TAG, "Callback error");
+                Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
+                Palette.from(bitmapBg).generate(paletteAsyncListener);
+            }
+        };
+
+        Picasso pic = Picasso.with(this);
+/*
+        if (container.getMoviePoster() == null) {
+            pic.load(R.drawable.no_movie_poster)
+                    .fit().centerCrop()
+                    .into(moviePoster);
+        } else {
+            pic.load(POSTER_BASE_URI + container.getMoviePoster())
+                    .fit().centerCrop()
+                    .error(R.drawable.no_movie_poster)
+                    .into(moviePoster);
+        }*/
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (container.getBackgroundPath() == null) {
+                pic.load(R.drawable.no_background_poster)
+                        .fit().centerCrop()
+                        .into(backgroundPoster, callback);
+            } else {
+                pic.load(BACKGROUND_BASE_URI + container.getBackgroundPath())
+                        .fit().centerCrop()
+                        .error(R.drawable.no_background_poster)
+                        .into(backgroundPoster, callback);
+            }
+        } else {
+            if (container.getBackgroundPath() == null) {
+                pic.load(R.drawable.no_background_poster)
+                        .fit()
+                        .into(backgroundPoster, callback);
+            } else {
+                pic.load(BACKGROUND_BASE_URI + container.getBackgroundPath())
+                        .fit()
+                        .error(R.drawable.no_background_poster)
+                        .into(backgroundPoster, callback);
+            }
+        }
+/*
+        if (StringUtils.isNotBlank(container.getYear())) {
+            movieDate.setText(container.getYear());
+        } else {
+            movieDate.setText(R.string.details_view_no_release_date);
+        }
+
+        if (container.getDuration() != null) {
+            movieDuration.setText(container.getDuration() + getString(R.string.details_view_text_minutes));
+        } else {
+            movieDuration.setVisibility(View.GONE);
+        }
+
+        if (container.getVote_average() != null) {
+            textRating.setText(container.getVote_average() + getString(R.string.details_view_text_vote_average_divider));
+        } else {
+            movieVoteAverage.setVisibility(View.GONE);
+        }
+
+        if (container.getOriginalLanguage() != null) {
+            String name = "";
+            Locale[] locales = Locale.getAvailableLocales();
+            for (Locale l : locales) {
+                if (l.getLanguage().equals(container.getOriginalLanguage())) {
+                    name = l.getDisplayLanguage();
+                }
+            }
+            if(name.isEmpty()) {
+                textLanguage.setText(container.getOriginalLanguage());
+            }
+            else {
+                textLanguage.setText(name);
+            }
+            textLanguage.setVisibility(View.VISIBLE);
+        }
+        else {
+            textLanguage.setVisibility(View.GONE);
+        }
+
+        if (container.getStatus() != null) {
+            textStatus.setText(container.getStatus());
+            textStatus.setVisibility(View.VISIBLE);
+        }
+        else {
+            textStatus.setVisibility(View.GONE);
+        }
+
+        if(!container.getGenres().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for(String genre: container.getGenres() ) {
+                builder.append(genre);
+                builder.append(" | ");
+            }
+            builder.delete(builder.length()-3, builder.length());
+            textGenres.setText(builder.toString());
+            textGenres.setVisibility(View.VISIBLE);
+        }
+        else{
+            textGenres.setVisibility(View.GONE);
+        }
+
+        if(!container.getOriginalCountries().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for(String country: container.getOriginalCountries() ) {
+                builder.append(country);
+                builder.append(" | ");
+            }
+            builder.delete(builder.length()-3, builder.length());
+            textCountries.setText(builder.toString());
+            textCountries.setVisibility(View.VISIBLE);
+        }
+        else{
+            textCountries.setVisibility(View.GONE);
+        }
+
+        if(!container.getProductionCompanies().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for(String podCompany: container.getProductionCompanies() ) {
+                builder.append(podCompany);
+                builder.append(" | ");
+            }
+            builder.delete(builder.length()-3, builder.length());
+            textProdCompanies.setText(builder.toString());
+            textProdCompanies.setVisibility(View.VISIBLE);
+        }
+        else{
+            textProdCompanies.setVisibility(View.GONE);
+        }
+
+        if(container.getImdbUri() != null  && container.getImdbUri().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+
+            builder.append(IMDB_URI);
+            builder.append("/");
+            builder.append(container.getImdbUri());
+
+            textIMDbId.setText(builder.toString());
+            textIMDbId.setVisibility(View.VISIBLE);
+        }
+        else{
+            textIMDbId.setVisibility(View.GONE);
+        }
+
+        if (StringUtils.isBlank(container.getPlot())) {
+            moviePlot.setText(R.string.details_view_no_description);
+        } else {
+            if (container.getPlot().length() > 80) {
+                moviePlot.setText(Html.fromHtml(container.getPlot().substring(0, 80) + SHORT_TEXT_PREVIEW));
+                isSeeMore = true;
+            } else {
+                String string = container.getPlot();
+                moviePlot.setText(Html.fromHtml(string + END_TEXT_PREVIEW));
+                isSeeMore = false;
+            }
+        }*/
+/*
+        moviePlotlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (StringUtils.isBlank(container.getPlot())) {
+                    moviePlot.setText(R.string.details_view_no_description);
+                }
+                else {
+                    Log.v(TAG, "moviePlot.getText().length() " + moviePlot.getText().length());
+                    if (isSeeMore) {
+                        String string = container.getPlot();
+                        moviePlot.setText(Html.fromHtml(string + LONG_TEXT_PREVIEW));
+                    } else {
+                        if (container.getPlot().length() > 80) {
+                            moviePlot.setText(Html.fromHtml(container.getPlot().substring(0, 80) + SHORT_TEXT_PREVIEW));
+                        } else {
+                            String string = container.getPlot();
+                            moviePlot.setText(Html.fromHtml(string + END_TEXT_PREVIEW));
+                        }
+                    }
+                    isSeeMore = !isSeeMore;
+                }
+            }
+        });*/
+
+        title.setText(container.getMovieTitle());
+        /*
+        markAsFavButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_NAME_MOVIE_ID, movieID);
+                values.put(COLUMN_DURATION, container.getDuration());
+                values.put(COLUMN_MOVIE_PLOT, container.getPlot());
+                values.put(COLUMN_NAME_TITLE, container.getMovieTitle());
+                values.put(COLUMN_POSTER_PATH, container.getMoviePoster());
+                values.put(COLUMN_VOTE_AVERAGE, container.getVoteAverage());
+                values.put(COLUMN_YEAR, container.getYear());
+                values.put(COLUMN_BACKGROUND_PATH, container.getBackgroundPath());
+                values.put(COLUMN_ORIGINAL_LANGUAGE, container.getOriginalLanguage());
+                getContentResolver().insert(URI, values);
+                markAsFavButton.setVisibility(View.GONE);
+                deleteFromFavButton.setVisibility(View.VISIBLE);
+            }
+        }); */
     }
 
 
