@@ -175,11 +175,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onMovieClick(int movieId) {
         Log.v(TAG, "onMovieClick movieId = " + movieId);
-        // TODO: Add details for item
 
+        // Launch a Details Activity
         Context context = getApplicationContext();
         Intent intent = new Intent(context, MovieDetailsActivity.class);
-        intent.putExtra(MovieDetailsActivity.EXTRA_NAME, "Sample Movie");
+        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }

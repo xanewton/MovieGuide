@@ -15,6 +15,7 @@ The app uses TMDb API for posters and information.
 - Google Youtube API  https://developers.google.com/youtube/v3/
 - Picasso library https://github.com/square/picasso
 - Glide library https://github.com/bumptech/glide
+- Apache Commons Lang library https://commons.apache.org/proper/commons-lang/
 
 ## Getting Started
 The app uses The Movie Database API and Google Youtube API.
