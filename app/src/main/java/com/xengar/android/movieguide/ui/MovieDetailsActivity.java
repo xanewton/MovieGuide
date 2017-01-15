@@ -32,6 +32,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +51,7 @@ import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.FavoriteMoviesProvider;
 import com.xengar.android.movieguide.data.MovieDetails;
 import com.xengar.android.movieguide.data.MovieDetailsData;
+import com.xengar.android.movieguide.data.ReviewData;
 import com.xengar.android.movieguide.data.TrailerData;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
@@ -94,6 +96,9 @@ public class MovieDetailsActivity extends AppCompatActivity
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
     private static final String POSTER_CAST_BASE_URI = "http://image.tmdb.org/t/p/w92";
     private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
+    private static final String SHORT_TEXT_PREVIEW = " \n <font color=#FF8A80>... show more</font>";
+    private static final String LONG_TEXT_PREVIEW = " \n<font color=#FF8A80>... show less</font>";
+    private static final String END_TEXT_PREVIEW = "\n<font color=#FF8A80> the end!</font>";
 
     private static final String TAG = MovieDetailsActivity.class.getSimpleName();
     private MovieDetailsData detailsData;
@@ -128,6 +133,10 @@ public class MovieDetailsActivity extends AppCompatActivity
     private MenuItem item = null;
     private boolean isTrailerLoaded = false;
     private Intent sharedIntent;
+
+    private List<ReviewData> reviewData;
+    private LinearLayout reviewList;
+    private boolean isReviewShown;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -164,6 +173,7 @@ public class MovieDetailsActivity extends AppCompatActivity
         textIMDbId = (TextView) findViewById(R.id.imdb_id);
         moviePlot = (TextView) findViewById(R.id.movie_plot);
         trailerList = (LinearLayout) findViewById(R.id.movie_trailers);
+        reviewList = (LinearLayout) findViewById(R.id.movie_reviews);
 
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
         getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
@@ -214,16 +224,21 @@ public class MovieDetailsActivity extends AppCompatActivity
     private void fetchMovieData() {
         if (trailerList != null)
             trailerList.removeAllViews();
+        if (reviewList != null)
+            reviewList.removeAllViews();
 
         if (data == null) {
             FetchMovieTask detailsTask = new FetchMovieTask(FetchMovieTask.MOVIE_DETAILS);
             detailsTask.execute(movieID);
             FetchMovieTask trailersTask = new FetchMovieTask(FetchMovieTask.MOVIE_TRAILERS);
             trailersTask.execute(movieID);
+            FetchMovieTask reviewsTask = new FetchMovieTask(FetchMovieTask.MOVIE_REVIEWS);
+            reviewsTask.execute(movieID);
         } else {
             Log.v(TAG, "data = " + data.getDetailsData());
             populateDetails(detailsData = data.getDetailsData());
             populateTrailerList(trailerData = data.getTrailersData());
+            populateReviewList(reviewData = data.getReviewsData(), isReviewShown);
         }
     }
 
@@ -582,6 +597,73 @@ public class MovieDetailsActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        data = new MovieDetails(detailsData, trailerData, reviewData /*, castData,*/);
+        if (youTubePlayer != null) {
+            youTubePlayer.release();
+        }
+    }
+
+    /**
+     * Populates the list of reviews in screen.
+     * @param data
+     * @param showReview
+     */
+    private void populateReviewList(final List<ReviewData> data, boolean showReview) {
+        if (data == null && data.isEmpty()) {
+            reviewList.setVisibility(View.GONE);
+        }
+
+        for (final ReviewData review : data) {
+            View view = getLayoutInflater().inflate(R.layout.movie_review_list_item, null);
+            TextView reviewAuthor = (TextView) view.findViewById(R.id.review_author);
+            reviewAuthor.setText(review.getReviewAuthor());
+            TextView reviewContentStart = (TextView) view.findViewById(R.id.review_content_start);
+            TextView reviewContentEnd = (TextView) view.findViewById(R.id.review_content_end);
+            StringBuilder buildStart = new StringBuilder();
+            buildStart.append(review.getReviewContent());
+
+            if (buildStart.length() > 72) {
+                reviewContentStart.setText(Html.fromHtml(buildStart.substring(0, 72) + SHORT_TEXT_PREVIEW));
+                reviewContentEnd.setText(Html.fromHtml(buildStart.substring(0, buildStart.length()) + LONG_TEXT_PREVIEW));
+                Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
+                Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
+
+            } else {
+                reviewContentStart.setText(buildStart);
+                reviewContentEnd.setText(Html.fromHtml(buildStart + END_TEXT_PREVIEW));
+                Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
+            }
+            Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
+            reviewContentStart.setVisibility(View.VISIBLE);
+            reviewContentEnd.setVisibility(View.GONE);
+            reviewList.addView(view);
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    TextView contentStart = (TextView) v.findViewById(R.id.review_content_start);
+                    TextView contentEnd = (TextView) v.findViewById(R.id.review_content_end);
+                    Log.v(TAG, "reviewContentstart ON" + contentStart.getText());
+                    Log.v(TAG, "reviewContentEnd ON" + contentEnd.getText());
+                    if (!isReviewShown) {
+                        contentEnd.setVisibility(View.VISIBLE);
+                        contentStart.setVisibility(View.GONE);
+                    } else {
+                        contentStart.setVisibility(View.VISIBLE);
+                        contentEnd.setVisibility(View.GONE);
+                    }
+                    isReviewShown = !isReviewShown;
+                }
+            });
+        }
+        reviewList.setVisibility(View.VISIBLE);
+    }
+
+
 
     /**
      * Fetch task to get data
@@ -590,6 +672,7 @@ public class MovieDetailsActivity extends AppCompatActivity
 
         public static final String MOVIE_DETAILS = "MovieDetails";
         public static final String MOVIE_TRAILERS = "MovieTrailers";
+        public static final String MOVIE_REVIEWS = "MovieReviews";
         private static final String TRAILER_BASE_URI = "http://www.youtube.com/watch?v=";
         private String requestType = null;
 
@@ -608,6 +691,9 @@ public class MovieDetailsActivity extends AppCompatActivity
                 case MOVIE_TRAILERS:
                     request = "/movie/" + params[0] + "/videos";
                     break;
+                case MOVIE_REVIEWS:
+                    request = "/movie/" + params[0] + "/reviews";
+                    break;
             }
 
             JSONObject jObj = JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
@@ -624,6 +710,9 @@ public class MovieDetailsActivity extends AppCompatActivity
                     break;
                 case MOVIE_TRAILERS:
                     processMovieTrailers(jObj);
+                    break;
+                case MOVIE_REVIEWS:
+                    processMovieReviews(jObj);
                     break;
             }
         }
@@ -694,6 +783,23 @@ public class MovieDetailsActivity extends AppCompatActivity
                     Log.e(TAG, "", e);
                 }
                 populateTrailerList(trailerData);
+            }
+        }
+
+        private void processMovieReviews(JSONObject jObj) {
+            if (jObj != null) {
+                reviewData = new ArrayList<ReviewData>();
+                try {
+                    JSONArray array = jObj.getJSONArray("results");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        reviewData.add(new ReviewData(object.getString("author"),
+                                object.getString("content")));
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "", e);
+                }
+                populateReviewList(reviewData, isReviewShown);
             }
         }
     }
