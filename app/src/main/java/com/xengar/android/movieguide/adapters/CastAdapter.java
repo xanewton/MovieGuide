@@ -1,0 +1,152 @@
+/*
+ * Copyright (C) 2017 Angel Garcia
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.xengar.android.movieguide.adapters;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.data.CastData;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+/**
+ * Cast adapter used to fill the cast list in the Movie Details.
+ */
+public class CastAdapter extends BaseAdapter {
+
+    private static final String TAG = CastAdapter.class.getSimpleName();
+    private static final String POSTER_CAST_BASE_URI = "http://image.tmdb.org/t/p/w92";
+    private final ArrayList<CastData> movieCast = new ArrayList<>();
+    private final HashSet<Integer> castIdSet = new HashSet<>();
+    private final Context mContext;
+
+    // Constructor
+    public CastAdapter(Context c) {
+        mContext = c;
+    }
+
+    @Override
+    public int getCount() {
+        return movieCast.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return movieCast.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return movieCast.get(position).getPersonId();
+    }
+
+    /**
+     * Creates a new ImageView for each item referenced by the Adapter.
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View view;
+        if (convertView == null) {
+            view = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                    .inflate(R.layout.movie_cast_list_item, parent, false);
+        } else {
+            view = convertView;
+        }
+
+        CastData cast = movieCast.get(position);
+        view.setTag(cast);
+        TextView castName = (TextView) view.findViewById(R.id.cast_name);
+        Log.v(TAG, "cast.getCastName() " + cast.getCastName());
+
+        ImageView castImage = (ImageView) view.findViewById(R.id.cast_image);
+        TextView castCharacter = (TextView) view.findViewById(R.id.cast_character);
+
+        if (cast.getCastName() == null) {
+            castImage.setVisibility(View.GONE);
+            castCharacter.setVisibility(View.GONE);
+            castName.setVisibility(View.GONE);
+        } else {
+            castName.setText(cast.getCastName());
+        }
+        if (cast.getCharacter() == null) {
+            castCharacter.setVisibility(View.GONE);
+        } else {
+            castCharacter.setText(cast.getCharacter());
+        }
+        if (cast.getCastImagePath() == null) {
+            castImage.setVisibility(View.GONE);
+        } else {
+            Picasso pic = Picasso.with(mContext);
+            pic.load(POSTER_CAST_BASE_URI + cast.getCastImagePath())
+                    .fit().centerCrop()
+                    .error(R.drawable.no_movie_poster)
+                    .into(castImage);
+        }
+
+        // Now set the onClickListener
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CastData data = (CastData) v.getTag();
+
+                // TODO: Show person details in new activity.
+                Toast.makeText(mContext, "Toast message for personID: " + data.getPersonId(),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+        return view;
+    }
+
+    public void add(CastData res) {
+        if (castIdSet.contains(res.getPersonId())) {
+            Log.w(TAG, "Cast duplicate found, personID = " + res.getPersonId());
+            return;
+        }
+        movieCast.add(res);
+        castIdSet.add(res.getPersonId());
+    }
+
+    public void addAll(List<CastData> res) {
+        movieCast.addAll(res);
+    }
+
+    public void clearData() {
+        movieCast.clear();
+        castIdSet.clear();
+        notifyDataSetChanged();
+    }
+
+    public List<CastData> getCastData() {
+        return movieCast;
+    }
+}

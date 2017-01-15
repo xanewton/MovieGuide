@@ -28,9 +28,12 @@
     <dimen name="movie_guide_gridview_column_width">150dp</dimen>
 
     <dimen name="movie_details_text_title_poster_text_size">25sp</dimen>
+    <dimen name="movie_details_plot_text_size">15sp</dimen>
 
-    <dimen name="movie_details_image_layout_width">130dp</dimen>
-    <dimen name="movie_details_image_layout_height">200dp</dimen>
+    <dimen name="movie_details_image_layout_width">127dp</dimen>
+    <dimen name="movie_details_image_layout_height">196dp</dimen>
+    <dimen name="movie_details_image_layout_marginTop">10dp</dimen>
+    <dimen name="movie_details_image_layout_marginLeft">20dp</dimen>
 
     <!-- Needed if we aren't including the Material Design Library -->
     <dimen name="appbar_elevation">4dp</dimen>

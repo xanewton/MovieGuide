@@ -37,6 +37,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,6 +51,8 @@ import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.adapters.CastAdapter;
+import com.xengar.android.movieguide.data.CastData;
 import com.xengar.android.movieguide.data.FavoriteMoviesProvider;
 import com.xengar.android.movieguide.data.MovieDetails;
 import com.xengar.android.movieguide.data.MovieDetailsData;
@@ -138,6 +143,10 @@ public class MovieDetailsActivity extends AppCompatActivity
     private LinearLayout reviewList;
     private boolean isReviewShown;
 
+    private List<CastData> castData;
+    private GridView gridview; // Cast list
+    private boolean gridViewResized = false; // boolean for resize gridview hack
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,10 +183,12 @@ public class MovieDetailsActivity extends AppCompatActivity
         moviePlot = (TextView) findViewById(R.id.movie_plot);
         trailerList = (LinearLayout) findViewById(R.id.movie_trailers);
         reviewList = (LinearLayout) findViewById(R.id.movie_reviews);
+        gridview = (GridView) findViewById(R.id.cast_data);
 
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
         getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
     }
+
 
     /**
      * Changes the CollapsingToolbarLayout to hide the title when the image is visible.
@@ -226,18 +237,23 @@ public class MovieDetailsActivity extends AppCompatActivity
             trailerList.removeAllViews();
         if (reviewList != null)
             reviewList.removeAllViews();
+        if (gridview != null)
+            gridview.removeAllViews();
 
         if (data == null) {
             FetchMovieTask detailsTask = new FetchMovieTask(FetchMovieTask.MOVIE_DETAILS);
             detailsTask.execute(movieID);
             FetchMovieTask trailersTask = new FetchMovieTask(FetchMovieTask.MOVIE_TRAILERS);
             trailersTask.execute(movieID);
+            FetchMovieTask castTask = new FetchMovieTask(FetchMovieTask.MOVIE_CAST);
+            castTask.execute(movieID);
             FetchMovieTask reviewsTask = new FetchMovieTask(FetchMovieTask.MOVIE_REVIEWS);
             reviewsTask.execute(movieID);
         } else {
             Log.v(TAG, "data = " + data.getDetailsData());
             populateDetails(detailsData = data.getDetailsData());
             populateTrailerList(trailerData = data.getTrailersData());
+            populateCastList(castData = data.getCastData());
             populateReviewList(reviewData = data.getReviewsData(), isReviewShown);
         }
     }
@@ -593,14 +609,13 @@ public class MovieDetailsActivity extends AppCompatActivity
             } else {
                 getFragmentManager().beginTransaction().remove(youTubePlayerFragment).commit();
             }
-
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        data = new MovieDetails(detailsData, trailerData, reviewData /*, castData,*/);
+        data = new MovieDetails(detailsData, trailerData, reviewData, castData);
         if (youTubePlayer != null) {
             youTubePlayer.release();
         }
@@ -663,6 +678,55 @@ public class MovieDetailsActivity extends AppCompatActivity
         reviewList.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Populates the Cast list in screen.
+     * @param data
+     */
+    private void populateCastList(final List<CastData> data) {
+        if (data == null && data.isEmpty()) {
+            gridview.setVisibility(View.GONE);
+            return;
+        }
+
+        // Add cast
+        CastAdapter adapter = new CastAdapter(this);
+        for (final CastData cast : data) {
+            adapter.add(cast);
+            if (cast.getCastOrder() == 7) {
+                break;
+            }
+        }
+        adapter.notifyDataSetChanged();
+        gridview.setAdapter(adapter);
+        gridview.setVisibility(View.VISIBLE);
+
+        /**
+         *  THIS IS A HACK!
+         *
+         *  Problem: GridView inside a scrollView only shows one row.
+         *  Solution: http://stackoverflow.com/questions/8481844/gridview-height-gets-cut
+         *            Calculate the height for one row and then calculate many rows you have
+         *            and resize the GridView height.
+         */
+        final int items = adapter.getCount();
+        final int columns = gridview.getNumColumns();
+        gridview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (!gridViewResized) {
+                    gridViewResized = true;
+                    ViewGroup.LayoutParams params = gridview.getLayoutParams();
+                    int oneRowHeight = gridview.getHeight();
+                    int rows = (int) (items / columns);
+                    if (items % columns != 0) {
+                        rows++;
+                    }
+                    params.height = oneRowHeight * rows;
+                    gridview.setLayoutParams(params);
+                }
+            }
+        });
+    }
 
 
     /**
@@ -673,6 +737,7 @@ public class MovieDetailsActivity extends AppCompatActivity
         public static final String MOVIE_DETAILS = "MovieDetails";
         public static final String MOVIE_TRAILERS = "MovieTrailers";
         public static final String MOVIE_REVIEWS = "MovieReviews";
+        public static final String MOVIE_CAST = "MovieCast";
         private static final String TRAILER_BASE_URI = "http://www.youtube.com/watch?v=";
         private String requestType = null;
 
@@ -694,6 +759,9 @@ public class MovieDetailsActivity extends AppCompatActivity
                 case MOVIE_REVIEWS:
                     request = "/movie/" + params[0] + "/reviews";
                     break;
+                case MOVIE_CAST:
+                    request = "/movie/" + params[0] + "/credits";
+                    break;
             }
 
             JSONObject jObj = JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
@@ -714,11 +782,15 @@ public class MovieDetailsActivity extends AppCompatActivity
                 case MOVIE_REVIEWS:
                     processMovieReviews(jObj);
                     break;
+                case MOVIE_CAST:
+                    processMovieCast(jObj);
+                    break;
             }
         }
 
         /**
          * Process the Movie Details data.
+         * @param jObj
          */
         private void processMovieDetails(JSONObject jObj) {
             if (jObj != null) {
@@ -767,6 +839,7 @@ public class MovieDetailsActivity extends AppCompatActivity
 
         /**
          * Process the Movie Trailers data.
+         * @param jObj
          */
         private void processMovieTrailers(JSONObject jObj) {
             if (jObj != null) {
@@ -786,6 +859,10 @@ public class MovieDetailsActivity extends AppCompatActivity
             }
         }
 
+        /**
+         * Process the Movie Reviews data.
+         * @param jObj
+         */
         private void processMovieReviews(JSONObject jObj) {
             if (jObj != null) {
                 reviewData = new ArrayList<ReviewData>();
@@ -800,6 +877,32 @@ public class MovieDetailsActivity extends AppCompatActivity
                     Log.e(TAG, "", e);
                 }
                 populateReviewList(reviewData, isReviewShown);
+            }
+        }
+
+        /**
+         * Process the Movie cast data.
+         * @param jObj
+         */
+        private void processMovieCast(JSONObject jObj) {
+            if (jObj != null) {
+                castData = new ArrayList<CastData>();
+                try {
+                    JSONArray array = jObj.getJSONArray("cast");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+
+                        castData.add(
+                                new CastData(object.getString("name"),
+                                        object.getString("profile_path"),
+                                        object.getString("character"),
+                                        object.getInt("id"),
+                                        object.getInt("order")));
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "", e);
+                }
+                populateCastList(castData);
             }
         }
     }

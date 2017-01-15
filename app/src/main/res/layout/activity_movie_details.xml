@@ -295,10 +295,15 @@
                         android:text="Cast"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-                    <TextView
+                    <GridView
+                        android:id="@+id/cast_data"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/cheese_ipsum" />
+                        android:columnWidth="@dimen/movie_details_image_layout_width"
+                        android:horizontalSpacing="@dimen/movie_guide_gridview_horizontal_spacing"
+                        android:numColumns="auto_fit"
+                        android:stretchMode="columnWidth"
+                        android:verticalSpacing="@dimen/movie_guide_gridview_vertical_spacing" />
 
                 </LinearLayout>
 

@@ -173,8 +173,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onMovieClick(int movieId) {
-        Log.v(TAG, "onMovieClick movieId = " + movieId);
+    public void onItemSelectionClick(int movieId) {
+        Log.v(TAG, "onItemSelectionClick movieId = " + movieId);
 
         // Launch a Details Activity
         Context context = getApplicationContext();
