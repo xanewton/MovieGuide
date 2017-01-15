@@ -23,11 +23,14 @@ import java.util.List;
 public class MovieDetails {
     private final MovieDetailsData detailsData;
     private final List<TrailerData> trailersData;
+    private final List<ReviewData> reviewsData;
 
     // Constructor
-    public MovieDetails(MovieDetailsData detailsData, List<TrailerData> trailersData) {
+    public MovieDetails(MovieDetailsData detailsData, List<TrailerData> trailersData,
+                        List<ReviewData> reviewsData) {
         this.detailsData = detailsData;
         this.trailersData = trailersData;
+        this.reviewsData = reviewsData;
     }
 
     // Getters
@@ -37,5 +40,9 @@ public class MovieDetails {
 
     public List<TrailerData> getTrailersData() {
         return trailersData;
+    }
+
+    public List<ReviewData> getReviewsData() {
+        return reviewsData;
     }
 }

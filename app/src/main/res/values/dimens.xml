@@ -48,4 +48,11 @@
     <dimen name="movie_details_trailer_image_view_layout_width">30dp</dimen>
     <dimen name="movie_details_trailer_image_view_layout_height">30dp</dimen>
 
+    <dimen name="movie_details_review_list_item_minSize">60dp</dimen>
+    <dimen name="movie_details_review_author_paddingLeft">8dp</dimen>
+    <dimen name="movie_details_review_author_paddingTop">8dp</dimen>
+    <dimen name="movie_details_review_content_paddingLeft">8dp</dimen>
+    <dimen name="movie_details_review_content_paddingTop">8dp</dimen>
+
+
 </resources>
