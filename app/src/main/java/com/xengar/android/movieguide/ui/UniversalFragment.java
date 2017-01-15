@@ -86,7 +86,7 @@ public class UniversalFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id) {
                     int movieId = (int) adapter.getItemId(position);
-                    ((OnItemClickListener) getActivity()).onMovieClick(movieId);
+                    ((OnItemClickListener) getActivity()).onItemSelectionClick(movieId);
                 }
             });
         }

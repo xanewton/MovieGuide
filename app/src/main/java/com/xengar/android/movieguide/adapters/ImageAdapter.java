@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Image adapter
+ * Image adapter used to fill the list of Movie posters.
  */
 public class ImageAdapter extends BaseAdapter {
 
@@ -44,47 +44,48 @@ public class ImageAdapter extends BaseAdapter {
     private final ArrayList<MovieData> finalMoviePosters = new ArrayList<>();
     private final HashSet<Integer> movieIdSet = new HashSet<>();
     private final float density;
-
     private final Context mContext;
 
+    // Constructor
     public ImageAdapter(Context c) {
         mContext = c;
         density = mContext.getResources().getDisplayMetrics().density;
     }
 
+    @Override
     public int getCount() {
         return finalMoviePosters.size();
     }
 
+    @Override
     public Object getItem(int position) {
         return finalMoviePosters.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
         return finalMoviePosters.get(position).getMovieId();
     }
 
-    // create a new ImageView for each item referenced by the Adapter
+    // Creates a new ImageView for each item referenced by the Adapter.
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
-        ImageView imageView;
-        TextView textView;
         if (convertView == null) {
             view = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                     .inflate(R.layout.image_layout, parent, false);
-
         } else {
             view = convertView;
         }
 
         MovieData data = finalMoviePosters.get(position);
-        imageView = (ImageView) view.findViewById(R.id.movie_poster_view);
+        ImageView imageView = (ImageView) view.findViewById(R.id.movie_poster_view);
         view.setLayoutParams(new GridView.LayoutParams((int) (IMAGE_WIDTH * density),
                 (int) (IMAGE_HEIGHT * density)));
 
         //imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         if (data.getMoviePoster() == null) {
-            textView = (TextView) view.findViewById(R.id.movie_title);
+            TextView textView = (TextView) view.findViewById(R.id.movie_title);
             textView.setText(data.getMovieTitle());
         }
 
@@ -100,7 +101,6 @@ public class ImageAdapter extends BaseAdapter {
             Log.w(TAG, "Movie duplicate found, movieID = " + res.getMovieId());
             return;
         }
-
         finalMoviePosters.add(res);
         movieIdSet.add(res.getMovieId());
     }

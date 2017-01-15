@@ -24,13 +24,15 @@ public class MovieDetails {
     private final MovieDetailsData detailsData;
     private final List<TrailerData> trailersData;
     private final List<ReviewData> reviewsData;
+    private final List<CastData> castData;
 
     // Constructor
     public MovieDetails(MovieDetailsData detailsData, List<TrailerData> trailersData,
-                        List<ReviewData> reviewsData) {
+                        List<ReviewData> reviewsData, List<CastData> castData) {
         this.detailsData = detailsData;
         this.trailersData = trailersData;
         this.reviewsData = reviewsData;
+        this.castData = castData;
     }
 
     // Getters
@@ -44,5 +46,9 @@ public class MovieDetails {
 
     public List<ReviewData> getReviewsData() {
         return reviewsData;
+    }
+
+    public List<CastData> getCastData() {
+        return castData;
     }
 }
