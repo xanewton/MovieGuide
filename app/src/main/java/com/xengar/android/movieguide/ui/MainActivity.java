@@ -17,6 +17,7 @@ package com.xengar.android.movieguide.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -68,8 +69,29 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // Set the initial fragment
-        launchFragment("upcoming");
-        getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+        String itemType = prefs.getString("movie_category", "UpcomingMovies");
+        launchFragment(itemType);
+
+        // change title
+        switch (itemType){
+            case "UpcomingMovies":
+                getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
+                navigationView.setCheckedItem(R.id.nav_upcomming_movies);
+                break;
+            case "TopRatedMovies":
+                getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
+                navigationView.setCheckedItem(R.id.nav_top_rated_movies);
+                break;
+            case "PopularMovies":
+                getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
+                navigationView.setCheckedItem(R.id.nav_popular_movies);
+                break;
+            case "NowPlayingMovies":
+                getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
+                navigationView.setCheckedItem(R.id.nav_now_playing_movies);
+                break;
+        }
     }
 
     @Override
@@ -144,7 +166,6 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
             getSupportActionBar().setTitle(R.string.app_name);
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -155,16 +176,17 @@ public class MainActivity extends AppCompatActivity
     /**
      * Launches the selected fragment.
      *
-     * @param sorting The sorting order to be put in the bundle
+     * @param category The type of search
      */
-    private void launchFragment(String sorting) {
+    private void launchFragment(String category) {
         // Set sorting preference
-        Bundle bundle = new Bundle();
-        bundle.putString("itemType", sorting);
+        SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
+        SharedPreferences.Editor e = prefs.edit();
+        e.putString("movie_category", category); // save "value" to the SharedPreferences
+        e.commit();
 
         // Handle selecting item action
         UniversalFragment fragment = new UniversalFragment();
-        fragment.setArguments(bundle);
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);

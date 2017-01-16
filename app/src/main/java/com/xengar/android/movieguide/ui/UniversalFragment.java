@@ -17,6 +17,7 @@ package com.xengar.android.movieguide.ui;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -65,7 +66,8 @@ public class UniversalFragment extends Fragment {
         adapter = new ImageAdapter(getActivity());
         setRetainInstance(true);
 
-        itemType = getArguments().getString("itemType", "UpcomingMovies");
+        SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
+        itemType = prefs.getString("movie_category", "UpcomingMovies");
         if (itemType.equals("PopularMovies")) {
             sortOrder = "popularity.desc";
         } else if (itemType.equals("NowPlayingMovies")) {
