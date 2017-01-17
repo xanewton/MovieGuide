@@ -16,6 +16,7 @@
 package com.xengar.android.movieguide.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +24,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.CastData;
+import com.xengar.android.movieguide.ui.PersonProfileActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -119,8 +120,14 @@ public class CastAdapter extends BaseAdapter {
                 CastData data = (CastData) v.getTag();
 
                 // TODO: Show person details in new activity.
-                Toast.makeText(mContext, "Toast message for personID: " + data.getPersonId(),
-                        Toast.LENGTH_LONG).show();
+                //Toast.makeText(mContext, "Toast message for personID: " + data.getPersonId(),
+                //        Toast.LENGTH_LONG).show();
+
+                // Launch a Person Profile Activity
+                Intent intent = new Intent(mContext, PersonProfileActivity.class);
+                intent.putExtra(PersonProfileActivity.EXTRA_PERSON_ID, data.getPersonId());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                mContext.startActivity(intent);
             }
         });
 
