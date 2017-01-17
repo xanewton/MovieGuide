@@ -37,6 +37,12 @@ import com.xengar.android.movieguide.sync.FetchItemListener;
 import com.xengar.android.movieguide.sync.FetchMovie;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
+import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
+import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -45,7 +51,6 @@ import com.xengar.android.movieguide.sync.OnItemClickListener;
 public class UniversalFragment extends Fragment {
 
     private static final String TAG = UniversalFragment.class.getSimpleName();
-    private static final String SHARED_PREF_NAME = "com.xengar.android.movieguide";
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
 
     private ImageAdapter adapter;
@@ -67,10 +72,10 @@ public class UniversalFragment extends Fragment {
         setRetainInstance(true);
 
         SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
-        itemType = prefs.getString("movie_category", "UpcomingMovies");
-        if (itemType.equals("PopularMovies")) {
+        itemType = prefs.getString(MOVIE_CATEGORY, UPCOMING_MOVIES);
+        if (itemType.equals(POPULAR_MOVIES)) {
             sortOrder = "popularity.desc";
-        } else if (itemType.equals("NowPlayingMovies")) {
+        } else if (itemType.equals(NOW_PLAYING_MOVIES)) {
             sortOrder = "current.desc";
         }
     }
@@ -130,14 +135,14 @@ public class UniversalFragment extends Fragment {
             /*adapter.clearData();
             FetchFavoriteMovieTask task = new FetchFavoriteMovieTask(adapter, getActivity().getContentResolver(), posterBaseUri);
             task.execute();*/
-        } else if (itemType.equals("NowPlayingMovies")) {
-            gridview.setOnScrollListener(new ItemViewScrollListener("NowPlayingMovies"));
-        } else if (itemType.equals("TopRatedMovies")) {
-            gridview.setOnScrollListener(new ItemViewScrollListener("TopRatedMovies"));
-        } else if (itemType.equals("UpcomingMovies")) {
-            gridview.setOnScrollListener(new ItemViewScrollListener("UpcomingMovies"));
+        } else if (itemType.equals(NOW_PLAYING_MOVIES)) {
+            gridview.setOnScrollListener(new ItemViewScrollListener(NOW_PLAYING_MOVIES));
+        } else if (itemType.equals(TOP_RATED_MOVIES)) {
+            gridview.setOnScrollListener(new ItemViewScrollListener(TOP_RATED_MOVIES));
+        } else if (itemType.equals(UPCOMING_MOVIES)) {
+            gridview.setOnScrollListener(new ItemViewScrollListener(UPCOMING_MOVIES));
         } else {
-            gridview.setOnScrollListener(new ItemViewScrollListener("PopularMovies"));
+            gridview.setOnScrollListener(new ItemViewScrollListener(POPULAR_MOVIES));
         }
     }
 

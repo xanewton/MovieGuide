@@ -35,10 +35,20 @@ import android.view.View;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
+import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
+import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
+
+/**
+ * Main Activity class
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnItemClickListener {
 
-    private static final String SHARED_PREF_NAME = "com.xengar.android.movieguide";
     private static final String TAG = MainActivity.class.getSimpleName();
     private Toolbar toolbar = null;
     private NavigationView navigationView = null;
@@ -70,24 +80,24 @@ public class MainActivity extends AppCompatActivity
 
         // Set the initial fragment
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-        String itemType = prefs.getString("movie_category", "UpcomingMovies");
+        String itemType = prefs.getString(MOVIE_CATEGORY, UPCOMING_MOVIES);
         launchFragment(itemType);
 
         // change title
         switch (itemType){
-            case "UpcomingMovies":
+            case UPCOMING_MOVIES:
                 getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
                 navigationView.setCheckedItem(R.id.nav_upcomming_movies);
                 break;
-            case "TopRatedMovies":
+            case TOP_RATED_MOVIES:
                 getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
                 navigationView.setCheckedItem(R.id.nav_top_rated_movies);
                 break;
-            case "PopularMovies":
+            case POPULAR_MOVIES:
                 getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
                 navigationView.setCheckedItem(R.id.nav_popular_movies);
                 break;
-            case "NowPlayingMovies":
+            case NOW_PLAYING_MOVIES:
                 getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
                 navigationView.setCheckedItem(R.id.nav_now_playing_movies);
                 break;
@@ -133,19 +143,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_top_rated_movies) {
-            launchFragment("TopRatedMovies");
+            launchFragment(TOP_RATED_MOVIES);
             getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
 
         } else if (id == R.id.nav_upcomming_movies) {
-            launchFragment("UpcomingMovies");
+            launchFragment(UPCOMING_MOVIES);
             getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
 
         } else if (id == R.id.nav_now_playing_movies) {
-            launchFragment("NowPlayingMovies");
+            launchFragment(NOW_PLAYING_MOVIES);
             getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
 
         } else if (id == R.id.nav_popular_movies) {
-            launchFragment("PopularMovies");
+            launchFragment(POPULAR_MOVIES);
             getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
 
         } else if (id == R.id.nav_favorite_movies) {
@@ -182,7 +192,7 @@ public class MainActivity extends AppCompatActivity
         // Set sorting preference
         SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
         SharedPreferences.Editor e = prefs.edit();
-        e.putString("movie_category", category); // save "value" to the SharedPreferences
+        e.putString(MOVIE_CATEGORY, category); // save "value" to the SharedPreferences
         e.commit();
 
         // Handle selecting item action
@@ -198,10 +208,15 @@ public class MainActivity extends AppCompatActivity
     public void onItemSelectionClick(int movieId) {
         Log.v(TAG, "onItemSelectionClick movieId = " + movieId);
 
-        // Launch a Details Activity
+        // Save movieId to Preferences
+        SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
+        SharedPreferences.Editor e = prefs.edit();
+        e.putInt(MOVIE_ID, movieId);
+        e.commit();
+
+        // Launch a Movie Details Activity
         Context context = getApplicationContext();
         Intent intent = new Intent(context, MovieDetailsActivity.class);
-        intent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }

@@ -15,6 +15,7 @@
  */
 package com.xengar.android.movieguide.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,10 +25,13 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.xengar.android.movieguide.R;
 
+import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
+
 public class PersonProfileActivity extends AppCompatActivity {
 
-    public static final String  EXTRA_PERSON_ID = "PersonID";
     private static final String TAG = PersonProfileActivity.class.getSimpleName();
+    private int personId;
 
 
     @Override
@@ -37,6 +41,9 @@ public class PersonProfileActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+        personId = prefs.getInt(PERSON_ID, -1);
 
         loadBackgroundPoster();
 
