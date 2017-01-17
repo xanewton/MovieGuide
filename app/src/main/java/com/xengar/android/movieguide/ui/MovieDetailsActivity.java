@@ -19,6 +19,7 @@ package com.xengar.android.movieguide.ui;
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -28,7 +29,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -81,6 +81,8 @@ import static com.xengar.android.movieguide.data.FavoriteMoviesContract.Favorite
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.JSONUtils.getDoubleValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getIntValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getListValue;
@@ -93,13 +95,11 @@ import static com.xengar.android.movieguide.utils.JSONUtils.getUriValue;
 public class MovieDetailsActivity extends AppCompatActivity
         implements YouTubePlayer.OnInitializedListener {
 
-    public static final String EXTRA_MOVIE_ID = "MovieID";
     private static final Uri URI =
             Uri.parse("content://" + FavoriteMoviesProvider.AUTHORITY + "/" + TABLE_NAME);
 
     private static final String IMDB_URI = "http://www.imdb.com/title";
     private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
-    private static final String POSTER_CAST_BASE_URI = "http://image.tmdb.org/t/p/w92";
     private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
     private static final String SHORT_TEXT_PREVIEW = " \n <font color=#FF8A80>... show more</font>";
     private static final String LONG_TEXT_PREVIEW = " \n<font color=#FF8A80>... show less</font>";
@@ -118,7 +118,6 @@ public class MovieDetailsActivity extends AppCompatActivity
     private LinearLayout rating;
     private TextView textRating;
     private ImageView starRating;
-    private NestedScrollView scrollView;
     private ImageView backgroundPoster;
     private ImageView moviePoster;
     private TextView movieDate;
@@ -151,9 +150,9 @@ public class MovieDetailsActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
-
-        Intent intent = getIntent();
-        movieID = intent.getIntExtra(EXTRA_MOVIE_ID, -1);
+        
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+        movieID = prefs.getInt(MOVIE_ID, -1);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -169,7 +168,6 @@ public class MovieDetailsActivity extends AppCompatActivity
         rating = (LinearLayout) findViewById(R.id.rating);
         textRating = (TextView) findViewById(R.id.text_rating);
         starRating = (ImageView) findViewById(R.id.star_rating);
-        scrollView = (NestedScrollView) findViewById(R.id.nested_scroll_view);
         backgroundPoster = (ImageView) findViewById(R.id.background_poster);
         moviePoster = (ImageView) findViewById(R.id.movie_poster);
         movieDate = (TextView) findViewById(R.id.movie_date);

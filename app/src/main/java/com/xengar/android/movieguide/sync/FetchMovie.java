@@ -28,6 +28,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
+
 /**
  * FetchMovie
  */
@@ -60,16 +65,16 @@ public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
 
         // assign the category to query
         switch (itemType){
-            case "TopRatedMovies":
+            case TOP_RATED_MOVIES:
                 this.requestType = MOVIE_TOP_RATED + "?page=";
                 break;
-            case "NowPlayingMovies":
+            case NOW_PLAYING_MOVIES:
                 this.requestType = MOVIE_NOW_PLAYING + "?page=";
                 break;
-            case "UpcomingMovies":
+            case UPCOMING_MOVIES:
                 this.requestType = MOVIE_UPCOMING + "?page=";
                 break;
-            case "PopularMovies":
+            case POPULAR_MOVIES:
                 this.requestType = DISCOVER_MOVIE + "?sort_by=" + sortOrder + "&page=";
                 break;
         }

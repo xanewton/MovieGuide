@@ -17,6 +17,7 @@ package com.xengar.android.movieguide.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,9 @@ import com.xengar.android.movieguide.ui.PersonProfileActivity;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 
 /**
  * Cast adapter used to fill the cast list in the Movie Details.
@@ -123,9 +127,13 @@ public class CastAdapter extends BaseAdapter {
                 //Toast.makeText(mContext, "Toast message for personID: " + data.getPersonId(),
                 //        Toast.LENGTH_LONG).show();
 
+                // Set PersonID to preferences
+                SharedPreferences prefs = mContext.getSharedPreferences(SHARED_PREF_NAME, 0);
+                SharedPreferences.Editor e = prefs.edit();
+                e.putInt(PERSON_ID, data.getPersonId());
+
                 // Launch a Person Profile Activity
                 Intent intent = new Intent(mContext, PersonProfileActivity.class);
-                intent.putExtra(PersonProfileActivity.EXTRA_PERSON_ID, data.getPersonId());
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 mContext.startActivity(intent);
             }
