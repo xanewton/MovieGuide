@@ -131,6 +131,7 @@ public class CastAdapter extends BaseAdapter {
                 SharedPreferences prefs = mContext.getSharedPreferences(SHARED_PREF_NAME, 0);
                 SharedPreferences.Editor e = prefs.edit();
                 e.putInt(PERSON_ID, data.getPersonId());
+                e.commit();
 
                 // Launch a Person Profile Activity
                 Intent intent = new Intent(mContext, PersonProfileActivity.class);

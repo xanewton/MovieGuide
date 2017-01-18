@@ -72,13 +72,17 @@ import java.util.Locale;
 
 import static android.app.DownloadManager.COLUMN_STATUS;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
+import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BUDGET;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_DURATION;
+import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_HOMEPAGE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_IMDB_ID;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_MOVIE_PLOT;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_TITLE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_ORIGINAL_LANGUAGE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
+import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_REVENUE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
+import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_COUNT;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
@@ -130,6 +134,9 @@ public class MovieDetailsActivity extends AppCompatActivity
     private TextView textProdCompanies;
     private TextView textIMDbId;
     private TextView moviePlot;
+    private TextView budget;
+    private TextView revenue;
+    private TextView homepage;
 
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer youTubePlayer;
@@ -150,19 +157,13 @@ public class MovieDetailsActivity extends AppCompatActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
-        
+
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         movieID = prefs.getInt(MOVIE_ID, -1);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Get Movie Details data
-        fetchMovieData();
-        defineCollapsingToolbarLayoutBehaviour();
-
-        loadBackgroundPoster();
 
         title = (TextView) findViewById(R.id.title);
         rating = (LinearLayout) findViewById(R.id.rating);
@@ -182,9 +183,17 @@ public class MovieDetailsActivity extends AppCompatActivity
         trailerList = (LinearLayout) findViewById(R.id.movie_trailers);
         reviewList = (LinearLayout) findViewById(R.id.movie_reviews);
         gridview = (GridView) findViewById(R.id.cast_data);
+        budget = (TextView) findViewById(R.id.budget);
+        revenue = (TextView) findViewById(R.id.revenue);
+        homepage = (TextView) findViewById(R.id.homepage);
 
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
         getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
+
+        // Get Movie Details data
+        fetchMovieData();
+        defineCollapsingToolbarLayoutBehaviour();
+        loadBackgroundPoster();
     }
 
 
@@ -235,8 +244,6 @@ public class MovieDetailsActivity extends AppCompatActivity
             trailerList.removeAllViews();
         if (reviewList != null)
             reviewList.removeAllViews();
-        if (gridview != null)
-            gridview.removeAllViews();
 
         if (data == null) {
             FetchMovieTask detailsTask = new FetchMovieTask(FetchMovieTask.MOVIE_DETAILS);
@@ -407,7 +414,8 @@ public class MovieDetailsActivity extends AppCompatActivity
 
         if (container.getVoteAverage() != null) {
             textRating.setText(container.getVoteAverage()
-                    + getString(R.string.details_view_text_vote_average_divider));
+                    + getString(R.string.details_view_text_vote_average_divider)
+                    + " of " + container.getVoteCount());
         } else {
             movieVoteAverage.setVisibility(View.GONE);
         }
@@ -500,7 +508,7 @@ public class MovieDetailsActivity extends AppCompatActivity
     }
 
     /**
-     * Populates status and IMDbId in screen.
+     * Populates status, IMDbId, budget, revenue and homepage in screen.
      * @param container
      */
     private void PopulateDetailsStatus(final MovieDetailsData container) {
@@ -510,6 +518,22 @@ public class MovieDetailsActivity extends AppCompatActivity
         }
         else {
             textStatus.setVisibility(View.GONE);
+        }
+
+        if (container.getBudget() != null) {
+            budget.setText(container.getBudget());
+        } else {
+            budget.setVisibility(View.GONE);
+        }
+        if (container.getRevenue() != null) {
+            revenue.setText(container.getRevenue());
+        } else {
+            revenue.setVisibility(View.GONE);
+        }
+        if (container.getHomepage() != null) {
+            homepage.setText(container.getHomepage());
+        } else {
+            homepage.setVisibility(View.GONE);
         }
 
         if(container.getImdbUri() != null  && container.getImdbUri().isEmpty()) {
@@ -799,13 +823,17 @@ public class MovieDetailsActivity extends AppCompatActivity
                             getStringValue(jObj, "release_date"),
                             getIntValue(jObj, "runtime", 0),
                             getDoubleValue(jObj, "vote_average", 0.0),
+                            getIntValue(jObj, "vote_count", 0),
                             getStringValue(jObj, "backdrop_path"),
                             getStringValue(jObj, "original_language"),
                             getListValue(jObj, "production_countries"),
                             getListValue(jObj, "genres"),
                             getStringValue(jObj, "status"),
                             getUriValue(jObj, "imdb_uri" + IMDB_URI),
-                            getListValue(jObj, "production_companies"));
+                            getListValue(jObj, "production_companies"),
+                            getStringValue(jObj, "budget"),
+                            getStringValue(jObj, "revenue"),
+                            getStringValue(jObj, "homepage"));
                     populateDetails(detailsData);
                 } catch (JSONException e) {
                     Log.e(TAG, "", e);
@@ -814,22 +842,25 @@ public class MovieDetailsActivity extends AppCompatActivity
             } else {
                 final Cursor cursor = getContentResolver().query(
                         ContentUris.withAppendedId(URI, movieID),
-                        new String[]{COLUMN_DURATION, COLUMN_YEAR, COLUMN_MOVIE_PLOT,
-                                COLUMN_NAME_TITLE, COLUMN_POSTER_PATH, COLUMN_VOTE_AVERAGE,
+                        new String[]{ COLUMN_POSTER_PATH, COLUMN_NAME_TITLE, COLUMN_MOVIE_PLOT,
+                                COLUMN_YEAR, COLUMN_DURATION, COLUMN_VOTE_AVERAGE, COLUMN_VOTE_COUNT,
                                 COLUMN_BACKGROUND_PATH, COLUMN_ORIGINAL_LANGUAGE,
                                 /*COLUMN_ORIGINAL_COUNTRIES, COLUMN_GENRES,*/ COLUMN_STATUS,
-                                COLUMN_IMDB_ID/*, COLUMN_PROD_COMPANIES */},
+                                COLUMN_IMDB_ID/*, COLUMN_PROD_COMPANIES */, COLUMN_BUDGET,
+                                COLUMN_REVENUE, COLUMN_HOMEPAGE},
                         null, null, null);
                 Log.d(TAG, "Cursor = " + cursor.getCount());
 
                 if (cursor.getCount() != 0) {
                     cursor.moveToFirst();
-                    detailsData = new MovieDetailsData(cursor.getString(4), movieID,
-                            cursor.getString(3), cursor.getString(2), cursor.getString(1),
-                            cursor.getInt(0), cursor.getDouble(5), cursor.getString(6),
-                            cursor.getString(7), Collections.<String>emptyList(),
-                            Collections.<String>emptyList(), cursor.getString(10),
-                            cursor.getString(11), Collections.<String>emptyList());
+                    // Note: Better if it matches the query order
+                    detailsData = new MovieDetailsData(cursor.getString(0), movieID,
+                            cursor.getString(1), cursor.getString(2), cursor.getString(3),
+                            cursor.getInt(4), cursor.getDouble(5), cursor.getInt(6),
+                            cursor.getString(7), cursor.getString(8), Collections.<String>emptyList(),
+                            Collections.<String>emptyList(), cursor.getString(9),
+                            cursor.getString(10), Collections.<String>emptyList(), cursor.getString(11),
+                            cursor.getString(12), cursor.getString(13));
                     populateDetails(detailsData);
                 }
             }

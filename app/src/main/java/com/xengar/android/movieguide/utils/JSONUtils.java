@@ -15,12 +15,16 @@
  */
 package com.xengar.android.movieguide.utils;
 
+import com.xengar.android.movieguide.data.MovieCreditCast;
+import com.xengar.android.movieguide.data.MovieCreditCrew;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -66,8 +70,9 @@ public final class JSONUtils {
         } else {
             JSONArray jArray = jobj.getJSONArray(name);
             List<String> results = new ArrayList<>(jArray.length());
+            JSONObject Jobject = null;
             for (int i = 0; i < jArray.length(); i++) {
-                JSONObject Jobject = jArray.getJSONObject(i);
+                Jobject = jArray.getJSONObject(i);
                 results.add(Jobject.getString("name"));
             }
             return results;
@@ -83,4 +88,88 @@ public final class JSONUtils {
             return jobj.getString("imdb_id");
         }
     }
+
+    /**
+     * Gets a List of credit cast.
+     * @param jobj
+     * @param
+     * @return
+     * @throws JSONException
+     */
+    public static List<MovieCreditCast> getMovieCreditCastList(JSONObject jobj, String object,
+                                                               String name)
+            throws JSONException {
+        if (jobj.isNull(object)) {
+            return Collections.emptyList();
+        } else {
+            JSONObject Jobject = jobj.getJSONObject(object);
+            if (Jobject.isNull(name)){
+                return Collections.emptyList();
+            } else {
+                List<MovieCreditCast> list = new ArrayList<>();
+                JSONArray jArray = Jobject.getJSONArray(name);
+                JSONObject jsonObject;
+                for (int i = 0; i < jArray.length(); i++) {
+                    jsonObject = jArray.getJSONObject(i);
+                    MovieCreditCast creditCast = new MovieCreditCast(
+                            jsonObject.getInt("id"),
+                            jsonObject.getString("character"),
+                            jsonObject.getString("title"),
+                            jsonObject.getString("poster_path"),
+                            jsonObject.getString("release_date")
+                    );
+                    list.add(i, creditCast);
+                }
+                Collections.sort(list, new Comparator<MovieCreditCast>() {
+                    @Override public int compare(MovieCreditCast p1, MovieCreditCast p2) {
+                        return p2.getReleaseYear() - p1.getReleaseYear(); // Descending
+                    }
+                });
+                return list;
+            }
+        }
+    }
+
+    /**
+     * Gets a List of crew cast.
+     * @param jobj
+     * @param
+     * @return
+     * @throws JSONException
+     */
+    public static List<MovieCreditCrew> getMovieCreditCrewList(JSONObject jobj, String object,
+                                                               String name)
+            throws JSONException {
+        if (jobj.isNull(object)) {
+            return Collections.emptyList();
+        } else {
+            JSONObject Jobject = jobj.getJSONObject(object);
+            if (Jobject.isNull(name)){
+                return Collections.emptyList();
+            } else {
+                List<MovieCreditCrew> list = new ArrayList<>();
+                JSONArray jArray = Jobject.getJSONArray(name);
+                JSONObject jsonObject;
+                for (int i = 0; i < jArray.length(); i++) {
+                    jsonObject = jArray.getJSONObject(i);
+                    MovieCreditCrew creditCrew = new MovieCreditCrew(
+                            jsonObject.getInt("id"),
+                            jsonObject.getString("job"),
+                            jsonObject.getString("title"),
+                            jsonObject.getString("poster_path"),
+                            jsonObject.getString("release_date")
+                    );
+                    // TODO: Sort by date since recent to last.
+                    list.add(i, creditCrew);
+                }
+                Collections.sort(list, new Comparator<MovieCreditCrew>() {
+                    @Override public int compare(MovieCreditCrew p1, MovieCreditCrew p2) {
+                        return p2.getReleaseYear() - p1.getReleaseYear(); // Descending
+                    }
+                });
+                return list;
+            }
+        }
+    }
+
 }
