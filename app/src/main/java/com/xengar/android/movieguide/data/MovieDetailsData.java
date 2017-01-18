@@ -26,6 +26,7 @@ public class MovieDetailsData extends MovieData {
     public final String year;
     public final Integer duration;
     public final Double voteAverage;
+    public final Integer voteCount;
     public final String backgroundPath;
     public final String originalLanguage;
     public final List<String> originalCountries;
@@ -33,18 +34,23 @@ public class MovieDetailsData extends MovieData {
     public final String status;
     public final String imdbUri;
     public final List<String> productionCompanies;
+    public final String budget;
+    public final String revenue;
+    public final String homepage;
 
     // Constructor
     public MovieDetailsData(String moviePoster, int movieId, String title, String plot, String year,
-                            Integer duration, Double voteAverage, String backgroundPath,
-                            String originalLanguage, List<String> originalCountries,
-                            List<String> genres, String status, String imdbUri,
-                            List<String> productionCompanies) {
+                            Integer duration, Double voteAverage, Integer voteCount,
+                            String backgroundPath, String originalLanguage,
+                            List<String> originalCountries, List<String> genres, String status,
+                            String imdbUri, List<String> productionCompanies, String budget,
+                            String revenue, String homepage) {
         super(moviePoster, movieId, title);
         this.plot = plot;
         this.year = year;
         this.duration = duration;
         this.voteAverage = voteAverage;
+        this.voteCount = voteCount;
         this.backgroundPath = backgroundPath;
         this.originalLanguage = originalLanguage;
         this.originalCountries = originalCountries;
@@ -52,6 +58,9 @@ public class MovieDetailsData extends MovieData {
         this.status = status;
         this.imdbUri = imdbUri;
         this.productionCompanies = productionCompanies;
+        this.budget = budget;
+        this.revenue = revenue;
+        this.homepage = homepage;
     }
 
     // Getter methods
@@ -71,6 +80,10 @@ public class MovieDetailsData extends MovieData {
         return voteAverage;
     }
 
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
     public String getBackgroundPath() {
         return backgroundPath;
     }
@@ -83,14 +96,32 @@ public class MovieDetailsData extends MovieData {
         return originalCountries;
     }
 
-    public List<String> getGenres() { return genres; }
+    public List<String> getGenres() {
+        return genres;
+    }
 
-    public String getStatus() { return status; }
+    public String getStatus() {
+        return status;
+    }
 
-    public String getImdbUri() { return imdbUri; }
+    public String getImdbUri() {
+        return imdbUri;
+    }
 
     public List<String> getProductionCompanies() {
         return productionCompanies;
+    }
+
+    public String getBudget() {
+        return budget;
+    }
+
+    public String getRevenue() {
+        return revenue;
+    }
+
+    public String getHomepage() {
+        return homepage;
     }
 
 }
