@@ -85,6 +85,9 @@ import static com.xengar.android.movieguide.data.FavoriteMoviesContract.Favorite
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_COUNT;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME;
+import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
+import static com.xengar.android.movieguide.utils.Constants.IMDB_URI;
+import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -100,17 +103,13 @@ import static com.xengar.android.movieguide.utils.JSONUtils.getUriValue;
 public class MovieDetailsActivity extends AppCompatActivity
         implements YouTubePlayer.OnInitializedListener {
 
+    private static final String TAG = MovieDetailsActivity.class.getSimpleName();
     private static final Uri URI =
             Uri.parse("content://" + FavoriteMoviesProvider.AUTHORITY + "/" + TABLE_NAME);
-
-    private static final String IMDB_URI = "http://www.imdb.com/title";
-    private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
-    private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
     private static final String SHORT_TEXT_PREVIEW = " \n <font color=#FF8A80>... show more</font>";
     private static final String LONG_TEXT_PREVIEW = " \n<font color=#FF8A80>... show less</font>";
     private static final String END_TEXT_PREVIEW = "\n<font color=#FF8A80> the end!</font>";
 
-    private static final String TAG = MovieDetailsActivity.class.getSimpleName();
     private MovieDetailsData detailsData;
     private MovieDetails data = null;
     private List<TrailerData> trailerData;

@@ -40,6 +40,7 @@ import com.xengar.android.movieguide.sync.OnItemClickListener;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
@@ -51,7 +52,6 @@ import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 public class UniversalFragment extends Fragment {
 
     private static final String TAG = UniversalFragment.class.getSimpleName();
-    private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
 
     private ImageAdapter adapter;
     private String sortOrder;
