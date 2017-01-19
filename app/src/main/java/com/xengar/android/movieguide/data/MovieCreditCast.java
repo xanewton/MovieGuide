@@ -36,7 +36,7 @@ public class MovieCreditCast {
         this.character = character;
         this.movieTitle = movieTitle;
         this.posterPath = posterPath;
-        this.releaseDate = releaseDate;
+        this.releaseDate = releaseDate; // "YYYY-MM-dd"
         this.releaseYear = (releaseDate != null && !releaseDate.equals("null"))?
                 Integer.parseInt(StringUtils.substringBefore(releaseDate, "-")) : 0;
     }

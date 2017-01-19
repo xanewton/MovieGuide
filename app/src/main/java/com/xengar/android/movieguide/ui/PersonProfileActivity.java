@@ -55,16 +55,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.R.attr.id;
+import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
+import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
+import static com.xengar.android.movieguide.utils.Constants.POSTER_PERSON_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.JSONUtils.getStringValue;
 
 public class PersonProfileActivity extends AppCompatActivity {
 
-    private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
-    private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
     private static final String TAG = PersonProfileActivity.class.getSimpleName();
     private int personId;
     private int movieID;
@@ -393,7 +394,6 @@ public class PersonProfileActivity extends AppCompatActivity {
     private class FetchPersonTask extends AsyncTask<Integer, Void, JSONObject> {
 
         public static final String PERSON_PROFILE = "PersonProfile";
-        private static final String POSTER_PERSONAL_IMAGE_BASE_URI = "http://image.tmdb.org/t/p/w92";
         private String requestType = null;
 
         // Constructor
@@ -433,7 +433,7 @@ public class PersonProfileActivity extends AppCompatActivity {
                 try {
                     Log.v(TAG, "jObj = " + jObj);
                     personalProfileData = new PersonalProfileData(getStringValue(jObj, "name"),
-                            POSTER_PERSONAL_IMAGE_BASE_URI + JSONUtils.getStringValue(jObj, "profile_path"),
+                            POSTER_PERSON_BASE_URI + JSONUtils.getStringValue(jObj, "profile_path"),
                             JSONUtils.getStringValue(jObj, "place_of_birth"),
                             JSONUtils.getStringValue(jObj, "birthday"),
                             JSONUtils.getStringValue(jObj, "deathday"),

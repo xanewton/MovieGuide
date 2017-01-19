@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
+import static com.xengar.android.movieguide.utils.Constants.POSTER_PERSON_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 
 /**
@@ -44,7 +45,6 @@ import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 public class CastAdapter extends BaseAdapter {
 
     private static final String TAG = CastAdapter.class.getSimpleName();
-    private static final String POSTER_CAST_BASE_URI = "http://image.tmdb.org/t/p/w92";
     private final ArrayList<CastData> movieCast = new ArrayList<>();
     private final HashSet<Integer> castIdSet = new HashSet<>();
     private final Context mContext;
@@ -110,7 +110,7 @@ public class CastAdapter extends BaseAdapter {
             castImage.setVisibility(View.GONE);
         } else {
             Picasso pic = Picasso.with(mContext);
-            pic.load(POSTER_CAST_BASE_URI + cast.getCastImagePath())
+            pic.load(POSTER_PERSON_BASE_URI + cast.getCastImagePath())
                     .fit().centerCrop()
                     .error(R.drawable.no_movie_poster)
                     .into(castImage);

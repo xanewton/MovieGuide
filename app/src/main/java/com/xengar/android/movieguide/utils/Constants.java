@@ -29,4 +29,9 @@ public final class  Constants {
     public static final String PERSON_ID = "person_id";
     public static final String MOVIE_ID = "movie_id";
     public static final String MOVIE_BACKGROUND_POSTER = "movie_background_poster";
+
+    public static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
+    public static final String POSTER_PERSON_BASE_URI = "http://image.tmdb.org/t/p/w92";
+    public static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
+    public static final String IMDB_URI = "http://www.imdb.com/title";
 }

@@ -83,7 +83,6 @@ public class MovieAdapter extends BaseAdapter {
         Log.v(TAG, "movie.getMovieTitle() " + movie.getMovieTitle());
         ImageView poster = (ImageView) view.findViewById(R.id.image);
         if (movie.getMovieTitle() == null) {
-            poster.setVisibility(View.GONE);
             title.setVisibility(View.GONE);
         } else {
             title.setText(movie.getMovieTitle());
