@@ -15,24 +15,35 @@
  */
 package com.xengar.android.movieguide.ui;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.adapters.MovieAdapter;
 import com.xengar.android.movieguide.data.MovieCreditCast;
 import com.xengar.android.movieguide.data.MovieCreditCrew;
+import com.xengar.android.movieguide.data.MovieData;
 import com.xengar.android.movieguide.data.PersonalProfileData;
 import com.xengar.android.movieguide.utils.JSONLoader;
 import com.xengar.android.movieguide.utils.JSONUtils;
@@ -40,9 +51,11 @@ import com.xengar.android.movieguide.utils.JSONUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.R.attr.id;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -50,6 +63,8 @@ import static com.xengar.android.movieguide.utils.JSONUtils.getStringValue;
 
 public class PersonProfileActivity extends AppCompatActivity {
 
+    private static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
+    private static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
     private static final String TAG = PersonProfileActivity.class.getSimpleName();
     private int personId;
     private int movieID;
@@ -57,13 +72,18 @@ public class PersonProfileActivity extends AppCompatActivity {
     private PersonalProfileData personalProfileData;
     private TextView biography;
     private ImageView personalProfImage;
+    private LinearLayout rating;
+    private TextView textPopularity;
+    private ImageView starRating;
+    private ImageView backgroundPoster;
     private TextView personName;
-    private TextView popularity;
     private TextView imdbId;
     private TextView placeOfBith;
     private TextView birthday;
     private TextView deathday;
     private TextView homepage;
+    private GridView gridview; // Movie credits list
+    private boolean gridViewResized = false; // boolean for resize gridview hack
     private LinearLayout creditCastList;
     private LinearLayout creditCrewList;
 
@@ -82,19 +102,23 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         personName = (TextView) findViewById(R.id.person);
+        rating = (LinearLayout) findViewById(R.id.rating);
+        textPopularity = (TextView) findViewById(R.id.text_popularity);
+        starRating = (ImageView) findViewById(R.id.star_rating);
+        backgroundPoster = (ImageView) findViewById(R.id.background_poster);
         biography = (TextView) findViewById(R.id.biography);
         personalProfImage = (ImageView) findViewById(R.id.personal_image);
-        popularity = (TextView) findViewById(R.id.popularity);
         imdbId = (TextView) findViewById(R.id.imdb_id);
         placeOfBith = (TextView) findViewById(R.id.placeOfBirth);
         birthday = (TextView) findViewById(R.id.birthday);
         deathday = (TextView) findViewById(R.id.deathday);
         homepage = (TextView) findViewById(R.id.homepage);
+        gridview = (GridView) findViewById(R.id.credit_movies_data);
         creditCastList = (LinearLayout) findViewById(R.id.credit_cast_data);
         creditCrewList = (LinearLayout) findViewById(R.id.credit_crew_data);
 
-        fetchPersonData();
         loadBackgroundPoster();
+        fetchPersonData();
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -129,13 +153,65 @@ public class PersonProfileActivity extends AppCompatActivity {
      * @param personalData
      */
     private void populatePersonalData(PersonalProfileData personalData) {
+
+        final Palette.PaletteAsyncListener paletteAsyncListener = new Palette.PaletteAsyncListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public void onGenerated(Palette palette) {
+                Log.v(TAG, "textSwatch.PaletteAsyncListener");
+                Palette.Swatch textSwatch = palette.getMutedSwatch();
+                Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
+
+                if (textSwatch != null && bgSwatch != null) {
+                    personName.setTextColor(textSwatch.getTitleTextColor());
+                    personName.setBackgroundColor(textSwatch.getRgb());
+                    textPopularity.setTextColor(bgSwatch.getTitleTextColor());
+                    rating.setBackgroundColor(bgSwatch.getRgb());
+                    starRating.setBackgroundColor(bgSwatch.getTitleTextColor());
+                } else if (bgSwatch != null) {
+                    personName.setBackgroundColor(bgSwatch.getRgb());
+                    personName.setTextColor(bgSwatch.getBodyTextColor());
+                    rating.setBackgroundColor(bgSwatch.getBodyTextColor());
+                    textPopularity.setTextColor(bgSwatch.getRgb());
+                    starRating.setBackgroundColor(bgSwatch.getRgb());
+                } else if (textSwatch != null) {
+                    personName.setBackgroundColor(textSwatch.getRgb());
+                    personName.setTextColor(textSwatch.getBodyTextColor());
+                    rating.setBackgroundColor(textSwatch.getBodyTextColor());
+                    textPopularity.setTextColor(textSwatch.getRgb());
+                    starRating.setBackgroundColor(textSwatch.getRgb());
+                } else {
+                    personName.setTextColor(getResources().getColor(R.color.textcolorPrimary, null));
+                    personName.setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
+                    textPopularity.setTextColor(getResources().getColor(R.color.textcolorSec, null));
+                    rating.setBackgroundColor(getResources().getColor(R.color.colorBackground, null));
+                }
+            }
+        };
+
+        Callback callback = new Callback() {
+            @Override
+            public void onSuccess() {
+                if (backgroundPoster != null) {
+                    Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
+                    Palette.from(bitmapBg).generate(paletteAsyncListener);
+                }
+            }
+            @Override
+            public void onError() {
+                Log.v(TAG, "Callback error");
+                Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
+                Palette.from(bitmapBg).generate(paletteAsyncListener);
+            }
+        };
+
         if (personalData == null)
             return;
 
         collapsingToolbar.setTitle(personalData.getActorName());
         personName.setText(personalData.getActorName());
         biography.setText(personalData.getBiography());
-        popularity.setText("" + personalData.getPopularity());
+        textPopularity.setText("" + personalData.getPopularity());
         imdbId.setText(personalData.getImdbId());
         placeOfBith.setText(personalData.getPlaceOfBirth());
         birthday.setText(personalData.getBirthday());
@@ -163,8 +239,103 @@ public class PersonProfileActivity extends AppCompatActivity {
                     .into(personalProfImage);
         }
 
+        /**
+         * HACK read movie poster from preferences.
+         * TODO: Use last movie poster.
+         */
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+        String backgroundPoster = prefs.getString(MOVIE_BACKGROUND_POSTER, "null");
+        PopulateBackgroundPoster(backgroundPoster, callback);
         PopulateCreditCast(personalData.getMovieCreditCastList());
         PopulateCreditCrew(personalData.getMovieCreditCrewList());
+        PopulateMovieList(personalData);
+    }
+
+    /**
+     * Populates poster in screen.
+     * @param posterPath
+     * @param callback
+     */
+    private void PopulateBackgroundPoster(final String posterPath, Callback callback) {
+        Picasso pic = Picasso.with(this);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            if (posterPath == null) {
+                pic.load(R.drawable.no_background_poster)
+                        .fit().centerCrop()
+                        .into(backgroundPoster, callback);
+            } else {
+                Log.v(TAG, "path: " + BACKGROUND_BASE_URI + posterPath);
+                pic.load(BACKGROUND_BASE_URI + posterPath)
+                        .fit().centerCrop()
+                        .error(R.drawable.no_background_poster)
+                        .into(backgroundPoster, callback);
+            }
+        } else {
+            if (posterPath == null) {
+                pic.load(R.drawable.no_background_poster)
+                        .fit()
+                        .into(backgroundPoster, callback);
+            } else {
+                Log.v(TAG, "path: " + BACKGROUND_BASE_URI + posterPath);
+                pic.load(BACKGROUND_BASE_URI + posterPath)
+                        .fit()
+                        .error(R.drawable.no_background_poster)
+                        .into(backgroundPoster, callback);
+            }
+        }
+    }
+
+    /**
+     * Populates the Movie list in screen.
+     * @param profileData
+     */
+    private void PopulateMovieList(PersonalProfileData profileData) {
+
+        List<MovieData> data = new ArrayList<>();
+        //Build the MovieData
+        for (final MovieCreditCast creditCast: profileData.getMovieCreditCastList()) {
+            MovieData movieData = new MovieData(
+                    POSTER_BASE_URI + creditCast.getPosterPath(), creditCast.getId(),
+                    creditCast.getMovieTitle());
+            data.add(movieData);
+        }
+
+        // Add cast
+        MovieAdapter adapter = new MovieAdapter(this);
+        for (final MovieData movie : data) {
+            adapter.add(movie);
+        }
+        adapter.notifyDataSetChanged();
+        gridview.setAdapter(adapter);
+        gridview.setVisibility(View.VISIBLE);
+
+        /**
+         *  THIS IS A HACK!
+         *
+         *  Problem: GridView inside a scrollView only shows one row.
+         *  Solution: http://stackoverflow.com/questions/8481844/gridview-height-gets-cut
+         *            Calculate the height for one row and then calculate many rows you have
+         *            and resize the GridView height.
+         */
+        final int items = adapter.getCount();
+        final int columns = gridview.getNumColumns();
+        gridview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (!gridViewResized) {
+                    gridViewResized = true;
+                    ViewGroup.LayoutParams params = gridview.getLayoutParams();
+                    int oneRowHeight = gridview.getHeight();
+                    int rows = (int) (items / columns);
+                    if (items % columns != 0) {
+                        rows++;
+                    }
+                    params.height = oneRowHeight * rows;
+                    gridview.setLayoutParams(params);
+                }
+            }
+        });
     }
 
     /**

@@ -86,7 +86,7 @@
                     android:src="@drawable/ic_star_border_black_24dp" />
 
                 <TextView
-                    android:id="@+id/popularity"
+                    android:id="@+id/text_popularity"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="5dp"

@@ -82,22 +82,21 @@ public class CastAdapter extends BaseAdapter {
         View view;
         if (convertView == null) {
             view = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(R.layout.movie_cast_list_item, parent, false);
+                    .inflate(R.layout.movie_list_item, parent, false);
         } else {
             view = convertView;
         }
 
         CastData cast = movieCast.get(position);
         view.setTag(cast);
-        TextView castName = (TextView) view.findViewById(R.id.cast_name);
+        TextView castName = (TextView) view.findViewById(R.id.name);
         Log.v(TAG, "cast.getCastName() " + cast.getCastName());
 
-        ImageView castImage = (ImageView) view.findViewById(R.id.cast_image);
-        TextView castCharacter = (TextView) view.findViewById(R.id.cast_character);
+        ImageView castImage = (ImageView) view.findViewById(R.id.image);
+        TextView castCharacter = (TextView) view.findViewById(R.id.character);
+        castCharacter.setVisibility(View.VISIBLE);
 
         if (cast.getCastName() == null) {
-            castImage.setVisibility(View.GONE);
-            castCharacter.setVisibility(View.GONE);
             castName.setVisibility(View.GONE);
         } else {
             castName.setText(cast.getCastName());
@@ -123,10 +122,6 @@ public class CastAdapter extends BaseAdapter {
             public void onClick(View v) {
                 CastData data = (CastData) v.getTag();
 
-                // TODO: Show person details in new activity.
-                //Toast.makeText(mContext, "Toast message for personID: " + data.getPersonId(),
-                //        Toast.LENGTH_LONG).show();
-
                 // Set PersonID to preferences
                 SharedPreferences prefs = mContext.getSharedPreferences(SHARED_PREF_NAME, 0);
                 SharedPreferences.Editor e = prefs.edit();
@@ -143,13 +138,13 @@ public class CastAdapter extends BaseAdapter {
         return view;
     }
 
-    public void add(CastData res) {
-        if (castIdSet.contains(res.getPersonId())) {
-            Log.w(TAG, "Cast duplicate found, personID = " + res.getPersonId());
+    public void add(CastData cast) {
+        if (castIdSet.contains(cast.getPersonId())) {
+            Log.w(TAG, "Cast duplicate found, personID = " + cast.getPersonId());
             return;
         }
-        movieCast.add(res);
-        castIdSet.add(res.getPersonId());
+        movieCast.add(cast);
+        castIdSet.add(cast.getPersonId());
     }
 
     public void addAll(List<CastData> res) {

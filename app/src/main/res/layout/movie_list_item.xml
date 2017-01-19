@@ -26,20 +26,21 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/cast_image"
+        android:id="@+id/image"
         android:layout_width="@dimen/movie_details_image_layout_width"
         android:layout_height="@dimen/movie_details_image_layout_height" />
 
     <TextView
-        android:id="@+id/cast_name"
+        android:id="@+id/name"
         style="@style/DetailViewTextMedium"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
     <TextView
-        android:id="@+id/cast_character"
+        android:id="@+id/character"
         style="@style/DetailViewTextMediumBlack"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
 </LinearLayout>
