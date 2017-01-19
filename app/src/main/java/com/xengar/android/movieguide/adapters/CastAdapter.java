@@ -17,7 +17,6 @@ package com.xengar.android.movieguide.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +25,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.CastData;
 import com.xengar.android.movieguide.ui.PersonProfileActivity;
+import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,7 +36,6 @@ import java.util.List;
 
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_PERSON_BASE_URI;
-import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 
 /**
  * Cast adapter used to fill the cast list in the Movie Details.
@@ -109,11 +107,8 @@ public class CastAdapter extends BaseAdapter {
         if (cast.getCastImagePath() == null) {
             castImage.setVisibility(View.GONE);
         } else {
-            Picasso pic = Picasso.with(mContext);
-            pic.load(POSTER_PERSON_BASE_URI + cast.getCastImagePath())
-                    .fit().centerCrop()
-                    .error(R.drawable.no_movie_poster)
-                    .into(castImage);
+            ActivityUtils.loadImage(mContext, POSTER_PERSON_BASE_URI + cast.getCastImagePath(),
+                    true, R.drawable.no_movie_poster, castImage, null);
         }
 
         // Now set the onClickListener
@@ -123,10 +118,7 @@ public class CastAdapter extends BaseAdapter {
                 CastData data = (CastData) v.getTag();
 
                 // Set PersonID to preferences
-                SharedPreferences prefs = mContext.getSharedPreferences(SHARED_PREF_NAME, 0);
-                SharedPreferences.Editor e = prefs.edit();
-                e.putInt(PERSON_ID, data.getPersonId());
-                e.commit();
+                ActivityUtils.saveIntToPreferences(mContext, PERSON_ID, data.getPersonId());
 
                 // Launch a Person Profile Activity
                 Intent intent = new Intent(mContext, PersonProfileActivity.class);

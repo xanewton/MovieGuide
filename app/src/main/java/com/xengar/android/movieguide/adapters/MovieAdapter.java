@@ -17,7 +17,6 @@ package com.xengar.android.movieguide.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,16 +25,15 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.MovieData;
 import com.xengar.android.movieguide.ui.MovieDetailsActivity;
+import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
-import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 
 /**
  * Movie adapter used to fill the movie list in the Person Profile page.
@@ -90,11 +88,8 @@ public class MovieAdapter extends BaseAdapter {
         if (movie.getMoviePoster() == null) {
             poster.setVisibility(View.GONE);
         } else {
-            Picasso pic = Picasso.with(mContext);
-            pic.load(movie.getMoviePoster())
-                    .fit().centerCrop()
-                    .error(R.drawable.no_movie_poster)
-                    .into(poster);
+            ActivityUtils.loadImage(mContext, movie.getMoviePoster(), true,
+                    R.drawable.no_movie_poster, poster, null);
         }
 
         // Now set the onClickListener
@@ -104,10 +99,7 @@ public class MovieAdapter extends BaseAdapter {
                 MovieData data = (MovieData) v.getTag();
 
                 // Save movieId to Preferences
-                SharedPreferences prefs = mContext.getSharedPreferences(SHARED_PREF_NAME, 0);
-                SharedPreferences.Editor e = prefs.edit();
-                e.putInt(MOVIE_ID, data.getMovieId());
-                e.commit();
+                ActivityUtils.saveIntToPreferences(mContext, MOVIE_ID, data.getMovieId());
 
                 // Launch a Movie Details Activity
                 Intent intent = new Intent(mContext, MovieDetailsActivity.class);

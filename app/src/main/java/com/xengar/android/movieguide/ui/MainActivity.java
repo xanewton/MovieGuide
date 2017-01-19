@@ -34,6 +34,7 @@ import android.view.View;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
+import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
@@ -190,10 +191,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void launchFragment(String category) {
         // Set sorting preference
-        SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
-        SharedPreferences.Editor e = prefs.edit();
-        e.putString(MOVIE_CATEGORY, category); // save "value" to the SharedPreferences
-        e.commit();
+        ActivityUtils.saveStringToPreferences(this, MOVIE_CATEGORY, category);
 
         // Handle selecting item action
         UniversalFragment fragment = new UniversalFragment();
@@ -209,10 +207,7 @@ public class MainActivity extends AppCompatActivity
         Log.v(TAG, "onItemSelectionClick movieId = " + movieId);
 
         // Save movieId to Preferences
-        SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
-        SharedPreferences.Editor e = prefs.edit();
-        e.putInt(MOVIE_ID, movieId);
-        e.commit();
+        ActivityUtils.saveIntToPreferences(this, MOVIE_ID, movieId);
 
         // Launch a Movie Details Activity
         Context context = getApplicationContext();
