@@ -16,14 +16,11 @@
 
 package com.xengar.android.movieguide.ui;
 
-import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -37,8 +34,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,7 +44,6 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.CastAdapter;
 import com.xengar.android.movieguide.data.CastData;
@@ -58,6 +52,7 @@ import com.xengar.android.movieguide.data.MovieDetails;
 import com.xengar.android.movieguide.data.MovieDetailsData;
 import com.xengar.android.movieguide.data.ReviewData;
 import com.xengar.android.movieguide.data.TrailerData;
+import com.xengar.android.movieguide.utils.ActivityUtils;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
 import org.apache.commons.lang3.StringUtils;
@@ -87,9 +82,9 @@ import static com.xengar.android.movieguide.data.FavoriteMoviesContract.Favorite
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.IMDB_URI;
-import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
+import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.JSONUtils.getDoubleValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getIntValue;
@@ -114,7 +109,7 @@ public class MovieDetailsActivity extends AppCompatActivity
     private MovieDetails data = null;
     private List<TrailerData> trailerData;
     private int movieID;
-    private String movieTitle = " ";
+    private String movieTitle[] = {" "};
     private CollapsingToolbarLayout collapsingToolbar;
 
     // Details components
@@ -151,7 +146,7 @@ public class MovieDetailsActivity extends AppCompatActivity
 
     private List<CastData> castData;
     private GridView gridview; // Cast list
-    private boolean gridViewResized = false; // boolean for resize gridview hack
+    private boolean gridViewResized[] = {false}; // boolean for resize gridview hack
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -192,37 +187,10 @@ public class MovieDetailsActivity extends AppCompatActivity
 
         // Get Movie Details data
         fetchMovieData();
-        defineCollapsingToolbarLayoutBehaviour();
-        loadBackgroundPoster();
-    }
-
-
-    /**
-     * Changes the CollapsingToolbarLayout to hide the title when the image is visible.
-     */
-    private void defineCollapsingToolbarLayoutBehaviour() {
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(movieTitle);
-                    isShow = true;
-                } else if(isShow) {
-                    // there should a space between double quote otherwise it wont work
-                    collapsingToolbar.setTitle(" ");
-                    isShow = false;
-                }
-            }
-        });
+        ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
+                (AppBarLayout) findViewById(R.id.appbar), movieTitle);
+        loadBackgroundPoster();
     }
 
     private void loadBackgroundPoster() {
@@ -269,59 +237,11 @@ public class MovieDetailsActivity extends AppCompatActivity
      */
     private void populateDetails(final MovieDetailsData container) {
 
-        final Palette.PaletteAsyncListener paletteAsyncListener = new Palette.PaletteAsyncListener() {
-            @SuppressLint("NewApi")
-            @Override
-            public void onGenerated(Palette palette) {
-                Log.v(TAG, "textSwatch.PaletteAsyncListener");
-                Palette.Swatch textSwatch = palette.getMutedSwatch();
-                Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
+        final Palette.PaletteAsyncListener paletteAsyncListener =
+                ActivityUtils.definePaletteAsyncListener(this, title, textRating, rating, starRating);
 
-                if (textSwatch != null && bgSwatch != null) {
-                    title.setTextColor(textSwatch.getTitleTextColor());
-                    title.setBackgroundColor(textSwatch.getRgb());
-                    textRating.setTextColor(bgSwatch.getTitleTextColor());
-                    rating.setBackgroundColor(bgSwatch.getRgb());
-                    starRating.setBackgroundColor(bgSwatch.getTitleTextColor());
-                } else if (bgSwatch != null) {
-                    title.setBackgroundColor(bgSwatch.getRgb());
-                    title.setTextColor(bgSwatch.getBodyTextColor());
-                    rating.setBackgroundColor(bgSwatch.getBodyTextColor());
-                    textRating.setTextColor(bgSwatch.getRgb());
-                    starRating.setBackgroundColor(bgSwatch.getRgb());
-                } else if (textSwatch != null) {
-                    title.setBackgroundColor(textSwatch.getRgb());
-                    title.setTextColor(textSwatch.getBodyTextColor());
-                    rating.setBackgroundColor(textSwatch.getBodyTextColor());
-                    textRating.setTextColor(textSwatch.getRgb());
-                    starRating.setBackgroundColor(textSwatch.getRgb());
-                } else {
-                    title.setTextColor(getResources().getColor(R.color.textcolorPrimary, null));
-                    title.setBackgroundColor(getResources().getColor(R.color.colorPrimary, null));
-                    textRating.setTextColor(getResources().getColor(R.color.textcolorSec, null));
-                    rating.setBackgroundColor(getResources().getColor(R.color.colorBackground, null));
-                }
-            }
-        };
-
-        Callback callback = new Callback() {
-            @Override
-            public void onSuccess() {
-                if (backgroundPoster != null) {
-                    Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
-                    Palette.from(bitmapBg).generate(paletteAsyncListener);
-                } else if (moviePoster != null) {
-                    Bitmap bitmapBg = ((BitmapDrawable) moviePoster.getDrawable()).getBitmap();
-                    Palette.from(bitmapBg).generate(paletteAsyncListener);
-                }
-            }
-            @Override
-            public void onError() {
-                Log.v(TAG, "Callback error");
-                Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
-                Palette.from(bitmapBg).generate(paletteAsyncListener);
-            }
-        };
+        Callback callback =
+                ActivityUtils.defineCallback(paletteAsyncListener, backgroundPoster, moviePoster);
 
         if (container == null) {
             return;
@@ -342,9 +262,9 @@ public class MovieDetailsActivity extends AppCompatActivity
      * @param container
      */
     private void PopulateDetailsTitle(final MovieDetailsData container) {
-        movieTitle = container.getMovieTitle();
-        collapsingToolbar.setTitle(movieTitle);
-        title.setText(movieTitle);
+        movieTitle[0] = container.getMovieTitle();
+        collapsingToolbar.setTitle(movieTitle[0]);
+        title.setText(movieTitle[0]);
     }
 
     /**
@@ -353,53 +273,22 @@ public class MovieDetailsActivity extends AppCompatActivity
      * @param callback
      */
     private void PopulateDetailsPoster(final MovieDetailsData container, Callback callback) {
-        Picasso pic = Picasso.with(this);
 
-        if (container.getMoviePoster() == null) {
-            pic.load(R.drawable.no_movie_poster)
-                    .fit().centerCrop()
-                    .into(moviePoster);
-        } else {
-            Log.v(TAG, POSTER_BASE_URI + container.getMoviePoster());
-            pic.load(POSTER_BASE_URI + container.getMoviePoster())
-                    .fit().centerCrop()
-                    .error(R.drawable.no_movie_poster)
-                    .into(moviePoster);
-        }
+        ActivityUtils.loadImage(this, POSTER_BASE_URI + container.getMoviePoster(), true,
+                R.drawable.no_movie_poster, moviePoster, null);
 
+        String backgroundPosterPath = container.getBackgroundPath();
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            if (container.getBackgroundPath() == null) {
-                pic.load(R.drawable.no_background_poster)
-                        .fit().centerCrop()
-                        .into(backgroundPoster, callback);
-            } else {
-                Log.v(TAG, BACKGROUND_BASE_URI + container.getBackgroundPath());
-                pic.load(BACKGROUND_BASE_URI + container.getBackgroundPath())
-                        .fit().centerCrop()
-                        .error(R.drawable.no_background_poster)
-                        .into(backgroundPoster, callback);
-            }
+            ActivityUtils.loadImage(this, BACKGROUND_BASE_URI + backgroundPosterPath, true,
+                    R.drawable.no_background_poster, backgroundPoster, callback);
         } else {
-            if (container.getBackgroundPath() == null) {
-                pic.load(R.drawable.no_background_poster)
-                        .fit()
-                        .into(backgroundPoster, callback);
-            } else {
-                Log.v(TAG, BACKGROUND_BASE_URI + container.getBackgroundPath());
-                pic.load(BACKGROUND_BASE_URI + container.getBackgroundPath())
-                        .fit()
-                        .error(R.drawable.no_background_poster)
-                        .into(backgroundPoster, callback);
-            }
+            ActivityUtils.loadImage(this, BACKGROUND_BASE_URI + backgroundPosterPath, false,
+                    R.drawable.no_background_poster, backgroundPoster, callback);
         }
 
-        /**
-         * HACK! Save background movie image to use in PersonProfile.
-         */
-        SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
-        SharedPreferences.Editor e = prefs.edit();
-        e.putString(MOVIE_BACKGROUND_POSTER, container.getBackgroundPath());
-        e.commit();
+        // Save background movie image poster to use in PersonProfile page.
+        ActivityUtils.saveStringToPreferences(this, MOVIE_BACKGROUND_POSTER,
+                container.getBackgroundPath());
     }
 
     /**
@@ -589,7 +478,7 @@ public class MovieDetailsActivity extends AppCompatActivity
             trailerList.addView(view);
         }
         Log.v(TAG, "data " + data);
-        if (data != null && !data.isEmpty()) {
+        if (!data.isEmpty()) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             Uri uri = data.get(0).getTrailerUri();
@@ -605,7 +494,7 @@ public class MovieDetailsActivity extends AppCompatActivity
         }
         isTrailerLoaded = true;
 
-        if (data != null && !data.isEmpty()) {
+        if (!data.isEmpty()) {
             youTubePlayerFragment.initialize(getString(R.string.YOUTUBE_DATA_API_V3), this);
         } else {
             findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
@@ -730,32 +619,7 @@ public class MovieDetailsActivity extends AppCompatActivity
         gridview.setAdapter(adapter);
         gridview.setVisibility(View.VISIBLE);
 
-        /**
-         *  THIS IS A HACK!
-         *
-         *  Problem: GridView inside a scrollView only shows one row.
-         *  Solution: http://stackoverflow.com/questions/8481844/gridview-height-gets-cut
-         *            Calculate the height for one row and then calculate many rows you have
-         *            and resize the GridView height.
-         */
-        final int items = adapter.getCount();
-        final int columns = gridview.getNumColumns();
-        gridview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (!gridViewResized) {
-                    gridViewResized = true;
-                    ViewGroup.LayoutParams params = gridview.getLayoutParams();
-                    int oneRowHeight = gridview.getHeight();
-                    int rows = (int) (items / columns);
-                    if (items % columns != 0) {
-                        rows++;
-                    }
-                    params.height = oneRowHeight * rows;
-                    gridview.setLayoutParams(params);
-                }
-            }
-        });
+        ActivityUtils.changeGridViewHeight(gridview, adapter.getCount(), gridViewResized);
     }
 
 

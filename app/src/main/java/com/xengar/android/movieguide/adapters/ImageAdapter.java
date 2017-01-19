@@ -25,9 +25,9 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.MovieData;
+import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -83,15 +83,12 @@ public class ImageAdapter extends BaseAdapter {
         view.setLayoutParams(new GridView.LayoutParams((int) (IMAGE_WIDTH * density),
                 (int) (IMAGE_HEIGHT * density)));
 
-        //imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         if (data.getMoviePoster() == null) {
             TextView textView = (TextView) view.findViewById(R.id.movie_title);
             textView.setText(data.getMovieTitle());
         }
 
-        Picasso pic = Picasso.with(mContext);
-        pic.load(data.getMoviePoster())
-                .into(imageView);
+        ActivityUtils.loadImage(mContext, data.getMoviePoster(), false, 0, imageView, null);
         return view;
     }
 
