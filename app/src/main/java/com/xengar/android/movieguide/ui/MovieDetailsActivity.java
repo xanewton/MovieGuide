@@ -85,6 +85,7 @@ import static com.xengar.android.movieguide.data.FavoriteMoviesContract.Favorite
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_COUNT;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.JSONUtils.getDoubleValue;
@@ -273,10 +274,7 @@ public class MovieDetailsActivity extends AppCompatActivity
             @SuppressLint("NewApi")
             @Override
             public void onGenerated(Palette palette) {
-                if (this == null)
-                    return;
                 Log.v(TAG, "textSwatch.PaletteAsyncListener");
-
                 Palette.Swatch textSwatch = palette.getMutedSwatch();
                 Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
 
@@ -363,6 +361,7 @@ public class MovieDetailsActivity extends AppCompatActivity
                     .fit().centerCrop()
                     .into(moviePoster);
         } else {
+            Log.v(TAG, POSTER_BASE_URI + container.getMoviePoster());
             pic.load(POSTER_BASE_URI + container.getMoviePoster())
                     .fit().centerCrop()
                     .error(R.drawable.no_movie_poster)
@@ -375,6 +374,7 @@ public class MovieDetailsActivity extends AppCompatActivity
                         .fit().centerCrop()
                         .into(backgroundPoster, callback);
             } else {
+                Log.v(TAG, BACKGROUND_BASE_URI + container.getBackgroundPath());
                 pic.load(BACKGROUND_BASE_URI + container.getBackgroundPath())
                         .fit().centerCrop()
                         .error(R.drawable.no_background_poster)
@@ -386,12 +386,21 @@ public class MovieDetailsActivity extends AppCompatActivity
                         .fit()
                         .into(backgroundPoster, callback);
             } else {
+                Log.v(TAG, BACKGROUND_BASE_URI + container.getBackgroundPath());
                 pic.load(BACKGROUND_BASE_URI + container.getBackgroundPath())
                         .fit()
                         .error(R.drawable.no_background_poster)
                         .into(backgroundPoster, callback);
             }
         }
+
+        /**
+         * HACK! Save background movie image to use in PersonProfile.
+         */
+        SharedPreferences prefs = this.getSharedPreferences(SHARED_PREF_NAME, 0);
+        SharedPreferences.Editor e = prefs.edit();
+        e.putString(MOVIE_BACKGROUND_POSTER, container.getBackgroundPath());
+        e.commit();
     }
 
     /**

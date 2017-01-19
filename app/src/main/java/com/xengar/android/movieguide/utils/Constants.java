@@ -28,4 +28,5 @@ public final class  Constants {
     public static final String TOP_RATED_MOVIES = "TopRatedMovies";
     public static final String PERSON_ID = "person_id";
     public static final String MOVIE_ID = "movie_id";
+    public static final String MOVIE_BACKGROUND_POSTER = "movie_background_poster";
 }

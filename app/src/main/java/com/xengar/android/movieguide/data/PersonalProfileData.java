@@ -105,6 +105,18 @@ public class PersonalProfileData {
         return movieCreditCastList;
     }
 
+    // Returns the first movie credit poster that finds.
+    public String getMovieCreditCastPoster() {
+        String posterPath = null;
+        for (MovieCreditCast movieCreditCast: movieCreditCastList) {
+            posterPath = movieCreditCast.getPosterPath();
+            if (posterPath != null && !posterPath.equals("null")){
+                break;
+            }
+        }
+        return posterPath;
+    }
+
     public List<MovieCreditCrew> getMovieCreditCrewList() {
         return movieCreditCrewList;
     }

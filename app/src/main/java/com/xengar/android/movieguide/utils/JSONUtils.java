@@ -159,7 +159,6 @@ public final class JSONUtils {
                             jsonObject.getString("poster_path"),
                             jsonObject.getString("release_date")
                     );
-                    // TODO: Sort by date since recent to last.
                     list.add(i, creditCrew);
                 }
                 Collections.sort(list, new Comparator<MovieCreditCrew>() {
