@@ -25,6 +25,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <!-- Settings activity theme. -->
+    <style name="AppTheme.Settings" parent="@style/AppTheme"/>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
