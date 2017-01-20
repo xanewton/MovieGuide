@@ -17,6 +17,7 @@ package com.xengar.android.movieguide.utils;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -36,7 +37,12 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.ui.MovieDetailsActivity;
+import com.xengar.android.movieguide.ui.PersonProfileActivity;
+import com.xengar.android.movieguide.ui.SettingsActivity;
 
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
+import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 
 /**
@@ -262,5 +268,45 @@ public class ActivityUtils {
                 }
             }
         });
+    }
+
+    /**
+     * Launches Settings Activity.
+     * @param context
+     */
+    public static void launchSettingsActivity(final Context context) {
+        Intent intent = new Intent(context, SettingsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Launches Movie Details Activity.
+     * @param context
+     * @param movieId
+     */
+    public static void launchMovieDetailsActivity(final Context context, final int movieId) {
+        // Save movieId to Preferences
+        saveIntToPreferences(context, MOVIE_ID, movieId);
+
+        // Launch activity
+        Intent intent = new Intent(context, MovieDetailsActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Launches PersonProfile Activity.
+     * @param context
+     * @param personId
+     */
+    public static void launchPersonProfileActivity(final Context context, final int personId) {
+        // Set PersonID to preferences
+        saveIntToPreferences(context, PERSON_ID, personId);
+
+        // Launch activity
+        Intent intent = new Intent(context, PersonProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }
