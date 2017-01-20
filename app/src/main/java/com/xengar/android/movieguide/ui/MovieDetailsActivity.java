@@ -227,7 +227,7 @@ public class MovieDetailsActivity extends AppCompatActivity
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Add to Favorites", DURATION)
+                Snackbar.make(view, getString(R.string.favorite_movie_add_message), DURATION)
                         .setAction("Action", null).show();
                 ContentValues values = new ContentValues();
                 values.put(COLUMN_NAME_MOVIE_ID, movieID);
@@ -254,10 +254,11 @@ public class MovieDetailsActivity extends AppCompatActivity
         fabDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Remove from Favorites", DURATION)
+                Snackbar.make(view, getString(R.string.favorite_movie_del_message), DURATION)
                         .setAction("Action", null).show();
                 getContentResolver().delete(URI, COLUMN_NAME_MOVIE_ID + " = ?",
                         new String[]{Integer.toString(movieID)} );
+
                 fabAdd.setVisibility(View.VISIBLE);
                 fabDel.setVisibility(View.INVISIBLE);
             }

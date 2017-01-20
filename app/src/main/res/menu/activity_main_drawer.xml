@@ -39,7 +39,7 @@
                 <item
                     android:id="@+id/nav_favorite_movies"
                     android:icon="@drawable/ic_favorite_black_24dp"
-                    android:title="@string/menu_option_favorite" />
+                    android:title="@string/menu_option_favorites" />
             </group>
         </menu>
     </item>
