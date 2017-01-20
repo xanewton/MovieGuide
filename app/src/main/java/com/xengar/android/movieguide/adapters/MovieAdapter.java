@@ -16,7 +16,6 @@
 package com.xengar.android.movieguide.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,13 +26,10 @@ import android.widget.TextView;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.MovieData;
-import com.xengar.android.movieguide.ui.MovieDetailsActivity;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 
 /**
  * Movie adapter used to fill the movie list in the Person Profile page.
@@ -97,14 +93,7 @@ public class MovieAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 MovieData data = (MovieData) v.getTag();
-
-                // Save movieId to Preferences
-                ActivityUtils.saveIntToPreferences(mContext, MOVIE_ID, data.getMovieId());
-
-                // Launch a Movie Details Activity
-                Intent intent = new Intent(mContext, MovieDetailsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intent);
+                ActivityUtils.launchMovieDetailsActivity(mContext, data.getMovieId());
             }
         });
 

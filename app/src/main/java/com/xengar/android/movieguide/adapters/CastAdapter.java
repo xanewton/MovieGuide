@@ -16,7 +16,6 @@
 package com.xengar.android.movieguide.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,14 +26,12 @@ import android.widget.TextView;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.CastData;
-import com.xengar.android.movieguide.ui.PersonProfileActivity;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_PERSON_BASE_URI;
 
 /**
@@ -116,14 +113,7 @@ public class CastAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 CastData data = (CastData) v.getTag();
-
-                // Set PersonID to preferences
-                ActivityUtils.saveIntToPreferences(mContext, PERSON_ID, data.getPersonId());
-
-                // Launch a Person Profile Activity
-                Intent intent = new Intent(mContext, PersonProfileActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mContext.startActivity(intent);
+                ActivityUtils.launchPersonProfileActivity(mContext, data.getPersonId());
             }
         });
 

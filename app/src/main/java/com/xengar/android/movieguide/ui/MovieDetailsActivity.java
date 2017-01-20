@@ -200,6 +200,25 @@ public class MovieDetailsActivity extends AppCompatActivity
         showFavoriteButtons();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            ActivityUtils.launchSettingsActivity(getApplicationContext());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Defines if add or remove from Favorites should be initially visible for this movieId.
      */
@@ -268,12 +287,6 @@ public class MovieDetailsActivity extends AppCompatActivity
     private void loadBackgroundPoster() {
         final ImageView imageView = (ImageView) findViewById(R.id.background_poster);
         Glide.with(this).load(R.drawable.no_background_poster).centerCrop().into(imageView);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
     }
 
     /**

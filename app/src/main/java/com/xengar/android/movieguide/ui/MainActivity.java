@@ -15,8 +15,6 @@
  */
 package com.xengar.android.movieguide.ui;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -38,7 +36,6 @@ import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -136,6 +133,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            ActivityUtils.launchSettingsActivity(getApplicationContext());
             return true;
         }
 
@@ -210,14 +208,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemSelectionClick(int movieId) {
         Log.v(TAG, "onItemSelectionClick movieId = " + movieId);
-
-        // Save movieId to Preferences
-        ActivityUtils.saveIntToPreferences(this, MOVIE_ID, movieId);
-
-        // Launch a Movie Details Activity
-        Context context = getApplicationContext();
-        Intent intent = new Intent(context, MovieDetailsActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        ActivityUtils.launchMovieDetailsActivity(getApplicationContext(), movieId);
     }
 }
