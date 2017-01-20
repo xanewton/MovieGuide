@@ -33,10 +33,12 @@ import android.widget.Toast;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
+import com.xengar.android.movieguide.sync.FetchFavorite;
 import com.xengar.android.movieguide.sync.FetchItemListener;
 import com.xengar.android.movieguide.sync.FetchMovie;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 
+import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
@@ -131,10 +133,11 @@ public class UniversalFragment extends Fragment {
         // Hide Floating Action Button
         getActivity().findViewById(R.id.fab).setVisibility(View.GONE);
 
-        if (itemType.equals("favorites")) {
-            /*adapter.clearData();
-            FetchFavoriteMovieTask task = new FetchFavoriteMovieTask(adapter, getActivity().getContentResolver(), posterBaseUri);
-            task.execute();*/
+        if (itemType.equals(FAVORITE_MOVIES)) {
+            adapter.clearData();
+            FetchFavorite task = new FetchFavorite(FAVORITE_MOVIES, adapter,
+                    getActivity().getContentResolver(), posterBaseUri);
+            task.execute();
         } else if (itemType.equals(NOW_PLAYING_MOVIES)) {
             gridview.setOnScrollListener(new ItemViewScrollListener(NOW_PLAYING_MOVIES));
         } else if (itemType.equals(TOP_RATED_MOVIES)) {

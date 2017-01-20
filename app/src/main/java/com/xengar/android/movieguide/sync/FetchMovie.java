@@ -34,7 +34,7 @@ import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 
 /**
- * FetchMovie
+ * FetchMovie items
  */
 public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
 

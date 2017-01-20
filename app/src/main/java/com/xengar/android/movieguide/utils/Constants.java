@@ -26,6 +26,7 @@ public final class  Constants {
     public static final String POPULAR_MOVIES = "PopularMovies";
     public static final String NOW_PLAYING_MOVIES = "NowPlayingMovies";
     public static final String TOP_RATED_MOVIES = "TopRatedMovies";
+    public static final String FAVORITE_MOVIES = "FavoriteMovies";
     public static final String PERSON_ID = "person_id";
     public static final String MOVIE_ID = "movie_id";
     public static final String MOVIE_BACKGROUND_POSTER = "movie_background_poster";

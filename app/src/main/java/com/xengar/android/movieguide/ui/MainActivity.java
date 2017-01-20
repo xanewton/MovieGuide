@@ -36,6 +36,7 @@ import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 
+import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
@@ -102,6 +103,10 @@ public class MainActivity extends AppCompatActivity
                 getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
                 navigationView.setCheckedItem(R.id.nav_now_playing_movies);
                 break;
+            case FAVORITE_MOVIES:
+                getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
+                navigationView.setCheckedItem(R.id.nav_favorite_movies);
+                break;
         }
     }
 
@@ -160,7 +165,7 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
 
         } else if (id == R.id.nav_favorite_movies) {
-            // TODO: Show list of favorites
+            launchFragment(FAVORITE_MOVIES);
             getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
 
         } else if (id == R.id.nav_popular_tv_shows) {

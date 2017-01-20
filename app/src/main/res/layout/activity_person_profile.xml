@@ -200,7 +200,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"
-                        android:text="@string/large_text"
+                        android:text="@string/cheese_ipsum"
                         android:paddingTop="10dp" />
 
                 </LinearLayout>
