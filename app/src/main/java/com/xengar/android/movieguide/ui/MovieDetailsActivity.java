@@ -17,6 +17,7 @@
 package com.xengar.android.movieguide.ui;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -26,6 +27,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -72,6 +75,7 @@ import static com.xengar.android.movieguide.data.FavoriteMoviesContract.Favorite
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_HOMEPAGE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_IMDB_ID;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_MOVIE_PLOT;
+import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_MOVIE_ID;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_TITLE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_ORIGINAL_LANGUAGE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
@@ -148,6 +152,8 @@ public class MovieDetailsActivity extends AppCompatActivity
     private GridView gridview; // Cast list
     private boolean gridViewResized[] = {false}; // boolean for resize gridview hack
 
+    private FloatingActionButton fabAdd, fabDel;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,6 +197,71 @@ public class MovieDetailsActivity extends AppCompatActivity
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), movieTitle);
         loadBackgroundPoster();
+        showFavoriteButtons();
+    }
+
+    /**
+     * Defines if add or remove from Favorites should be initially visible for this movieId.
+     */
+    private void showFavoriteButtons() {
+        fabAdd = (FloatingActionButton) findViewById(R.id.fab_add);
+        fabDel = (FloatingActionButton) findViewById(R.id.fab_minus);
+
+        Cursor cursor = getContentResolver().query(ContentUris.withAppendedId(URI, movieID),
+                new String[]{COLUMN_NAME_MOVIE_ID}, null, null, null);
+        if (cursor != null && cursor.getCount() != 0) {
+            fabDel.setVisibility(View.VISIBLE);
+        } else {
+            fabAdd.setVisibility(View.VISIBLE);
+        }
+        cursor.close();
+    }
+
+    /**
+     * Defines what to do when click on add/remove from Favorites buttons.
+     * @param container
+     */
+    private void defineClickFavoriteButtons(final MovieDetailsData container) {
+        final int DURATION = 1000;
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Add to Favorites", DURATION)
+                        .setAction("Action", null).show();
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_NAME_MOVIE_ID, movieID);
+                values.put(COLUMN_NAME_TITLE, container.getMovieTitle());
+                values.put(COLUMN_MOVIE_PLOT, container.getPlot());
+                values.put(COLUMN_POSTER_PATH, container.getMoviePoster());
+                values.put(COLUMN_YEAR, container.getYear());
+                values.put(COLUMN_DURATION, container.getDuration());
+                values.put(COLUMN_VOTE_AVERAGE, container.getVoteAverage());
+                values.put(COLUMN_BACKGROUND_PATH, container.getBackgroundPath());
+                values.put(COLUMN_ORIGINAL_LANGUAGE, container.getOriginalLanguage());
+                values.put(COLUMN_STATUS, container.getStatus());
+                values.put(COLUMN_IMDB_ID, container.getImdbUri());
+                values.put(COLUMN_BUDGET, container.getBudget());
+                values.put(COLUMN_REVENUE, container.getRevenue());
+                values.put(COLUMN_HOMEPAGE, container.getHomepage());
+                getContentResolver().insert(URI, values);
+
+                fabAdd.setVisibility(View.INVISIBLE);
+                fabDel.setVisibility(View.VISIBLE);
+            }
+        });
+
+        fabDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Remove from Favorites", DURATION)
+                        .setAction("Action", null).show();
+                getContentResolver().delete(URI, COLUMN_NAME_MOVIE_ID + " = ?",
+                        new String[]{Integer.toString(movieID)} );
+                fabAdd.setVisibility(View.VISIBLE);
+                fabDel.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     private void loadBackgroundPoster() {
@@ -255,6 +326,7 @@ public class MovieDetailsActivity extends AppCompatActivity
         PopulateDetailsProdCompanies(container);
         PopulateDetailsStatus(container);
         PopulateDetailsPlot(container);
+        defineClickFavoriteButtons(container);
     }
 
     /**

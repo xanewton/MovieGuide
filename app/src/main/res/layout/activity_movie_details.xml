@@ -371,12 +371,25 @@
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|right|end"
         android:src="@drawable/fab_plus"
         android:layout_margin="@dimen/fab_margin"
-        android:clickable="true" />
+        android:clickable="true"
+        android:visibility="invisible" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_minus"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end"
+        android:src="@drawable/fab_minus"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        android:visibility="invisible" />
 
 </android.support.design.widget.CoordinatorLayout>
