@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.preference.PreferenceActivity;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.graphics.Palette;
@@ -276,6 +277,10 @@ public class ActivityUtils {
      */
     public static void launchSettingsActivity(final Context context) {
         Intent intent = new Intent(context, SettingsActivity.class);
+        intent.putExtra( PreferenceActivity.EXTRA_SHOW_FRAGMENT,
+                SettingsActivity.GeneralPreferenceFragment.class.getName() );
+        intent.putExtra( PreferenceActivity.EXTRA_NO_HEADERS, true );
+        intent.putExtra( PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, R.string.action_settings);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
