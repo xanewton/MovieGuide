@@ -300,8 +300,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             // updated to reflect the new value, per the Android Design
             // guidelines.
             //bindPreferenceSummaryToValue(findPreference("example_text"));
-            //bindPreferenceSummaryToValue(findPreference("example_list"));
             //bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_show_main_toolbar)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_cast_list)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_movie_list)));
         }

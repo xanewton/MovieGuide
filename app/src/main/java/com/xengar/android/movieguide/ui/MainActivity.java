@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        boolean showToolbar = ActivityUtils.getPreferenceShowToolbar(getApplicationContext());
+        if (!showToolbar) {
+            toolbar.setVisibility(View.GONE);
+        }
 
         // Save name of activity, in case of calling SettingsActivity
         ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
