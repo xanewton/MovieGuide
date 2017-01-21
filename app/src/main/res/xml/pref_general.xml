@@ -19,7 +19,7 @@
     <PreferenceCategory
         android:title="@string/pref_header_general"
         android:key="pref_key_storage_settings_general">
-
+<!--
         <SwitchPreference
             android:icon="@drawable/ic_info_black_24dp"
             android:defaultValue="true"
@@ -27,8 +27,8 @@
             android:summary="@string/pref_description_social_recommendations"
             android:title="@string/pref_title_social_recommendations" />
 
-        <!-- NOTE: EditTextPreference accepts EditText attributes. -->
-        <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
+        // NOTE: EditTextPreference accepts EditText attributes.
+        // NOTE: EditTextPreference's summary should be set to its value by the activity code.
         <EditTextPreference
             android:icon="@drawable/ic_info_black_24dp"
             android:capitalize="words"
@@ -39,37 +39,48 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/pref_title_display_name" />
+-->
 
-        <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-             dismiss it. -->
+        <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to dismiss it. -->
         <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
         <ListPreference
-            android:icon="@drawable/ic_info_black_24dp"
-            android:defaultValue="-1"
-            android:entries="@array/pref_example_list_titles"
-            android:entryValues="@array/pref_example_list_values"
-            android:key="example_list"
+            android:icon="@drawable/ic_boxes_black_24dp"
+            android:defaultValue="6"
+            android:entries="@array/pref_list_max_cast_elements_titles"
+            android:entryValues="@array/pref_list_max_cast_elements_values"
+            android:key="@string/pref_max_cast_list"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null"
-            android:title="@string/pref_title_add_friends_to_messages" />
+            android:title="@string/pref_title_max_cast_elements" />
+
+        <ListPreference
+            android:icon="@drawable/ic_boxes_black_24dp"
+            android:defaultValue="-1"
+            android:entries="@array/pref_list_max_movie_elements_titles"
+            android:entryValues="@array/pref_list_max_movie_elements_values"
+            android:key="@string/pref_max_movie_list"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null"
+            android:title="@string/pref_title_max_movie_elements" />
 
     </PreferenceCategory>
 
+<!--
     <PreferenceCategory
         android:title="@string/pref_header_notifications"
         android:key="pref_key_storage_settings_notifications">
 
-        <!-- A 'parent' preference, which enables/disables child preferences (below)
-         when checked/unchecked. -->
+        // A 'parent' preference, which enables/disables child preferences (below)
+        // when checked/unchecked.
         <SwitchPreference
             android:icon="@drawable/ic_notifications_black_24dp"
             android:defaultValue="true"
             android:key="notifications_new_message"
             android:title="@string/pref_title_new_message_notifications" />
 
-        <!-- Allows the user to choose a ringtone in the 'notification' category. -->
-        <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
-        <!-- NOTE: RingtonePreference's summary should be set to its value by the activity code. -->
+        // Allows the user to choose a ringtone in the 'notification' category.
+        // NOTE: This preference will be enabled only when the checkbox above is checked.
+        // NOTE: RingtonePreference's summary should be set to its value by the activity code.
         <RingtonePreference
             android:icon="@drawable/ic_notifications_black_24dp"
             android:defaultValue="content://settings/system/notification_sound"
@@ -78,7 +89,7 @@
             android:ringtoneType="notification"
             android:title="@string/pref_title_ringtone" />
 
-        <!-- NOTE: This preference will be enabled only when the checkbox above is checked. -->
+        // NOTE: This preference will be enabled only when the checkbox above is checked.
         <SwitchPreference
             android:icon="@drawable/ic_notifications_black_24dp"
             android:defaultValue="true"
@@ -92,9 +103,8 @@
         android:title="@string/pref_header_data_sync"
         android:key="pref_key_storage_settings_data_sync">
 
-        <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it. -->
-        <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
+        // NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to dismiss it.
+        // NOTE: ListPreference's summary should be set to its value by the activity code.
         <ListPreference
             android:icon="@drawable/ic_sync_black_24dp"
             android:defaultValue="180"
@@ -105,8 +115,8 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_title_sync_frequency" />
 
-        <!-- This preference simply launches an intent when selected. Use this UI sparingly, per
-             design guidelines. -->
+        // This preference simply launches an intent when selected. Use this UI sparingly, per
+        //     design guidelines.
         <Preference
             android:icon="@drawable/ic_sync_black_24dp"
             android:title="@string/pref_title_system_sync_settings">
@@ -114,5 +124,5 @@
         </Preference>
 
     </PreferenceCategory>
-
+-->
 </PreferenceScreen>

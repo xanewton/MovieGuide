@@ -228,8 +228,13 @@ public class PersonProfileActivity extends AppCompatActivity {
     private void PopulateMovieList(PersonalProfileData profileData) {
 
         List<MovieData> data = new ArrayList<>();
+        int index = 0;
+        int maxMovies = ActivityUtils.getPreferenceMaxMovieItems(getApplicationContext());
         //Build the MovieData
         for (final MovieCreditCast creditCast: profileData.getMovieCreditCastList()) {
+            if ( index == maxMovies)
+                break;
+            index++;
             MovieData movieData = new MovieData(
                     POSTER_BASE_URI + creditCast.getPosterPath(), creditCast.getId(),
                     creditCast.getMovieTitle());
