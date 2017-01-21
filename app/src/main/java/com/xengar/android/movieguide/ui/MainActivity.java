@@ -35,6 +35,8 @@ import com.xengar.android.movieguide.sync.OnItemClickListener;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
@@ -58,6 +60,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Save name of activity, in case of calling SettingsActivity
+        ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
+                MAIN_ACTIVITY);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

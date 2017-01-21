@@ -53,9 +53,11 @@ import java.util.List;
 
 import static android.R.attr.id;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
+import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
+import static com.xengar.android.movieguide.utils.Constants.PERSON_PROFILE_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_PERSON_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -98,6 +100,10 @@ public class PersonProfileActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         personId = prefs.getInt(PERSON_ID, -1);
         movieID = prefs.getInt(MOVIE_ID, -1);
+
+        // Save name of activity, in case of calling SettingsActivity
+        ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
+                PERSON_PROFILE_ACTIVITY);
 
         personName = (TextView) findViewById(R.id.person);
         rating = (LinearLayout) findViewById(R.id.rating);

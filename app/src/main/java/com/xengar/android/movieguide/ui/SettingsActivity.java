@@ -43,6 +43,12 @@ import com.xengar.android.movieguide.R;
 
 import java.util.List;
 
+import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_DETAILS_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.PERSON_PROFILE_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -280,6 +286,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public static class GeneralPreferenceFragment extends PreferenceFragment {
+
+        private Context context;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -298,10 +307,29 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         }
 
         @Override
+        public void onActivityCreated(Bundle savedInstanceState) {
+            super.onActivityCreated(savedInstanceState);
+            context = getActivity();
+        }
+
+        @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
+
+                SharedPreferences prefs = context.getSharedPreferences(SHARED_PREF_NAME, 0);
+                String lastActivity = prefs.getString(LAST_ACTIVITY, MAIN_ACTIVITY);
+                switch (lastActivity) {
+                    case MOVIE_DETAILS_ACTIVITY:
+                        startActivity(new Intent(getActivity(), MovieDetailsActivity.class));
+                        break;
+                    case PERSON_PROFILE_ACTIVITY:
+                        startActivity(new Intent(getActivity(), PersonProfileActivity.class));
+                        break;
+                    default:
+                        startActivity(new Intent(getActivity(), MainActivity.class));
+                        break;
+                }
                 return true;
             }
             return super.onOptionsItemSelected(item);

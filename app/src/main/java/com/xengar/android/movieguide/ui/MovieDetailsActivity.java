@@ -86,7 +86,9 @@ import static com.xengar.android.movieguide.data.FavoriteMoviesContract.Favorite
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.IMDB_URI;
+import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_DETAILS_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -161,6 +163,10 @@ public class MovieDetailsActivity extends AppCompatActivity
 
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         movieID = prefs.getInt(MOVIE_ID, -1);
+
+        // Save name of activity, in case of calling SettingsActivity
+        ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
+                MOVIE_DETAILS_ACTIVITY);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
