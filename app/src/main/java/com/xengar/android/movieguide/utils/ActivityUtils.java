@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.graphics.Palette;
@@ -79,6 +80,32 @@ public class ActivityUtils {
         SharedPreferences.Editor e = prefs.edit();
         e.putString(name, value);
         e.commit();
+    }
+
+    /**
+     * Returns the max cast items from preferences.
+     * @param context
+     * @return
+     */
+    public static int getPreferenceMaxCastItems(final Context context) {
+        String key = context.getString(R.string.pref_max_cast_list);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String data = prefs.getString(key, null);
+        int value = (data != null)? Integer.parseInt(data) : 6;
+        return value;
+    }
+
+    /**
+     * Returns the max movie items from preferences.
+     * @param context
+     * @return
+     */
+    public static int getPreferenceMaxMovieItems(final Context context) {
+        String key = context.getString(R.string.pref_max_movie_list);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String data = prefs.getString(key, null);
+        int value = (data != null)? Integer.parseInt(data) : -1;
+        return value;
     }
 
     /**

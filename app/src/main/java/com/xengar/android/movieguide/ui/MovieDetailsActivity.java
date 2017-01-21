@@ -694,12 +694,16 @@ public class MovieDetailsActivity extends AppCompatActivity
         }
 
         // Add cast
+        int index = 0;
+        int maxCast = ActivityUtils.getPreferenceMaxCastItems(getApplicationContext());
         CastAdapter adapter = new CastAdapter(this);
+        // Assume the cast will always come sorted
         for (final CastData cast : data) {
-            adapter.add(cast);
-            if (cast.getCastOrder() == 7) {
+            if (index == maxCast) {
                 break;
             }
+            index++;
+            adapter.add(cast);
         }
         adapter.notifyDataSetChanged();
         gridview.setAdapter(adapter);

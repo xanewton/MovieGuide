@@ -35,4 +35,8 @@ public final class  Constants {
     public static final String POSTER_PERSON_BASE_URI = "http://image.tmdb.org/t/p/w92";
     public static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
     public static final String IMDB_URI = "http://www.imdb.com/title";
+    public static final String LAST_ACTIVITY = "last_activity";
+    public static final String MAIN_ACTIVITY = "main_activity";
+    public static final String MOVIE_DETAILS_ACTIVITY = "movie_details_activity";
+    public static final String PERSON_PROFILE_ACTIVITY = "person_profile_activity";
 }

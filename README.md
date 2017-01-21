@@ -23,7 +23,13 @@ The app uses The Movie Database API and YouTubeAndroidPlayerApi.
 Download YouTubeAndroidPlayerApi from https://developers.google.com/youtube/android/player/downloads/ and place it under MovieGuide\app\libs
 Get your API keys in order to run the app.
 Create a new resources file (using this path:/app/src/main/res/values/api_keys.xml) and put "THE_MOVIE_DB_API_TOKEN" and "YOUTUBE_DATA_API_V3" keys values in it as strings.
-
+```
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="THE_MOVIE_DB_API_TOKEN">1exxxxd326xxxx82d1xxxxf600xxxxxx</string>
+    <string name="YOUTUBE_DATA_API_V3">AIzaXXXXXXXXXXHhK8XXXXXXXXXXr1cnXXXXXXX</string>
+</resources>
+```
 
 ## License
 
