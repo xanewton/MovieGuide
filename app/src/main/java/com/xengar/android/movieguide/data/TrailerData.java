@@ -21,8 +21,8 @@ import android.net.Uri;
  * TrailerData
  */
 public class TrailerData {
-    private Uri trailerUri;
-    private String trailerName;
+    private final Uri trailerUri;
+    private final String trailerName;
 
     public TrailerData(Uri trailerUri, String trailerName) {
         this.trailerUri = trailerUri;

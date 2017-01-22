@@ -16,6 +16,7 @@
  -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/touch_effect"
@@ -28,7 +29,7 @@
         android:layout_width="@dimen/movie_details_trailer_image_view_layout_width"
         android:layout_height="@dimen/movie_details_trailer_image_view_layout_height"
         android:layout_gravity="center"
-        android:src="@drawable/ic_play_arrow_black_24dp" />
+        app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
 
     <TextView
         android:id="@+id/trailer_name"

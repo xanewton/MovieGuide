@@ -49,6 +49,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
@@ -67,7 +68,6 @@ public class PersonActivity extends AppCompatActivity {
 
     private static final String TAG = PersonActivity.class.getSimpleName();
     private int personId;
-    private int movieID;
     private CollapsingToolbarLayout collapsingToolbar;
     private PersonData personData;
     private TextView biography;
@@ -83,8 +83,8 @@ public class PersonActivity extends AppCompatActivity {
     private TextView deathday;
     private TextView homepage;
     private GridView gridview; // Movie credits list
-    private boolean gridViewResized[] = {false}; // boolean for resize gridview hack
-    private String personTitle[] = {" "};
+    private final boolean[] gridViewResized = {false}; // boolean for resize gridview hack
+    private final String[] personTitle = {" "};
     private LinearLayout creditCastList;
     private LinearLayout creditCrewList;
 
@@ -99,7 +99,7 @@ public class PersonActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         personId = prefs.getInt(PERSON_ID, -1);
-        movieID = prefs.getInt(MOVIE_ID, -1);
+        int movieID = prefs.getInt(MOVIE_ID, -1);
 
         // Save name of activity, in case of calling SettingsActivity
         ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
@@ -174,7 +174,7 @@ public class PersonActivity extends AppCompatActivity {
         collapsingToolbar.setTitle(personTitle[0]);
         personName.setText(personTitle[0]);
         biography.setText(personData.getBiography());
-        textPopularity.setText("" + personData.getPopularity());
+        textPopularity.setText(String.format(Locale.ENGLISH, "%d", personData.getPopularity()));
         imdbId.setText(personData.getImdbId());
         placeOfBirth.setText(personData.getPlaceOfBirth());
         birthday.setText(personData.getBirthday());
@@ -272,7 +272,7 @@ public class PersonActivity extends AppCompatActivity {
             title = (TextView) view.findViewById(R.id.poster_title);
             character = (TextView) view.findViewById(R.id.movie_character);
 
-            date.setText("" + creditCast.getReleaseYear());
+            date.setText(String.format(Locale.ENGLISH, "%d", creditCast.getReleaseYear()));
             title.setText(creditCast.getMovieTitle());
             character.setText(creditCast.getCharacter());
             creditCastList.addView(view);
@@ -296,7 +296,7 @@ public class PersonActivity extends AppCompatActivity {
             title = (TextView) view.findViewById(R.id.poster_title);
             character = (TextView) view.findViewById(R.id.movie_character);
 
-            date.setText("" + creditCrew.getReleaseYear());
+            date.setText(String.format(Locale.ENGLISH, "%d", creditCrew.getReleaseYear()));
             title.setText(creditCrew.getMovieTitle());
             character.setText(creditCrew.getJob());
             creditCrewList.addView(view);
@@ -325,9 +325,8 @@ public class PersonActivity extends AppCompatActivity {
                     request = "/person/";
                     break;
             }
-            JSONObject jObj = JSONLoader.load(request + params[0],
+            return JSONLoader.load(request + params[0],
                     getString(R.string.THE_MOVIE_DB_API_TOKEN), "movie_credits");
-            return jObj;
         }
 
         @Override

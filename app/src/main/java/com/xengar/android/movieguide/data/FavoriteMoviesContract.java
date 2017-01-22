@@ -18,7 +18,7 @@ package com.xengar.android.movieguide.data;
 import android.provider.BaseColumns;
 
 /**
- * Created by xengar on 1/13/2017.
+ * FavoriteMoviesContract
  */
 public final class FavoriteMoviesContract {
     private FavoriteMoviesContract() {

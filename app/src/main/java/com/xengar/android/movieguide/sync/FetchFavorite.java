@@ -55,7 +55,7 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
         this.adapter = adapter;
         this.contentResolver = contentResolver;
         this.posterBaseUri = posterBaseUri;
-        switch (itemType){
+        switch (requestType){
             case FAVORITE_MOVIES:
                 this.uri = FAVORITE_MOVIES_URI;
                 break;
@@ -81,6 +81,8 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
         } else {
             Log.d(TAG, "Cursor is empty");
         }
+        if (cursor != null)
+            cursor.close();
         return moviePosters;
     }
 

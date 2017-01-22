@@ -98,7 +98,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"
-                    android:text="popularity" />
+                    android:text="@string/popularity" />
 
             </LinearLayout>
 
@@ -111,7 +111,7 @@
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/movie_details_title_min_height"
                 android:paddingLeft="@dimen/movie_details_title_padding_left"
-                android:text="person"
+                android:text="@string/person"
                 android:textSize="@dimen/movie_details_title_text_size"
                 android:textStyle="normal" />
 
@@ -128,7 +128,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Info"
+                        android:text="@string/info"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <LinearLayout
@@ -156,7 +156,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="Place of birth" />
+                                android:text="@string/place_of_birth" />
 
                             <TextView
                                 android:id="@+id/birthday"
@@ -164,7 +164,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="Birthday" />
+                                android:text="@string/birthday" />
 
                             <TextView
                                 android:id="@+id/deathday"
@@ -172,7 +172,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="Deathday" />
+                                android:text="@string/deathday" />
 
                             <TextView
                                 android:id="@+id/homepage"
@@ -180,7 +180,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="Homepage" />
+                                android:text="@string/homepage" />
 
                             <TextView
                                 android:id="@+id/imdb_id"
@@ -188,7 +188,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="imdb_id " />
+                                android:text="@string/imdb_id" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -222,7 +222,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Movie Credits"
+                        android:text="@string/movie_credits"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <GridView
@@ -239,7 +239,7 @@
                         android:id="@+id/credit_cast_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cast"
+                        android:text="@string/cast"
                         android:layout_marginTop="2dp"
                         android:textAppearance="@style/DetailViewTextMediumBlack" />
                     <LinearLayout
@@ -252,7 +252,7 @@
                         android:id="@+id/credit_crew_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Crew"
+                        android:text="@string/crew"
                         android:layout_marginTop="2dp"
                         android:textAppearance="@style/DetailViewTextMediumBlack" />
                     <LinearLayout

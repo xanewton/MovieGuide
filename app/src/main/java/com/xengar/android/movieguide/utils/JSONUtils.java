@@ -70,7 +70,7 @@ public final class JSONUtils {
         } else {
             JSONArray jArray = jobj.getJSONArray(name);
             List<String> results = new ArrayList<>(jArray.length());
-            JSONObject Jobject = null;
+            JSONObject Jobject;
             for (int i = 0; i < jArray.length(); i++) {
                 Jobject = jArray.getJSONObject(i);
                 results.add(Jobject.getString("name"));

@@ -31,6 +31,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -67,7 +68,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
      */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener =
+    private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener =
             new Preference.OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
@@ -104,9 +105,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                     }
                 } */
             } else if (preference instanceof SwitchPreference) {
-                // For a boolean value, set the default value
-                Boolean boolValue = (stringValue.contains("t"))? true : false;
-                preference.setDefaultValue(boolValue);
+                // For a boolean value, set the default value "true"
+                preference.setDefaultValue((stringValue.contains("t")));
             } else {
                 // For all other preferences, set the summary to the value's
                 // simple string representation.
@@ -199,7 +199,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             root.addView(content);
             root.addView(toolbar);
         }
-        toolbar.setBackgroundColor(getResources().getColor(R.color.colorAccent ));
+        toolbar.setBackgroundColor(
+                ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

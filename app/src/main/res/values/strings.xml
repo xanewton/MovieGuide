@@ -38,11 +38,9 @@
     <string name="menu_option_favorite_movies">Favorite movies</string>
     <string name="menu_title_tv_shows">TV Shows</string>
     <string name="menu_option_on_the_air">On the air</string>
-    <string name="menu_option_airing_today">Airing today</string>
     <string name="menu_option_popular_tv_shows">Popular TV shows</string>
     <string name="menu_option_top_rated_tv_shows">Top rated TV shows</string>
     <string name="menu_option_on_the_air_tv_shows">On the air TV shows</string>
-    <string name="menu_option_airing_today_tv_shows">Airing today TV shows</string>
 
     <!-- Details Movie -->
     <string name="cheese_ipsum">Jarlsberg lancashire edam. Dolcelatte hard cheese brie st. agur blue
@@ -97,11 +95,38 @@
     <string name="pref_show_main_toolbar">pref_show_main_toolbar</string>
     <string name="pref_title_show_main_toolbar">Show toolbar</string>
     <string name="pref_description_show_main_toolbar">Display main toolbar</string>
+    <string name="date">date</string>
+    <string name="title">Title</string>
+    <string name="character">character</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
+    <string name="popularity">popularity</string>
+    <string name="imdb_raiting">imdb_raiting</string>
+    <string name="person">person</string>
+    <string name="movie_title">movie title</string>
+    <string name="info">Info</string>
+    <string name="place_of_birth">Place of birth</string>
+    <string name="genre">Genre</string>
+    <string name="birthday">Birthday</string>
+    <string name="countries">Countries</string>
+    <string name="deathday">Deathday</string>
+    <string name="movie_duration">movie duration</string>
+    <string name="homepage">Homepage</string>
+    <string name="imdb_id">imdb_id</string>
+    <string name="status">Status</string>
+    <string name="budget">Budget</string>
+    <string name="movie_credits">Movie Credits</string>
+    <string name="revenue">Revenue</string>
+    <string name="cast">Cast</string>
+    <string name="prodution_companies">Prodution Companies</string>
+    <string name="crew">Crew</string>
+    <string name="trailers">Trailers</string>
+    <string name="reviews">Reviews</string>
 
-<!--
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
--->
+    <!--
+        <string name="pref_title_display_name">Display name</string>
+        <string name="pref_default_display_name">John Smith</string>
+    -->
 
     <!-- Example settings for Data & Sync --><!--
     <string name="pref_header_data_sync">Data &amp; sync</string>

@@ -18,7 +18,6 @@ package com.xengar.android.movieguide.ui;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -32,7 +31,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -115,7 +113,7 @@ public class MovieActivity extends AppCompatActivity
     private MovieDetails data = null;
     private List<TrailerData> trailerData;
     private int movieID;
-    private String movieTitle[] = {" "};
+    private final String movieTitle[] = {" "};
     private CollapsingToolbarLayout collapsingToolbar;
 
     // Details components
@@ -142,9 +140,6 @@ public class MovieActivity extends AppCompatActivity
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer youTubePlayer;
     private LinearLayout trailerList;
-    private MenuItem item = null;
-    private boolean isTrailerLoaded = false;
-    private Intent sharedIntent;
 
     private List<ReviewData> reviewData;
     private LinearLayout reviewList;
@@ -152,7 +147,7 @@ public class MovieActivity extends AppCompatActivity
 
     private List<CastData> castData;
     private GridView gridview; // Cast list
-    private boolean gridViewResized[] = {false}; // boolean for resize gridview hack
+    private final boolean[] gridViewResized = {false}; // boolean for resize gridview hack
 
     private FloatingActionButton fabAdd, fabDel;
 
@@ -240,7 +235,8 @@ public class MovieActivity extends AppCompatActivity
         } else {
             fabAdd.setVisibility(View.VISIBLE);
         }
-        cursor.close();
+        if (cursor != null)
+            cursor.close();
     }
 
     /**
@@ -391,8 +387,9 @@ public class MovieActivity extends AppCompatActivity
         }
 
         if (container.getDuration() != null) {
-            movieDuration.setText(container.getDuration()
-                    + getString(R.string.details_view_text_minutes));
+            movieDuration.setText(
+                    String.format(Locale.ENGLISH, "%d %s", container.getDuration(),
+                            getString(R.string.details_view_text_minutes)));
         } else {
             movieDuration.setVisibility(View.GONE);
         }
@@ -560,27 +557,11 @@ public class MovieActivity extends AppCompatActivity
                 public void onClick(View v) {
                     TrailerData data = (TrailerData) v.getTag();
                     youTubePlayer.loadVideo(data.getTrailerUri().getQueryParameter("v"));
-
                 }
             });
             trailerList.addView(view);
         }
-        Log.v(TAG, "data " + data);
-        if (!data.isEmpty()) {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            Uri uri = data.get(0).getTrailerUri();
-            shareIntent.putExtra(Intent.EXTRA_TEXT, uri.toString());
-            if (item == null) {
-                this.sharedIntent = shareIntent;
-            } else {
-                sharedIntent = null;
-                item.setVisible(true);
-            }
-        } else if (item != null) {
-            item.setVisible(false);
-        }
-        isTrailerLoaded = true;
+        boolean isTrailerLoaded = true;
 
         if (!data.isEmpty()) {
             youTubePlayerFragment.initialize(getString(R.string.YOUTUBE_DATA_API_V3), this);
@@ -634,7 +615,7 @@ public class MovieActivity extends AppCompatActivity
      * @param showReview
      */
     private void populateReviewList(final List<ReviewData> data, boolean showReview) {
-        if (data == null && data.isEmpty()) {
+        if (data == null || data.isEmpty()) {
             reviewList.setVisibility(View.GONE);
         }
 
@@ -648,14 +629,17 @@ public class MovieActivity extends AppCompatActivity
             buildStart.append(review.getReviewContent());
 
             if (buildStart.length() > 72) {
-                reviewContentStart.setText(Html.fromHtml(buildStart.substring(0, 72) + SHORT_TEXT_PREVIEW));
-                reviewContentEnd.setText(Html.fromHtml(buildStart.substring(0, buildStart.length()) + LONG_TEXT_PREVIEW));
+                reviewContentStart.setText(
+                        ActivityUtils.fromHtml(buildStart.substring(0, 72) + SHORT_TEXT_PREVIEW));
+                reviewContentEnd.setText(
+                        ActivityUtils.fromHtml(buildStart.substring(0, buildStart.length())
+                                + LONG_TEXT_PREVIEW));
                 Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
                 Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
 
             } else {
                 reviewContentStart.setText(buildStart);
-                reviewContentEnd.setText(Html.fromHtml(buildStart + END_TEXT_PREVIEW));
+                reviewContentEnd.setText(ActivityUtils.fromHtml(buildStart + END_TEXT_PREVIEW));
                 Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
             }
             Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
@@ -690,7 +674,7 @@ public class MovieActivity extends AppCompatActivity
      * @param data
      */
     private void populateCastList(final List<CastData> data) {
-        if (data == null && data.isEmpty()) {
+        if (data == null || data.isEmpty()) {
             gridview.setVisibility(View.GONE);
             return;
         }
@@ -751,8 +735,7 @@ public class MovieActivity extends AppCompatActivity
                     break;
             }
 
-            JSONObject jObj = JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
-            return jObj;
+            return JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
         }
 
         @Override
@@ -814,9 +797,9 @@ public class MovieActivity extends AppCompatActivity
                                 COLUMN_IMDB_ID/*, COLUMN_PROD_COMPANIES */, COLUMN_BUDGET,
                                 COLUMN_REVENUE, COLUMN_HOMEPAGE},
                         null, null, null);
-                Log.d(TAG, "Cursor = " + cursor.getCount());
 
                 if (cursor.getCount() != 0) {
+                    Log.d(TAG, "Cursor = " + cursor.getCount());
                     cursor.moveToFirst();
                     // Note: Better if it matches the query order
                     detailsData = new MovieData(cursor.getString(0), movieID,
@@ -828,6 +811,7 @@ public class MovieActivity extends AppCompatActivity
                             cursor.getString(12), cursor.getString(13));
                     populateDetails(detailsData);
                 }
+                cursor.close();
             }
         }
 

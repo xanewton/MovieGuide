@@ -136,25 +136,34 @@ public class UniversalFragment extends Fragment {
         // Hide Floating Action Button
         getActivity().findViewById(R.id.fab).setVisibility(View.GONE);
 
-        if (itemType.equals(POPULAR_TV_SHOWS)) {
-            gridview.setOnScrollListener(new ItemViewScrollListener(POPULAR_TV_SHOWS));
-        } else if (itemType.equals(TOP_RATED_TV_SHOWS)) {
-            gridview.setOnScrollListener(new ItemViewScrollListener(TOP_RATED_TV_SHOWS));
-        } else if (itemType.equals(ON_THE_AIR_TV_SHOWS)) {
-            gridview.setOnScrollListener(new ItemViewScrollListener(ON_THE_AIR_TV_SHOWS));
-        } else if (itemType.equals(FAVORITE_MOVIES)) {
-            adapter.clearData();
-            FetchFavorite task = new FetchFavorite(FAVORITE_MOVIES, adapter,
-                    getActivity().getContentResolver(), posterBaseUri);
-            task.execute();
-        } else if (itemType.equals(NOW_PLAYING_MOVIES)) {
-            gridview.setOnScrollListener(new ItemViewScrollListener(NOW_PLAYING_MOVIES));
-        } else if (itemType.equals(TOP_RATED_MOVIES)) {
-            gridview.setOnScrollListener(new ItemViewScrollListener(TOP_RATED_MOVIES));
-        } else if (itemType.equals(UPCOMING_MOVIES)) {
-            gridview.setOnScrollListener(new ItemViewScrollListener(UPCOMING_MOVIES));
-        } else {
-            gridview.setOnScrollListener(new ItemViewScrollListener(POPULAR_MOVIES));
+        switch (itemType) {
+            case POPULAR_TV_SHOWS:
+                gridview.setOnScrollListener(new ItemViewScrollListener(POPULAR_TV_SHOWS));
+                break;
+            case TOP_RATED_TV_SHOWS:
+                gridview.setOnScrollListener(new ItemViewScrollListener(TOP_RATED_TV_SHOWS));
+                break;
+            case ON_THE_AIR_TV_SHOWS:
+                gridview.setOnScrollListener(new ItemViewScrollListener(ON_THE_AIR_TV_SHOWS));
+                break;
+            case FAVORITE_MOVIES:
+                adapter.clearData();
+                FetchFavorite task = new FetchFavorite(FAVORITE_MOVIES, adapter,
+                        getActivity().getContentResolver(), posterBaseUri);
+                task.execute();
+                break;
+            case NOW_PLAYING_MOVIES:
+                gridview.setOnScrollListener(new ItemViewScrollListener(NOW_PLAYING_MOVIES));
+                break;
+            case TOP_RATED_MOVIES:
+                gridview.setOnScrollListener(new ItemViewScrollListener(TOP_RATED_MOVIES));
+                break;
+            case UPCOMING_MOVIES:
+                gridview.setOnScrollListener(new ItemViewScrollListener(UPCOMING_MOVIES));
+                break;
+            default:
+                gridview.setOnScrollListener(new ItemViewScrollListener(POPULAR_MOVIES));
+                break;
         }
     }
 
