@@ -28,7 +28,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:text="date"/>
+        android:text="@string/date"/>
 
     <TextView
         android:id="@+id/poster_title"
@@ -37,7 +37,7 @@
         android:layout_weight="2"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:text="Title"/>
+        android:text="@string/title"/>
 
     <TextView
         android:id="@+id/movie_character"
@@ -46,6 +46,6 @@
         android:layout_weight="2"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:text="character" />
+        android:text="@string/character" />
 
 </LinearLayout>

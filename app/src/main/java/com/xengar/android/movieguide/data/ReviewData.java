@@ -19,8 +19,8 @@ package com.xengar.android.movieguide.data;
  * ReviewData
  */
 public class ReviewData {
-    private String reviewAuthor;
-    private String reviewContent;
+    private final String reviewAuthor;
+    private final String reviewContent;
 
     public ReviewData(String reviewAuthor, String reviewContent) {
         this.reviewAuthor = reviewAuthor;

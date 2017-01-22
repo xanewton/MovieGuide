@@ -23,6 +23,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 /**
@@ -72,14 +73,14 @@ public class FavoriteMoviesProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = helper.getWritableDatabase();
         return db.delete(FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME,
                 selection, selectionArgs);
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (sUriMatcher.match(uri)) {
             case MOVIES:
                 return "vnd.android.cursor.dir/movie";
@@ -91,7 +92,7 @@ public class FavoriteMoviesProvider extends ContentProvider {
     }
 
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = helper.getWritableDatabase();
         long rowId = db.insert(FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME, null, values);
 
@@ -107,7 +108,7 @@ public class FavoriteMoviesProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
 
         SQLiteDatabase db = helper.getReadableDatabase();
@@ -126,19 +127,11 @@ public class FavoriteMoviesProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
 
-        Cursor cursor = builder.query(
-                db,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder);
-        return cursor;
+        return builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = helper.getWritableDatabase();
         return db.update(FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME, values, selection,
                 selectionArgs);

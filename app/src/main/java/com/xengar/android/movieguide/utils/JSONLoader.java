@@ -43,7 +43,7 @@ public class JSONLoader {
     public static JSONObject load(String relativeUri, String apiKey, String appendToResponse) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        String movieJsonStr = null;
+        String movieJsonStr;
 
         try {
             Uri.Builder uriBuilder = Uri.parse(MOVIE_BASE_URI + relativeUri).buildUpon()
@@ -61,7 +61,7 @@ public class JSONLoader {
 
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             if (inputStream == null) {
                 return null;
             }

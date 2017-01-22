@@ -22,18 +22,18 @@ import java.util.List;
  */
 public class PersonData {
 
-    private int personId;
-    private int popularity;
-    private String actorName;
-    private String profilePath;
-    private String placeOfBirth;
-    private String birthday;
-    private String deathday;
-    private String biography;
-    private String imdbId;
-    private String homepage;
-    private List<MovieCreditCast> movieCreditCastList;
-    private List<MovieCreditCrew> movieCreditCrewList;
+    private final int personId;
+    private final int popularity;
+    private final String actorName;
+    private final String profilePath;
+    private final String placeOfBirth;
+    private final String birthday;
+    private final String deathday;
+    private final String biography;
+    private final String imdbId;
+    private final String homepage;
+    private final List<MovieCreditCast> movieCreditCastList;
+    private final List<MovieCreditCrew> movieCreditCrewList;
 
     // Constructor
     public PersonData(String actorName, String profilePath, String placeOfBirth,

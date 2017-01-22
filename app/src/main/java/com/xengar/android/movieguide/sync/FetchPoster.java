@@ -54,7 +54,6 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
     private final String posterBaseUri;
     private final ImageAdapter adapter;
     private final String apiKey;
-    private final String sortOrder;
     private final String itemType;
     private String requestType;
 
@@ -67,7 +66,6 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
         this.posterBaseUri = posterBaseUri;
         this.adapter = adapter;
         this.apiKey = apiKey;
-        this.sortOrder = sortOrder;
 
         // assign the category to query
         switch (itemType){
@@ -122,7 +120,7 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
             String itemTitle = (itemType.equals(POPULAR_TV_SHOWS) || itemType.equals(TOP_RATED_TV_SHOWS)
                     || itemType.equals(ON_THE_AIR_TV_SHOWS))? "name" : "title";
             JSONArray itemsArray = jObj.getJSONArray("results");
-            JSONObject item = null;
+            JSONObject item;
             for (int i = 0; i < itemsArray.length(); i++) {
                 item = itemsArray.optJSONObject(i);
                 posters.add(new ImageItem(posterBaseUri + item.getString("poster_path"),

@@ -19,11 +19,11 @@ package com.xengar.android.movieguide.data;
  * CastData
  */
 public class CastData {
-    private String actorName;
-    private String profilePath;
-    private String character;
-    private int personId;
-    private int castOrder;
+    private final String actorName;
+    private final String profilePath;
+    private final String character;
+    private final int personId;
+    private final int castOrder;
 
     // Constructor
     public CastData(String actorName, String profilePath, String character, int personId,

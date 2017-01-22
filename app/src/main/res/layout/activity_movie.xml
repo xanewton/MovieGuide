@@ -100,7 +100,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"
-                    android:text="imdb_raiting" />
+                    android:text="@string/imdb_raiting" />
 
             </LinearLayout>
 
@@ -113,7 +113,7 @@
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/movie_details_title_min_height"
                 android:paddingLeft="@dimen/movie_details_title_padding_left"
-                android:text="movie title"
+                android:text="@string/movie_title"
                 android:textSize="@dimen/movie_details_title_text_size"
                 android:textStyle="normal" />
 
@@ -130,7 +130,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Info"
+                        android:text="@string/info"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <LinearLayout
@@ -158,7 +158,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="Genre" />
+                                android:text="@string/genre" />
 
                             <TextView
                                 android:id="@+id/countries"
@@ -166,7 +166,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="Countries " />
+                                android:text="@string/countries" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -180,7 +180,7 @@
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     android:gravity="left"
-                                    android:text="movie duration" />
+                                    android:text="@string/movie_duration" />
                                 <TextView
                                     android:id="@+id/text_language"
                                     style="@style/DetailViewTextSmall"
@@ -208,7 +208,7 @@
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     android:gravity="left"
-                                    android:text="Status "
+                                    android:text="@string/status"
                                     android:visibility="gone" />
                             </LinearLayout>
                             <LinearLayout
@@ -222,7 +222,7 @@
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     android:gravity="left"
-                                    android:text="Budget"/>
+                                    android:text="@string/budget"/>
 
                                 <TextView
                                     android:id="@+id/revenue"
@@ -231,7 +231,7 @@
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
                                     android:gravity="left"
-                                    android:text="Revenue" />
+                                    android:text="@string/revenue" />
                             </LinearLayout>
 
                             <TextView
@@ -240,7 +240,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="homepage" />
+                                android:text="@string/homepage" />
 
                             <TextView
                                 android:id="@+id/prod_companies"
@@ -249,7 +249,7 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
                                 android:layout_marginTop="5dp"
-                                android:text="Prod Companies" />
+                                android:text="@string/prodution_companies" />
 
                             <TextView
                                 android:id="@+id/imdb_id"
@@ -257,7 +257,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="imdb_id " />
+                                android:text="@string/imdb_id" />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -290,7 +290,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Trailers"
+                        android:text="@string/trailers"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <FrameLayout
@@ -324,7 +324,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Cast"
+                        android:text="@string/cast"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <GridView
@@ -356,7 +356,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Reviews"
+                        android:text="@string/reviews"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <LinearLayout

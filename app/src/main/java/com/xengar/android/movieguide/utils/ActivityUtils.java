@@ -27,6 +27,8 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.graphics.Palette;
 import android.support.v7.graphics.Palette.PaletteAsyncListener;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -92,8 +94,7 @@ public class ActivityUtils {
         String key = context.getString(R.string.pref_max_cast_list);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String data = prefs.getString(key, null);
-        int value = (data != null)? Integer.parseInt(data) : 6;
-        return value;
+        return (data != null)? Integer.parseInt(data) : 6;
     }
 
     /**
@@ -105,8 +106,7 @@ public class ActivityUtils {
         String key = context.getString(R.string.pref_max_movie_list);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         String data = prefs.getString(key, null);
-        int value = (data != null)? Integer.parseInt(data) : -1;
-        return value;
+        return (data != null)? Integer.parseInt(data) : -1;
     }
 
     /**
@@ -117,8 +117,7 @@ public class ActivityUtils {
     public static boolean getPreferenceShowToolbar(final Context context) {
         String key = context.getString(R.string.pref_show_main_toolbar);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean value = prefs.getBoolean(key, true);
-        return value;
+        return prefs.getBoolean(key, true);
     }
 
     /**
@@ -134,7 +133,7 @@ public class ActivityUtils {
                                                                   final TextView textRating,
                                                                   final LinearLayout rating,
                                                                   final ImageView starRating) {
-        final PaletteAsyncListener paletteAsyncListener = new PaletteAsyncListener() {
+        return new PaletteAsyncListener() {
             @SuppressLint("NewApi")
             @Override
             public void onGenerated(Palette palette) {
@@ -172,8 +171,6 @@ public class ActivityUtils {
                 }
             }
         };
-
-        return paletteAsyncListener;
     }
 
     /**
@@ -186,7 +183,7 @@ public class ActivityUtils {
     public static Callback defineCallback(final PaletteAsyncListener paletteAsyncListener,
                                           final ImageView backgroundPoster,
                                           final ImageView moviePoster) {
-        Callback callback = new Callback() {
+        return new Callback() {
             @Override
             public void onSuccess() {
                 if (backgroundPoster != null) {
@@ -204,7 +201,6 @@ public class ActivityUtils {
                 Palette.from(bitmapBg).generate(paletteAsyncListener);
             }
         };
-        return callback;
     }
 
 
@@ -277,7 +273,7 @@ public class ActivityUtils {
                     gridViewResized[0] = true;
                     ViewGroup.LayoutParams params = gridview.getLayoutParams();
                     int oneRowHeight = gridview.getHeight();
-                    int rows = (int) (items / columns);
+                    int rows = items / columns;
                     if (items % columns != 0) {
                         rows++;
                     }
@@ -362,5 +358,22 @@ public class ActivityUtils {
         Intent intent = new Intent(context, PersonActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    /**
+     * Helper class to handle deprecated method.
+     * Source: http://stackoverflow.com/questions/37904739/html-fromhtml-deprecated-in-android-n
+     * @param html
+     * @return
+     */
+    @SuppressWarnings("deprecation")
+    public static Spanned fromHtml(String html){
+        Spanned result;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            result = Html.fromHtml(html,Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            result = Html.fromHtml(html);
+        }
+        return result;
     }
 }
