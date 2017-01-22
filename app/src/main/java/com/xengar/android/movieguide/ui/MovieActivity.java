@@ -42,7 +42,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
@@ -51,8 +50,8 @@ import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.CastAdapter;
 import com.xengar.android.movieguide.data.CastData;
 import com.xengar.android.movieguide.data.FavoriteMoviesProvider;
-import com.xengar.android.movieguide.data.MovieDetails;
 import com.xengar.android.movieguide.data.MovieData;
+import com.xengar.android.movieguide.data.MovieDetails;
 import com.xengar.android.movieguide.data.ReviewData;
 import com.xengar.android.movieguide.data.TrailerData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
@@ -68,7 +67,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static android.app.DownloadManager.COLUMN_STATUS;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BACKGROUND_PATH;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_BUDGET;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_DURATION;
@@ -80,6 +78,7 @@ import static com.xengar.android.movieguide.data.FavoriteMoviesContract.Favorite
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_ORIGINAL_LANGUAGE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_REVENUE;
+import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_STATUS;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_AVERAGE;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_VOTE_COUNT;
 import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_YEAR;
@@ -101,10 +100,10 @@ import static com.xengar.android.movieguide.utils.JSONUtils.getUriValue;
 /**
  * MovieDetails Activity
  */
-public class MovieDetailsActivity extends AppCompatActivity
+public class MovieActivity extends AppCompatActivity
         implements YouTubePlayer.OnInitializedListener {
 
-    private static final String TAG = MovieDetailsActivity.class.getSimpleName();
+    private static final String TAG = MovieActivity.class.getSimpleName();
     private static final Uri URI =
             Uri.parse("content://" + FavoriteMoviesProvider.AUTHORITY + "/" + TABLE_NAME);
     private static final String SHORT_TEXT_PREVIEW = " \n <font color=#FF8A80>... show more</font>";
@@ -159,7 +158,7 @@ public class MovieDetailsActivity extends AppCompatActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie_details);
+        setContentView(R.layout.activity_movie);
 
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         movieID = prefs.getInt(MOVIE_ID, -1);
@@ -202,7 +201,8 @@ public class MovieDetailsActivity extends AppCompatActivity
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), movieTitle);
-        loadBackgroundPoster();
+        ActivityUtils.loadNoBackgroundPoster(getApplicationContext(),
+                (ImageView) findViewById(R.id.background_poster));
         showFavoriteButtons();
     }
 
@@ -288,11 +288,6 @@ public class MovieDetailsActivity extends AppCompatActivity
                 fabDel.setVisibility(View.INVISIBLE);
             }
         });
-    }
-
-    private void loadBackgroundPoster() {
-        final ImageView imageView = (ImageView) findViewById(R.id.background_poster);
-        Glide.with(this).load(R.drawable.no_background_poster).centerCrop().into(imageView);
     }
 
     /**

@@ -33,14 +33,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.MovieAdapter;
 import com.xengar.android.movieguide.data.MovieCreditCast;
 import com.xengar.android.movieguide.data.MovieCreditCrew;
+import com.xengar.android.movieguide.data.PersonData;
 import com.xengar.android.movieguide.data.PosterData;
-import com.xengar.android.movieguide.data.PersonalProfileData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 import com.xengar.android.movieguide.utils.JSONLoader;
 import com.xengar.android.movieguide.utils.JSONUtils;
@@ -51,7 +50,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.id;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
@@ -61,15 +59,17 @@ import static com.xengar.android.movieguide.utils.Constants.PERSON_PROFILE_ACTIV
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_PERSON_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
-import static com.xengar.android.movieguide.utils.JSONUtils.getStringValue;
 
-public class PersonProfileActivity extends AppCompatActivity {
+/**
+ * Represents the Person Profile page.
+ */
+public class PersonActivity extends AppCompatActivity {
 
-    private static final String TAG = PersonProfileActivity.class.getSimpleName();
+    private static final String TAG = PersonActivity.class.getSimpleName();
     private int personId;
     private int movieID;
     private CollapsingToolbarLayout collapsingToolbar;
-    private PersonalProfileData personalProfileData;
+    private PersonData personData;
     private TextView biography;
     private ImageView personalProfImage;
     private LinearLayout rating;
@@ -78,7 +78,7 @@ public class PersonProfileActivity extends AppCompatActivity {
     private ImageView backgroundPoster;
     private TextView personName;
     private TextView imdbId;
-    private TextView placeOfBith;
+    private TextView placeOfBirth;
     private TextView birthday;
     private TextView deathday;
     private TextView homepage;
@@ -92,7 +92,7 @@ public class PersonProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_person_profile);
+        setContentView(R.layout.activity_person);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -113,7 +113,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         biography = (TextView) findViewById(R.id.biography);
         personalProfImage = (ImageView) findViewById(R.id.personal_image);
         imdbId = (TextView) findViewById(R.id.imdb_id);
-        placeOfBith = (TextView) findViewById(R.id.placeOfBirth);
+        placeOfBirth = (TextView) findViewById(R.id.placeOfBirth);
         birthday = (TextView) findViewById(R.id.birthday);
         deathday = (TextView) findViewById(R.id.deathday);
         homepage = (TextView) findViewById(R.id.homepage);
@@ -122,7 +122,8 @@ public class PersonProfileActivity extends AppCompatActivity {
         creditCrewList = (LinearLayout) findViewById(R.id.credit_crew_data);
 
         fetchPersonData();
-        loadBackgroundPoster();
+        ActivityUtils.loadNoBackgroundPoster(getApplicationContext(),
+                (ImageView) findViewById(R.id.background_poster));
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), personTitle);
@@ -137,20 +138,15 @@ public class PersonProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        int itemId = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (itemId == R.id.action_settings) {
             ActivityUtils.launchSettingsActivity(getApplicationContext());
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void loadBackgroundPoster() {
-        final ImageView imageView = (ImageView) findViewById(R.id.background_poster);
-        Glide.with(this).load(R.drawable.no_background_poster).centerCrop().into(imageView);
     }
 
     private void fetchPersonData() {
@@ -160,9 +156,9 @@ public class PersonProfileActivity extends AppCompatActivity {
 
     /**
      * Populates the Person data in screen.
-     * @param personalData
+     * @param personData
      */
-    private void populatePersonalData(PersonalProfileData personalData) {
+    private void populateProfile(PersonData personData) {
 
         final Palette.PaletteAsyncListener paletteAsyncListener =
                 ActivityUtils.definePaletteAsyncListener(this, personName, textPopularity, rating,
@@ -171,26 +167,26 @@ public class PersonProfileActivity extends AppCompatActivity {
         Callback callback =
                 ActivityUtils.defineCallback(paletteAsyncListener, backgroundPoster, null);
 
-        if (personalData == null)
+        if (personData == null)
             return;
 
-        personTitle[0] = personalData.getActorName();
+        personTitle[0] = personData.getActorName();
         collapsingToolbar.setTitle(personTitle[0]);
         personName.setText(personTitle[0]);
-        biography.setText(personalData.getBiography());
-        textPopularity.setText("" + personalData.getPopularity());
-        imdbId.setText(personalData.getImdbId());
-        placeOfBith.setText(personalData.getPlaceOfBirth());
-        birthday.setText(personalData.getBirthday());
-        if (personalData.getDeathday() == null) {
+        biography.setText(personData.getBiography());
+        textPopularity.setText("" + personData.getPopularity());
+        imdbId.setText(personData.getImdbId());
+        placeOfBirth.setText(personData.getPlaceOfBirth());
+        birthday.setText(personData.getBirthday());
+        if (personData.getDeathday() == null) {
             deathday.setVisibility(View.GONE);
         } else {
-            deathday.setText(personalData.getDeathday());
+            deathday.setText(personData.getDeathday());
         }
-        if (personalData.getHomepage() == null) {
+        if (personData.getHomepage() == null) {
             homepage.setVisibility(View.GONE);
         } else {
-            homepage.setText(personalData.getHomepage());
+            homepage.setText(personData.getHomepage());
         }
 
         /**
@@ -199,10 +195,10 @@ public class PersonProfileActivity extends AppCompatActivity {
          */
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         String backgroundPoster = prefs.getString(MOVIE_BACKGROUND_POSTER, "null");
-        PopulateBackgroundPoster(personalData.getProfileImagePath(), backgroundPoster, callback);
-        PopulateCreditCast(personalData.getMovieCreditCastList());
-        PopulateCreditCrew(personalData.getMovieCreditCrewList());
-        PopulateMovieList(personalData);
+        PopulateBackgroundPoster(personData.getProfileImagePath(), backgroundPoster, callback);
+        PopulateCreditCast(personData.getMovieCreditCastList());
+        PopulateCreditCrew(personData.getMovieCreditCrewList());
+        PopulateMovieList(personData);
     }
 
     /**
@@ -229,15 +225,15 @@ public class PersonProfileActivity extends AppCompatActivity {
 
     /**
      * Populates the Movie list in screen.
-     * @param profileData
+     * @param personData
      */
-    private void PopulateMovieList(PersonalProfileData profileData) {
+    private void PopulateMovieList(PersonData personData) {
 
         List<PosterData> data = new ArrayList<>();
         int index = 0;
         int maxMovies = ActivityUtils.getPreferenceMaxMovieItems(getApplicationContext());
         //Build the PosterData
-        for (final MovieCreditCast creditCast: profileData.getMovieCreditCastList()) {
+        for (final MovieCreditCast creditCast: personData.getMovieCreditCastList()) {
             if ( index == maxMovies)
                 break;
             index++;
@@ -261,24 +257,24 @@ public class PersonProfileActivity extends AppCompatActivity {
 
     /**
      * Populates the movie credit cast list on screen.
-     * @param movieCreditCasts
+     * @param movieCreditCast
      */
-    private void PopulateCreditCast(List<MovieCreditCast> movieCreditCasts) {
-        if (movieCreditCasts == null || movieCreditCasts.isEmpty()) {
+    private void PopulateCreditCast(List<MovieCreditCast> movieCreditCast) {
+        if (movieCreditCast == null || movieCreditCast.isEmpty()) {
             return;
         }
 
         TextView date, title, character;
         View view;
-        for (MovieCreditCast creditcast: movieCreditCasts) {
+        for (MovieCreditCast creditCast: movieCreditCast) {
             view = getLayoutInflater().inflate(R.layout.credit_list_item, null);
             date = (TextView) view.findViewById(R.id.movie_date);
             title = (TextView) view.findViewById(R.id.poster_title);
             character = (TextView) view.findViewById(R.id.movie_character);
 
-            date.setText("" + creditcast.getReleaseYear());
-            title.setText(creditcast.getMovieTitle());
-            character.setText(creditcast.getCharacter());
+            date.setText("" + creditCast.getReleaseYear());
+            title.setText(creditCast.getMovieTitle());
+            character.setText(creditCast.getCharacter());
             creditCastList.addView(view);
         }
     }
@@ -294,15 +290,15 @@ public class PersonProfileActivity extends AppCompatActivity {
 
         TextView date, title, character;
         View view;
-        for (MovieCreditCrew creditcrew: movieCreditCrew) {
+        for (MovieCreditCrew creditCrew: movieCreditCrew) {
             view = getLayoutInflater().inflate(R.layout.credit_list_item, null);
             date = (TextView) view.findViewById(R.id.movie_date);
             title = (TextView) view.findViewById(R.id.poster_title);
             character = (TextView) view.findViewById(R.id.movie_character);
 
-            date.setText("" + creditcrew.getReleaseYear());
-            title.setText(creditcrew.getMovieTitle());
-            character.setText(creditcrew.getJob());
+            date.setText("" + creditCrew.getReleaseYear());
+            title.setText(creditCrew.getMovieTitle());
+            character.setText(creditCrew.getJob());
             creditCrewList.addView(view);
         }
     }
@@ -339,7 +335,7 @@ public class PersonProfileActivity extends AppCompatActivity {
             super.onPostExecute(jObj);
             switch (requestType) {
                 case PERSON_PROFILE:
-                    processPersonDetails(jObj);
+                    processPersonData(jObj);
                     break;
             }
         }
@@ -348,22 +344,22 @@ public class PersonProfileActivity extends AppCompatActivity {
          * Process the Person Details data.
          * @param jObj
          */
-        private void processPersonDetails(JSONObject jObj) {
+        private void processPersonData(JSONObject jObj) {
             if (jObj != null) {
                 try {
                     Log.v(TAG, "jObj = " + jObj);
-                    personalProfileData = new PersonalProfileData(getStringValue(jObj, "name"),
+                    personData = new PersonData(JSONUtils.getStringValue(jObj, "name"),
                             POSTER_PERSON_BASE_URI + JSONUtils.getStringValue(jObj, "profile_path"),
                             JSONUtils.getStringValue(jObj, "place_of_birth"),
                             JSONUtils.getStringValue(jObj, "birthday"),
                             JSONUtils.getStringValue(jObj, "deathday"),
-                            JSONUtils.getStringValue(jObj, "biography"), id,
+                            JSONUtils.getStringValue(jObj, "biography"), personId,
                             JSONUtils.getIntValue(jObj, "popularity", 0),
                             JSONUtils.getStringValue(jObj, "imdb_id"),
                             JSONUtils.getStringValue(jObj, "homepage"),
                             JSONUtils.getMovieCreditCastList(jObj, "movie_credits", "cast"),
                             JSONUtils.getMovieCreditCrewList(jObj, "movie_credits", "crew"));
-                    populatePersonalData(personalProfileData);
+                    populateProfile(personData);
 
                 } catch (JSONException e) {
                     Log.e(TAG, "", e);

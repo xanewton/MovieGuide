@@ -14,6 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
  -->
+
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -58,7 +59,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
@@ -83,12 +83,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:src="@drawable/ic_star_border_black_24dp" />
+                    app:srcCompat="@drawable/ic_star_border_black_24dp" />
 
                 <TextView
-                    android:id="@+id/text_popularity"
+                    android:id="@+id/text_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
                     android:gravity="center_vertical" />
 
@@ -96,14 +97,15 @@
                     android:id="@+id/imdb_text_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"
-                    android:text="popularity" />
+                    android:text="imdb_raiting" />
 
             </LinearLayout>
 
             <TextView
-                android:id="@+id/person"
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="4dp"
@@ -111,7 +113,7 @@
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/movie_details_title_min_height"
                 android:paddingLeft="@dimen/movie_details_title_padding_left"
-                android:text="person"
+                android:text="movie title"
                 android:textSize="@dimen/movie_details_title_text_size"
                 android:textStyle="normal" />
 
@@ -138,7 +140,7 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:id="@+id/personal_image"
+                            android:id="@+id/movie_poster"
                             android:layout_width="@dimen/movie_details_image_layout_width"
                             android:layout_height="@dimen/movie_details_image_layout_height"
                             android:src="@drawable/no_movie_poster"
@@ -151,28 +153,86 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/placeOfBirth"
-                                style="@style/DetailViewTextMedium"
+                                android:id="@+id/genre"
+                                style="@style/DetailViewTextSmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="Place of birth" />
+                                android:text="Genre" />
 
                             <TextView
-                                android:id="@+id/birthday"
-                                style="@style/DetailViewTextMedium"
+                                android:id="@+id/countries"
+                                style="@style/DetailViewTextSmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="Birthday" />
+                                android:text="Countries " />
 
-                            <TextView
-                                android:id="@+id/deathday"
-                                style="@style/DetailViewTextMedium"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:gravity="center_vertical"
-                                android:text="Deathday" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/movie_duration"
+                                    style="@style/DetailViewTextSmall"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="left"
+                                    android:text="movie duration" />
+                                <TextView
+                                    android:id="@+id/text_language"
+                                    style="@style/DetailViewTextSmall"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="left" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/movie_date"
+                                    style="@style/DetailViewTextSmall"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="left" />
+
+                                <TextView
+                                    android:id="@+id/status"
+                                    style="@style/DetailViewTextSmall"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="left"
+                                    android:text="Status "
+                                    android:visibility="gone" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                <TextView
+                                    android:id="@+id/budget"
+                                    style="@style/DetailViewTextSmall"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="left"
+                                    android:text="Budget"/>
+
+                                <TextView
+                                    android:id="@+id/revenue"
+                                    style="@style/DetailViewTextSmall"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="left"
+                                    android:text="Revenue" />
+                            </LinearLayout>
 
                             <TextView
                                 android:id="@+id/homepage"
@@ -180,7 +240,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
-                                android:text="Homepage" />
+                                android:text="homepage" />
+
+                            <TextView
+                                android:id="@+id/prod_companies"
+                                style="@style/DetailViewTextSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:layout_marginTop="5dp"
+                                android:text="Prod Companies" />
 
                             <TextView
                                 android:id="@+id/imdb_id"
@@ -193,14 +262,13 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!--- Description -->
+                    <!--- Plot -->
                     <TextView
-                        android:id="@+id/biography"
+                        android:id="@+id/movie_plot"
                         style="@style/DetailViewTextMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="1dp"
-                        android:text="@string/cheese_ipsum"
                         android:paddingTop="10dp" />
 
                 </LinearLayout>
@@ -222,11 +290,45 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Movie Credits"
+                        android:text="Trailers"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    <FrameLayout
+                        android:id="@+id/youtube_fragment"
+                        android:name="com.google.android.youtube.player.YouTubePlayerFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:id="@+id/movie_trailers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_margin"
+                android:layout_marginLeft="@dimen/card_margin"
+                android:layout_marginRight="@dimen/card_margin">
+
+                <LinearLayout
+                    style="@style/Widget.CardContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cast"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                     <GridView
-                        android:id="@+id/credit_movies_data"
+                        android:id="@+id/cast_data"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:columnWidth="@dimen/movie_details_image_layout_width"
@@ -235,28 +337,30 @@
                         android:stretchMode="columnWidth"
                         android:verticalSpacing="@dimen/movie_guide_gridview_vertical_spacing" />
 
-                    <TextView
-                        android:id="@+id/credit_cast_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cast"
-                        android:layout_marginTop="2dp"
-                        android:textAppearance="@style/DetailViewTextMediumBlack" />
-                    <LinearLayout
-                        android:id="@+id/credit_cast_data"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/card_margin"
+                android:layout_marginLeft="@dimen/card_margin"
+                android:layout_marginRight="@dimen/card_margin">
+
+                <LinearLayout
+                    style="@style/Widget.CardContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/credit_crew_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Crew"
-                        android:layout_marginTop="2dp"
-                        android:textAppearance="@style/DetailViewTextMediumBlack" />
+                        android:text="Reviews"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
                     <LinearLayout
-                        android:id="@+id/credit_crew_data"
+                        android:id="@+id/movie_reviews"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical" />
@@ -264,19 +368,30 @@
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
-    <!--
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
+        android:id="@+id/fab_add"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/fab_plus"
         android:layout_margin="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" /> -->
+        android:clickable="true"
+        android:visibility="invisible" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_minus"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/fab_minus"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        android:visibility="invisible" />
 
 </android.support.design.widget.CoordinatorLayout>
