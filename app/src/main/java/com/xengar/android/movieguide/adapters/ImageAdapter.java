@@ -26,45 +26,53 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.data.PosterData;
+import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import static com.xengar.android.movieguide.utils.Constants.POSTER_PERSON_BASE_URI;
+
 /**
- * Image adapter used to fill the list of Movie/TVShow posters.
+ * Image adapter used to fill the list of Movie/TVShow images.
  */
 public class ImageAdapter extends BaseAdapter {
+
+    public static final String CAST_IMAGE = "cast";
+    public static final String MOVIE_IMAGE = "movie";
+    public static final String POSTER_IMAGE = "poster";
 
     private static final String TAG = ImageAdapter.class.getSimpleName();
     private static final int IMAGE_WIDTH = 185;
     private static final int IMAGE_HEIGHT = 278;
-    private final ArrayList<PosterData> posters = new ArrayList<>();
+    private final ArrayList<ImageItem> images = new ArrayList<>();
     private final HashSet<Integer> idSet = new HashSet<>();
     private final float density;
     private final Context mContext;
+    private final String type;
 
     // Constructor
-    public ImageAdapter(Context c) {
+    public ImageAdapter(Context c, String type) {
         mContext = c;
+        this.type = type;
         density = mContext.getResources().getDisplayMetrics().density;
     }
 
     @Override
     public int getCount() {
-        return posters.size();
+        return images.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return posters.get(position);
+        return images.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return posters.get(position).getPosterId();
+        return images.get(position).getImageId();
     }
 
     // Creates a new ImageView for each item referenced by the Adapter.
@@ -72,47 +80,144 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
+            int layout = (type.contentEquals(POSTER_IMAGE))?
+                    R.layout.image_layout : R.layout.movie_list_item;
             view = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(R.layout.image_layout, parent, false);
+                    .inflate(layout, parent, false);
         } else {
             view = convertView;
         }
+        ImageItem data = images.get(position);
 
-        PosterData data = posters.get(position);
+        switch (type){
+            case POSTER_IMAGE:
+                fillPosterView(view, data);
+                break;
+            case CAST_IMAGE:
+                fillCastView(view, data);
+                defineOnclickAction(view);
+                break;
+            case MOVIE_IMAGE:
+                fillMovieView(view, data);
+                defineOnclickAction(view);
+                break;
+        }
+
+        return view;
+    }
+
+    /**
+     * Defines OnClick action.
+     * @param view
+     */
+    private void defineOnclickAction(View view) {
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageItem item = (ImageItem) v.getTag();
+                if (type.contentEquals(MOVIE_IMAGE)) {
+                    ActivityUtils.launchMovieDetailsActivity(mContext, item.getImageId());
+                } else if (type.contentEquals(CAST_IMAGE)) {
+                    ActivityUtils.launchPersonProfileActivity(mContext, item.getImageId());
+                }
+            }
+        });
+    }
+
+    /**
+     * Fills a poster image view.
+     * @param view
+     * @param image
+     */
+    private void fillPosterView(View view, ImageItem image) {
         ImageView imageView = (ImageView) view.findViewById(R.id.poster_view);
         view.setLayoutParams(new GridView.LayoutParams((int) (IMAGE_WIDTH * density),
                 (int) (IMAGE_HEIGHT * density)));
 
-        if (data.getPosterPath() == null) {
+        if (image.getImagePath() == null) {
             TextView textView = (TextView) view.findViewById(R.id.poster_title);
-            textView.setText(data.getPosterTitle());
+            textView.setText(image.getImageTitle());
         }
 
-        ActivityUtils.loadImage(mContext, data.getPosterPath(), false, 0, imageView, null);
-        return view;
+        ActivityUtils.loadImage(mContext, image.getImagePath(), false, 0, imageView, null);
     }
 
+    /**
+     * Fills a cast image view.
+     * @param view
+     * @param image
+     */
+    private void fillCastView(View view, ImageItem image){
+        view.setTag(image);
+        TextView castName = (TextView) view.findViewById(R.id.name);
+        ImageView castImage = (ImageView) view.findViewById(R.id.image);
+        TextView castCharacter = (TextView) view.findViewById(R.id.character);
+        castCharacter.setVisibility(View.VISIBLE);
 
-    public void add(PosterData res) {
-        if (idSet.contains(res.getPosterId())) {
-            Log.w(TAG, "Poster item duplicate found, itemID = " + res.getPosterId());
+        if (image.getImageTitle() == null) {
+            castName.setVisibility(View.GONE);
+        } else {
+            castName.setText(image.getImageTitle());
+        }
+        if (image.getImageSubtitle() == null) {
+            castCharacter.setVisibility(View.GONE);
+        } else {
+            castCharacter.setText(image.getImageSubtitle());
+        }
+        if (image.getImagePath() == null) {
+            castImage.setVisibility(View.GONE);
+        } else {
+            ActivityUtils.loadImage(mContext, POSTER_PERSON_BASE_URI + image.getImagePath(),
+                    true, R.drawable.no_movie_poster, castImage, null);
+        }
+    }
+
+    /**
+     * Fills a movie image view.
+     * @param view
+     * @param image
+     */
+    private void fillMovieView(View view, ImageItem image) {
+        view.setTag(image);
+        TextView title = (TextView) view.findViewById(R.id.name);
+        ImageView poster = (ImageView) view.findViewById(R.id.image);
+        if (image.getImageTitle() == null) {
+            title.setVisibility(View.GONE);
+        } else {
+            title.setText(image.getImageTitle());
+        }
+        if (image.getImagePath() == null) {
+            poster.setVisibility(View.GONE);
+        } else {
+            ActivityUtils.loadImage(mContext, image.getImagePath(), true,
+                    R.drawable.no_movie_poster, poster, null);
+        }
+    }
+
+    /**
+     * Adds an image item.
+     * @param item
+     */
+    public void add(ImageItem item) {
+        if (idSet.contains(item.getImageId())) {
+            Log.w(TAG, "Poster item duplicate found, itemID = " + item.getImageId());
             return;
         }
-        posters.add(res);
-        idSet.add(res.getPosterId());
+        images.add(item);
+        idSet.add(item.getImageId());
     }
 
-    public void addAll(List<PosterData> res) {
-        posters.addAll(res);
+    public void addAll(List<ImageItem> list) {
+        images.addAll(list);
     }
 
     public void clearData() {
-        posters.clear();
+        images.clear();
         idSet.clear();
         notifyDataSetChanged();
     }
 
-    public List<PosterData> getPosters() {
-        return posters;
+    public List<ImageItem> getImages() {
+        return images;
     }
 }

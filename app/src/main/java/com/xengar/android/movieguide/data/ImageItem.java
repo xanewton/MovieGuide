@@ -16,31 +16,38 @@
 package com.xengar.android.movieguide.data;
 
 /**
- * Components of a scrollable poster item (movie/TV Show)
+ * Container for data of a clickable, scrollable image.
+ * It can be a movie imagePath, TV Show imagePath, cast image or movie image.
  */
-public class PosterData {
+public class ImageItem {
 
-    private final String title;
     private final int id;
-    private final String poster;
+    private final String imagePath;
+    private final String title;
+    private final String subtitle;
 
     // Constructor
-    public PosterData(String poster, int id, String title) {
+    public ImageItem(String imagePath, int id, String title, String subtitle) {
         this.title = title;
+        this.subtitle = subtitle;
         this.id = id;
-        this.poster = poster;
+        this.imagePath = imagePath;
     }
 
     // Getters
-    public String getPosterTitle() {
+    public String getImageTitle() {
         return title;
     }
 
-    public int getPosterId() {
+    public String getImageSubtitle() {
+        return subtitle;
+    }
+
+    public int getImageId() {
         return id;
     }
 
-    public String getPosterPath() {
-        return poster;
+    public String getImagePath() {
+        return imagePath;
     }
 }

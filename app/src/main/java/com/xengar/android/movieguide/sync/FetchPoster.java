@@ -19,7 +19,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.xengar.android.movieguide.adapters.ImageAdapter;
-import com.xengar.android.movieguide.data.PosterData;
+import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
 import org.json.JSONArray;
@@ -39,7 +39,7 @@ import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 /**
  * FetchPoster items
  */
-public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<PosterData>> {
+public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> {
 
     private static final String TAG = FetchPoster.class.getSimpleName();
     private static final String MOVIE_TOP_RATED = "/movie/top_rated";
@@ -96,10 +96,10 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<PosterData>>
     }
 
     @Override
-    protected void onPostExecute(ArrayList<PosterData> moviePosters) {
+    protected void onPostExecute(ArrayList<ImageItem> moviePosters) {
         super.onPostExecute(moviePosters);
         if (moviePosters != null) {
-            for (PosterData res : moviePosters) {
+            for (ImageItem res : moviePosters) {
                 adapter.add(res);
             }
             adapter.notifyDataSetChanged();
@@ -110,8 +110,8 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<PosterData>>
     }
 
     @Override
-    protected ArrayList<PosterData> doInBackground(Integer... params) {
-        ArrayList<PosterData> posters = new ArrayList<>();
+    protected ArrayList<ImageItem> doInBackground(Integer... params) {
+        ArrayList<ImageItem> posters = new ArrayList<>();
         try {
             JSONObject jObj = JSONLoader.load(requestType + params[0], apiKey);
             if (jObj == null) {
@@ -125,8 +125,8 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<PosterData>>
             JSONObject item = null;
             for (int i = 0; i < itemsArray.length(); i++) {
                 item = itemsArray.optJSONObject(i);
-                posters.add(new PosterData(posterBaseUri + item.getString("poster_path"),
-                        item.getInt("id"), item.getString(itemTitle)));
+                posters.add(new ImageItem(posterBaseUri + item.getString("poster_path"),
+                        item.getInt("id"), item.getString(itemTitle), null));
             }
         } catch (JSONException e) {
             Log.e(TAG, "Error ", e);

@@ -35,11 +35,11 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.adapters.MovieAdapter;
+import com.xengar.android.movieguide.adapters.ImageAdapter;
+import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.data.MovieCreditCast;
 import com.xengar.android.movieguide.data.MovieCreditCrew;
 import com.xengar.android.movieguide.data.PersonData;
-import com.xengar.android.movieguide.data.PosterData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 import com.xengar.android.movieguide.utils.JSONLoader;
 import com.xengar.android.movieguide.utils.JSONUtils;
@@ -229,23 +229,23 @@ public class PersonActivity extends AppCompatActivity {
      */
     private void PopulateMovieList(PersonData personData) {
 
-        List<PosterData> data = new ArrayList<>();
+        List<ImageItem> data = new ArrayList<>();
         int index = 0;
         int maxMovies = ActivityUtils.getPreferenceMaxMovieItems(getApplicationContext());
-        //Build the PosterData
+        // Build the ImageItem
         for (final MovieCreditCast creditCast: personData.getMovieCreditCastList()) {
             if ( index == maxMovies)
                 break;
             index++;
-            PosterData posterData = new PosterData(
+            ImageItem imageItem = new ImageItem(
                     POSTER_BASE_URI + creditCast.getPosterPath(), creditCast.getId(),
-                    creditCast.getMovieTitle());
-            data.add(posterData);
+                    creditCast.getMovieTitle(), null);
+            data.add(imageItem);
         }
 
         // Add movie
-        MovieAdapter adapter = new MovieAdapter(this);
-        for (final PosterData movie : data) {
+        ImageAdapter adapter = new ImageAdapter(getApplicationContext(), ImageAdapter.MOVIE_IMAGE);
+        for (final ImageItem movie : data) {
             adapter.add(movie);
         }
         adapter.notifyDataSetChanged();

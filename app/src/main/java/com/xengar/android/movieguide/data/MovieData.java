@@ -20,32 +20,37 @@ import java.util.List;
 /**
  * Details for a Movie
  */
-public class MovieData extends PosterData {
+public class MovieData {
 
-    public final String plot;
-    public final String year;
-    public final Integer duration;
-    public final Double voteAverage;
-    public final Integer voteCount;
-    public final String backgroundPath;
-    public final String originalLanguage;
-    public final List<String> originalCountries;
-    public final List<String> genres;
-    public final String status;
-    public final String imdbUri;
-    public final List<String> productionCompanies;
-    public final String budget;
-    public final String revenue;
-    public final String homepage;
+    private final int movieId;
+    private final String posterPath;
+    private final String title;
+    private final String plot;
+    private final String year;
+    private final Integer duration;
+    private final Double voteAverage;
+    private final Integer voteCount;
+    private final String backgroundPath;
+    private final String originalLanguage;
+    private final List<String> originalCountries;
+    private final List<String> genres;
+    private final String status;
+    private final String imdbUri;
+    private final List<String> productionCompanies;
+    private final String budget;
+    private final String revenue;
+    private final String homepage;
 
     // Constructor
     public MovieData(String moviePoster, int movieId, String title, String plot, String year,
-                     Integer duration, Double voteAverage, Integer voteCount,
-                     String backgroundPath, String originalLanguage,
-                     List<String> originalCountries, List<String> genres, String status,
-                     String imdbUri, List<String> productionCompanies, String budget,
+                     Integer duration, Double voteAverage, Integer voteCount, String backgroundPath,
+                     String originalLanguage, List<String> originalCountries, List<String> genres,
+                     String status, String imdbUri, List<String> productionCompanies, String budget,
                      String revenue, String homepage) {
-        super(moviePoster, movieId, title);
+
+        this.movieId = movieId;
+        this.posterPath = moviePoster;
+        this.title = title;
         this.plot = plot;
         this.year = year;
         this.duration = duration;
@@ -66,6 +71,18 @@ public class MovieData extends PosterData {
     // Getter methods
     public String getPlot() {
         return plot;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public int getMovieId() {
+        return movieId;
     }
 
     public String getYear() {
