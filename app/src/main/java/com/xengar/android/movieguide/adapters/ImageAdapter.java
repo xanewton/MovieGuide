@@ -116,9 +116,9 @@ public class ImageAdapter extends BaseAdapter {
             public void onClick(View v) {
                 ImageItem item = (ImageItem) v.getTag();
                 if (type.contentEquals(MOVIE_IMAGE)) {
-                    ActivityUtils.launchMovieDetailsActivity(mContext, item.getImageId());
+                    ActivityUtils.launchMoviActivity(mContext, item.getImageId());
                 } else if (type.contentEquals(CAST_IMAGE)) {
-                    ActivityUtils.launchPersonProfileActivity(mContext, item.getImageId());
+                    ActivityUtils.launchPersonActivity(mContext, item.getImageId());
                 }
             }
         });

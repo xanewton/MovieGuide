@@ -237,9 +237,9 @@ public class MainActivity extends AppCompatActivity
         Log.v(TAG, "onItemSelectionClick itemId = " + itemId + " itemType = " + itemType);
         if (itemType.equals(POPULAR_TV_SHOWS) || itemType.equals(TOP_RATED_TV_SHOWS)
                 || itemType.equals(ON_THE_AIR_TV_SHOWS)) {
-            // TODO: TV Show description
+            ActivityUtils.launchTVShowActivity(getApplicationContext(), itemId);
         } else {
-            ActivityUtils.launchMovieDetailsActivity(getApplicationContext(), itemId);
+            ActivityUtils.launchMoviActivity(getApplicationContext(), itemId);
         }
     }
 }

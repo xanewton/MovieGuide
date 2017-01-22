@@ -45,10 +45,12 @@ import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.ui.MovieActivity;
 import com.xengar.android.movieguide.ui.PersonActivity;
 import com.xengar.android.movieguide.ui.SettingsActivity;
+import com.xengar.android.movieguide.ui.TVShowActivity;
 
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
+import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ID;
 
 /**
  * ActivityUtils. To handle common tasks.
@@ -335,7 +337,7 @@ public class ActivityUtils {
      * @param context
      * @param movieId
      */
-    public static void launchMovieDetailsActivity(final Context context, final int movieId) {
+    public static void launchMoviActivity(final Context context, final int movieId) {
         // Save movieId to Preferences
         saveIntToPreferences(context, MOVIE_ID, movieId);
 
@@ -350,12 +352,27 @@ public class ActivityUtils {
      * @param context
      * @param personId
      */
-    public static void launchPersonProfileActivity(final Context context, final int personId) {
+    public static void launchPersonActivity(final Context context, final int personId) {
         // Set PersonID to preferences
         saveIntToPreferences(context, PERSON_ID, personId);
 
         // Launch activity
         Intent intent = new Intent(context, PersonActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Launches TVShow Activity.
+     * @param context
+     * @param tvShowId
+     */
+    public static void launchTVShowActivity(final Context context, final int tvShowId) {
+        // Save tvShowId to Preferences
+        saveIntToPreferences(context, TV_SHOW_ID, tvShowId);
+
+        // Launch activity
+        Intent intent = new Intent(context, TVShowActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
