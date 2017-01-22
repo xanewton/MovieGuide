@@ -18,9 +18,9 @@ package com.xengar.android.movieguide.data;
 import java.util.List;
 
 /**
- * PersonalProfileData
+ * PersonData
  */
-public class PersonalProfileData {
+public class PersonData {
 
     private int personId;
     private int popularity;
@@ -36,11 +36,11 @@ public class PersonalProfileData {
     private List<MovieCreditCrew> movieCreditCrewList;
 
     // Constructor
-    public PersonalProfileData(String actorName, String profilePath, String placeOfBirth,
-                               String birthday, String deathday,
-                               String biography, int personId, int popularity, String imdbId,
-                               String homepage, List<MovieCreditCast> movieCreditCastList,
-                               List<MovieCreditCrew> movieCreditCrewList) {
+    public PersonData(String actorName, String profilePath, String placeOfBirth,
+                      String birthday, String deathday,
+                      String biography, int personId, int popularity, String imdbId,
+                      String homepage, List<MovieCreditCast> movieCreditCastList,
+                      List<MovieCreditCrew> movieCreditCrewList) {
         this.personId = personId;
         this.popularity = popularity;
         this.actorName = actorName;

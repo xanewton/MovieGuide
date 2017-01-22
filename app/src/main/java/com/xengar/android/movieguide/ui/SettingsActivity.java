@@ -321,10 +321,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                 String lastActivity = prefs.getString(LAST_ACTIVITY, MAIN_ACTIVITY);
                 switch (lastActivity) {
                     case MOVIE_DETAILS_ACTIVITY:
-                        startActivity(new Intent(getActivity(), MovieDetailsActivity.class));
+                        startActivity(new Intent(getActivity(), MovieActivity.class));
                         break;
                     case PERSON_PROFILE_ACTIVITY:
-                        startActivity(new Intent(getActivity(), PersonProfileActivity.class));
+                        startActivity(new Intent(getActivity(), PersonActivity.class));
                         break;
                     default:
                         startActivity(new Intent(getActivity(), MainActivity.class));

@@ -35,12 +35,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.ui.MovieDetailsActivity;
-import com.xengar.android.movieguide.ui.PersonProfileActivity;
+import com.xengar.android.movieguide.ui.MovieActivity;
+import com.xengar.android.movieguide.ui.PersonActivity;
 import com.xengar.android.movieguide.ui.SettingsActivity;
 
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
@@ -242,6 +243,15 @@ public class ActivityUtils {
     }
 
     /**
+     * Loads the image.
+     * @param context
+     * @param imageView
+     */
+    public static void loadNoBackgroundPoster(final Context context, final ImageView imageView) {
+        Glide.with(context).load(R.drawable.no_background_poster).centerCrop().into(imageView);
+    }
+
+    /**
      * Change the height of a gridview according to the elements contained.
      * @param gridview
      * @param items
@@ -334,7 +344,7 @@ public class ActivityUtils {
         saveIntToPreferences(context, MOVIE_ID, movieId);
 
         // Launch activity
-        Intent intent = new Intent(context, MovieDetailsActivity.class);
+        Intent intent = new Intent(context, MovieActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
@@ -349,7 +359,7 @@ public class ActivityUtils {
         saveIntToPreferences(context, PERSON_ID, personId);
 
         // Launch activity
-        Intent intent = new Intent(context, PersonProfileActivity.class);
+        Intent intent = new Intent(context, PersonActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
