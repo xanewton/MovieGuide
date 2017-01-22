@@ -46,5 +46,7 @@
     <dimen name="movie_details_review_author_paddingTop">8dp</dimen>
     <dimen name="movie_details_review_content_paddingLeft">8dp</dimen>
     <dimen name="movie_details_review_content_paddingTop">8dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
 
 </resources>
