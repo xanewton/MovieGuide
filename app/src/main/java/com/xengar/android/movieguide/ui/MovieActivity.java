@@ -47,9 +47,10 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.adapters.CastAdapter;
+import com.xengar.android.movieguide.adapters.ImageAdapter;
 import com.xengar.android.movieguide.data.CastData;
 import com.xengar.android.movieguide.data.FavoriteMoviesProvider;
+import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.data.MovieData;
 import com.xengar.android.movieguide.data.MovieDetails;
 import com.xengar.android.movieguide.data.ReviewData;
@@ -256,7 +257,7 @@ public class MovieActivity extends AppCompatActivity
                         .setAction("Action", null).show();
                 ContentValues values = new ContentValues();
                 values.put(COLUMN_NAME_MOVIE_ID, movieID);
-                values.put(COLUMN_NAME_TITLE, container.getPosterTitle());
+                values.put(COLUMN_NAME_TITLE, container.getTitle());
                 values.put(COLUMN_MOVIE_PLOT, container.getPlot());
                 values.put(COLUMN_POSTER_PATH, container.getPosterPath());
                 values.put(COLUMN_YEAR, container.getYear());
@@ -349,7 +350,7 @@ public class MovieActivity extends AppCompatActivity
      * @param container
      */
     private void PopulateDetailsTitle(final MovieData container) {
-        movieTitle[0] = container.getPosterTitle();
+        movieTitle[0] = container.getTitle();
         collapsingToolbar.setTitle(movieTitle[0]);
         title.setText(movieTitle[0]);
     }
@@ -697,14 +698,15 @@ public class MovieActivity extends AppCompatActivity
         // Add cast
         int index = 0;
         int maxCast = ActivityUtils.getPreferenceMaxCastItems(getApplicationContext());
-        CastAdapter adapter = new CastAdapter(this);
+        ImageAdapter adapter = new ImageAdapter(getApplicationContext(), ImageAdapter.CAST_IMAGE);
         // Assume the cast will always come sorted
         for (final CastData cast : data) {
             if (index == maxCast) {
                 break;
             }
             index++;
-            adapter.add(cast);
+            adapter.add(new ImageItem(cast.getCastImagePath(), cast.getPersonId(),
+                                        cast.getCastName(), cast.getCharacter()));
         }
         adapter.notifyDataSetChanged();
         gridview.setAdapter(adapter);

@@ -23,7 +23,7 @@ import android.util.Log;
 
 import com.xengar.android.movieguide.adapters.ImageAdapter;
 import com.xengar.android.movieguide.data.FavoriteMoviesProvider;
-import com.xengar.android.movieguide.data.PosterData;
+import com.xengar.android.movieguide.data.ImageItem;
 
 import java.util.ArrayList;
 
@@ -36,7 +36,7 @@ import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 /**
  * FetchFavorite. Gets favorite items.
  */
-public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<PosterData>> {
+public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
 
     private static final String TAG = FetchFavorite.class.getSimpleName();
     private static final Uri FAVORITE_MOVIES_URI =
@@ -65,17 +65,17 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<PosterData>> 
     }
 
     @Override
-    protected ArrayList<PosterData> doInBackground(Void... voids) {
-        ArrayList<PosterData> moviePosters = new ArrayList<>();
+    protected ArrayList<ImageItem> doInBackground(Void... voids) {
+        ArrayList<ImageItem> moviePosters = new ArrayList<>();
         final Cursor cursor = contentResolver.query(uri,
                 new String[]{ COLUMN_POSTER_PATH, COLUMN_NAME_MOVIE_ID, COLUMN_NAME_TITLE},
                 null, null, null);
 
         if (cursor != null && cursor.getCount() != 0) {
-            PosterData data;
+            ImageItem data;
             while (cursor.moveToNext()) {
-                data = new PosterData(posterBaseUri + cursor.getString(0), cursor.getInt(1),
-                        cursor.getString(2));
+                data = new ImageItem(posterBaseUri + cursor.getString(0), cursor.getInt(1),
+                        cursor.getString(2), null);
                 moviePosters.add(data);
             }
         } else {
@@ -85,10 +85,10 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<PosterData>> 
     }
 
     @Override
-    protected void onPostExecute(ArrayList<PosterData> moviePosters) {
+    protected void onPostExecute(ArrayList<ImageItem> moviePosters) {
         super.onPostExecute(moviePosters);
         if (moviePosters != null) {
-            for (PosterData movie : moviePosters) {
+            for (ImageItem movie : moviePosters) {
                 adapter.add(movie);
             }
             adapter.notifyDataSetChanged();

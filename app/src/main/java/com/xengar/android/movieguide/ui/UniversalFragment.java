@@ -73,7 +73,7 @@ public class UniversalFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ImageAdapter(getActivity());
+        adapter = new ImageAdapter(getActivity(), ImageAdapter.POSTER_IMAGE);
         setRetainInstance(true);
 
         SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
