@@ -13,11 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xengar.android.movieguide.sync;
+package com.xengar.android.movieguide.data;
 
 /**
- * Item listener
+ * Components of a scrollable poster item (movie/TV Show)
  */
-public interface OnItemClickListener {
-    void onItemSelectionClick(String itemType, int itemId);
+public class PosterData {
+
+    private final String title;
+    private final int id;
+    private final String poster;
+
+    // Constructor
+    public PosterData(String poster, int id, String title) {
+        this.title = title;
+        this.id = id;
+        this.poster = poster;
+    }
+
+    // Getters
+    public String getPosterTitle() {
+        return title;
+    }
+
+    public int getPosterId() {
+        return id;
+    }
+
+    public String getPosterPath() {
+        return poster;
+    }
 }

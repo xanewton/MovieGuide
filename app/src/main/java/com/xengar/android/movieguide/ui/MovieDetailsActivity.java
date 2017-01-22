@@ -52,7 +52,7 @@ import com.xengar.android.movieguide.adapters.CastAdapter;
 import com.xengar.android.movieguide.data.CastData;
 import com.xengar.android.movieguide.data.FavoriteMoviesProvider;
 import com.xengar.android.movieguide.data.MovieDetails;
-import com.xengar.android.movieguide.data.MovieDetailsData;
+import com.xengar.android.movieguide.data.MovieData;
 import com.xengar.android.movieguide.data.ReviewData;
 import com.xengar.android.movieguide.data.TrailerData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
@@ -111,7 +111,7 @@ public class MovieDetailsActivity extends AppCompatActivity
     private static final String LONG_TEXT_PREVIEW = " \n<font color=#FF8A80>... show less</font>";
     private static final String END_TEXT_PREVIEW = "\n<font color=#FF8A80> the end!</font>";
 
-    private MovieDetailsData detailsData;
+    private MovieData detailsData;
     private MovieDetails data = null;
     private List<TrailerData> trailerData;
     private int movieID;
@@ -246,7 +246,7 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Defines what to do when click on add/remove from Favorites buttons.
      * @param container
      */
-    private void defineClickFavoriteButtons(final MovieDetailsData container) {
+    private void defineClickFavoriteButtons(final MovieData container) {
         final int DURATION = 1000;
 
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -256,9 +256,9 @@ public class MovieDetailsActivity extends AppCompatActivity
                         .setAction("Action", null).show();
                 ContentValues values = new ContentValues();
                 values.put(COLUMN_NAME_MOVIE_ID, movieID);
-                values.put(COLUMN_NAME_TITLE, container.getMovieTitle());
+                values.put(COLUMN_NAME_TITLE, container.getPosterTitle());
                 values.put(COLUMN_MOVIE_PLOT, container.getPlot());
-                values.put(COLUMN_POSTER_PATH, container.getMoviePoster());
+                values.put(COLUMN_POSTER_PATH, container.getPosterPath());
                 values.put(COLUMN_YEAR, container.getYear());
                 values.put(COLUMN_DURATION, container.getDuration());
                 values.put(COLUMN_VOTE_AVERAGE, container.getVoteAverage());
@@ -326,7 +326,7 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Fills the Movie Details in screen.
      * @param container
      */
-    private void populateDetails(final MovieDetailsData container) {
+    private void populateDetails(final MovieData container) {
 
         final Palette.PaletteAsyncListener paletteAsyncListener =
                 ActivityUtils.definePaletteAsyncListener(this, title, textRating, rating, starRating);
@@ -353,8 +353,8 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Populates Title in screen.
      * @param container
      */
-    private void PopulateDetailsTitle(final MovieDetailsData container) {
-        movieTitle[0] = container.getMovieTitle();
+    private void PopulateDetailsTitle(final MovieData container) {
+        movieTitle[0] = container.getPosterTitle();
         collapsingToolbar.setTitle(movieTitle[0]);
         title.setText(movieTitle[0]);
     }
@@ -364,9 +364,9 @@ public class MovieDetailsActivity extends AppCompatActivity
      * @param container
      * @param callback
      */
-    private void PopulateDetailsPoster(final MovieDetailsData container, Callback callback) {
+    private void PopulateDetailsPoster(final MovieData container, Callback callback) {
 
-        ActivityUtils.loadImage(this, POSTER_BASE_URI + container.getMoviePoster(), true,
+        ActivityUtils.loadImage(this, POSTER_BASE_URI + container.getPosterPath(), true,
                 R.drawable.no_movie_poster, moviePoster, null);
 
         String backgroundPosterPath = container.getBackgroundPath();
@@ -387,7 +387,7 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Populates date, duration and rating in screen.
      * @param container
      */
-    private void PopulateDetailsDateDurationRating(final MovieDetailsData container) {
+    private void PopulateDetailsDateDurationRating(final MovieData container) {
         if (StringUtils.isNotBlank(container.getYear())) {
             movieDate.setText(container.getYear());
         } else {
@@ -414,7 +414,7 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Populates language in screen.
      * @param container
      */
-    private void PopulateDetailsLanguage(final MovieDetailsData container) {
+    private void PopulateDetailsLanguage(final MovieData container) {
         if (container.getOriginalLanguage() != null) {
             String name = "";
             Locale[] locales = Locale.getAvailableLocales();
@@ -440,7 +440,7 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Populates genres in screen.
      * @param container
      */
-    private void PopulateDetailsGenres(final MovieDetailsData container) {
+    private void PopulateDetailsGenres(final MovieData container) {
         if(!container.getGenres().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for(String genre: container.getGenres() ) {
@@ -460,7 +460,7 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Populates countries in screen.
      * @param container
      */
-    private void PopulateDetailsCountries(final MovieDetailsData container) {
+    private void PopulateDetailsCountries(final MovieData container) {
         if(!container.getOriginalCountries().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for(String country: container.getOriginalCountries() ) {
@@ -480,7 +480,7 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Populates Production Companies in screen.
      * @param container
      */
-    private void PopulateDetailsProdCompanies(final MovieDetailsData container) {
+    private void PopulateDetailsProdCompanies(final MovieData container) {
         if(!container.getProductionCompanies().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for(String podCompany: container.getProductionCompanies() ) {
@@ -500,7 +500,7 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Populates status, IMDbId, budget, revenue and homepage in screen.
      * @param container
      */
-    private void PopulateDetailsStatus(final MovieDetailsData container) {
+    private void PopulateDetailsStatus(final MovieData container) {
         if (container.getStatus() != null) {
             textStatus.setText(container.getStatus());
             textStatus.setVisibility(View.VISIBLE);
@@ -539,7 +539,7 @@ public class MovieDetailsActivity extends AppCompatActivity
      * Populates Movie plot in screen.
      * @param container
      */
-    private void PopulateDetailsPlot(final MovieDetailsData container) {
+    private void PopulateDetailsPlot(final MovieData container) {
         if (StringUtils.isBlank(container.getPlot())) {
             moviePlot.setText(R.string.details_view_no_description);
         } else {
@@ -785,7 +785,7 @@ public class MovieDetailsActivity extends AppCompatActivity
         private void processMovieDetails(JSONObject jObj) {
             if (jObj != null) {
                 try {
-                    detailsData = new MovieDetailsData(getStringValue(jObj, "poster_path"),
+                    detailsData = new MovieData(getStringValue(jObj, "poster_path"),
                             movieID, getStringValue(jObj, "title"),
                             getStringValue(jObj, "overview"),
                             getStringValue(jObj, "release_date"),
@@ -822,7 +822,7 @@ public class MovieDetailsActivity extends AppCompatActivity
                 if (cursor.getCount() != 0) {
                     cursor.moveToFirst();
                     // Note: Better if it matches the query order
-                    detailsData = new MovieDetailsData(cursor.getString(0), movieID,
+                    detailsData = new MovieData(cursor.getString(0), movieID,
                             cursor.getString(1), cursor.getString(2), cursor.getString(3),
                             cursor.getInt(4), cursor.getDouble(5), cursor.getInt(6),
                             cursor.getString(7), cursor.getString(8), Collections.<String>emptyList(),

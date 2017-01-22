@@ -35,16 +35,19 @@ import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
 import com.xengar.android.movieguide.sync.FetchFavorite;
 import com.xengar.android.movieguide.sync.FetchItemListener;
-import com.xengar.android.movieguide.sync.FetchMovie;
+import com.xengar.android.movieguide.sync.FetchPoster;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
+import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 
 /**
@@ -74,7 +77,7 @@ public class UniversalFragment extends Fragment {
         setRetainInstance(true);
 
         SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
-        itemType = prefs.getString(MOVIE_CATEGORY, UPCOMING_MOVIES);
+        itemType = prefs.getString(ITEM_CATEGORY, UPCOMING_MOVIES);
         if (itemType.equals(POPULAR_MOVIES)) {
             sortOrder = "popularity.desc";
         } else if (itemType.equals(NOW_PLAYING_MOVIES)) {
@@ -94,8 +97,8 @@ public class UniversalFragment extends Fragment {
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id) {
-                    int movieId = (int) adapter.getItemId(position);
-                    ((OnItemClickListener) getActivity()).onItemSelectionClick(movieId);
+                    ((OnItemClickListener) getActivity()).onItemSelectionClick( itemType,
+                            (int) adapter.getItemId(position));
                 }
             });
         }
@@ -133,7 +136,13 @@ public class UniversalFragment extends Fragment {
         // Hide Floating Action Button
         getActivity().findViewById(R.id.fab).setVisibility(View.GONE);
 
-        if (itemType.equals(FAVORITE_MOVIES)) {
+        if (itemType.equals(POPULAR_TV_SHOWS)) {
+            gridview.setOnScrollListener(new ItemViewScrollListener(POPULAR_TV_SHOWS));
+        } else if (itemType.equals(TOP_RATED_TV_SHOWS)) {
+            gridview.setOnScrollListener(new ItemViewScrollListener(TOP_RATED_TV_SHOWS));
+        } else if (itemType.equals(ON_THE_AIR_TV_SHOWS)) {
+            gridview.setOnScrollListener(new ItemViewScrollListener(ON_THE_AIR_TV_SHOWS));
+        } else if (itemType.equals(FAVORITE_MOVIES)) {
             adapter.clearData();
             FetchFavorite task = new FetchFavorite(FAVORITE_MOVIES, adapter,
                     getActivity().getContentResolver(), posterBaseUri);
@@ -175,8 +184,8 @@ public class UniversalFragment extends Fragment {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
                 if (!loadingState) {
-                    FetchMovie fetchTopRated =
-                            new FetchMovie(itemType, adapter, this, apiKey, posterBaseUri, sortOrder);
+                    FetchPoster fetchTopRated =
+                            new FetchPoster(itemType, adapter, this, apiKey, posterBaseUri, sortOrder);
                     fetchTopRated.execute(totalItemCount / PAGE_SIZE + 1);
                     loadingState = true;
                 }

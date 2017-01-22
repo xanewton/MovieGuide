@@ -15,32 +15,113 @@
  */
 package com.xengar.android.movieguide.data;
 
-/**
- * Components of a movie item
- */
-public class MovieData {
+import java.util.List;
 
-    private final String title;
-    private final int id;
-    private final String poster;
+/**
+ * Details for a Movie
+ */
+public class MovieData extends PosterData {
+
+    public final String plot;
+    public final String year;
+    public final Integer duration;
+    public final Double voteAverage;
+    public final Integer voteCount;
+    public final String backgroundPath;
+    public final String originalLanguage;
+    public final List<String> originalCountries;
+    public final List<String> genres;
+    public final String status;
+    public final String imdbUri;
+    public final List<String> productionCompanies;
+    public final String budget;
+    public final String revenue;
+    public final String homepage;
 
     // Constructor
-    public MovieData(String poster, int id, String title) {
-        this.title = title;
-        this.id = id;
-        this.poster = poster;
+    public MovieData(String moviePoster, int movieId, String title, String plot, String year,
+                     Integer duration, Double voteAverage, Integer voteCount,
+                     String backgroundPath, String originalLanguage,
+                     List<String> originalCountries, List<String> genres, String status,
+                     String imdbUri, List<String> productionCompanies, String budget,
+                     String revenue, String homepage) {
+        super(moviePoster, movieId, title);
+        this.plot = plot;
+        this.year = year;
+        this.duration = duration;
+        this.voteAverage = voteAverage;
+        this.voteCount = voteCount;
+        this.backgroundPath = backgroundPath;
+        this.originalLanguage = originalLanguage;
+        this.originalCountries = originalCountries;
+        this.genres = genres;
+        this.status = status;
+        this.imdbUri = imdbUri;
+        this.productionCompanies = productionCompanies;
+        this.budget = budget;
+        this.revenue = revenue;
+        this.homepage = homepage;
     }
 
-    // Getters
-    public String getMovieTitle() {
-        return title;
+    // Getter methods
+    public String getPlot() {
+        return plot;
     }
 
-    public int getMovieId() {
-        return id;
+    public String getYear() {
+        return year;
     }
 
-    public String getMoviePoster() {
-        return poster;
+    public Integer getDuration() {
+        return duration;
     }
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public Integer getVoteCount() {
+        return voteCount;
+    }
+
+    public String getBackgroundPath() {
+        return backgroundPath;
+    }
+
+    public String getOriginalLanguage() {
+        return originalLanguage;
+    }
+
+    public List<String> getOriginalCountries() {
+        return originalCountries;
+    }
+
+    public List<String> getGenres() {
+        return genres;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getImdbUri() {
+        return imdbUri;
+    }
+
+    public List<String> getProductionCompanies() {
+        return productionCompanies;
+    }
+
+    public String getBudget() {
+        return budget;
+    }
+
+    public String getRevenue() {
+        return revenue;
+    }
+
+    public String getHomepage() {
+        return homepage;
+    }
+
 }

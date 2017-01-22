@@ -19,7 +19,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.xengar.android.movieguide.adapters.ImageAdapter;
-import com.xengar.android.movieguide.data.MovieData;
+import com.xengar.android.movieguide.data.PosterData;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
 import org.json.JSONArray;
@@ -29,20 +29,26 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 
 /**
- * FetchMovie items
+ * FetchPoster items
  */
-public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
+public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<PosterData>> {
 
-    private static final String TAG = FetchMovie.class.getSimpleName();
+    private static final String TAG = FetchPoster.class.getSimpleName();
     private static final String MOVIE_TOP_RATED = "/movie/top_rated";
     private static final String MOVIE_NOW_PLAYING = "/movie/now_playing";
     private static final String MOVIE_UPCOMING = "/movie/upcoming";
     private static final String DISCOVER_MOVIE = "/discover/movie";
+    private static final String TV_POPULAR = "/tv/popular";
+    private static final String TV_TOP_RATED = "/tv/top_rated";
+    private static final String TV_ON_THE_AIR = "/tv/on_the_air";
 
     private final FetchItemListener fetchMovieListener;
     private final String posterBaseUri;
@@ -53,9 +59,9 @@ public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
     private String requestType;
 
     // Constructor
-    public FetchMovie(String itemType, ImageAdapter adapter,
-                      FetchItemListener fetchMovieListener, String apiKey,
-                      String posterBaseUri, String sortOrder) {
+    public FetchPoster(String itemType, ImageAdapter adapter,
+                       FetchItemListener fetchMovieListener, String apiKey,
+                       String posterBaseUri, String sortOrder) {
         this.itemType = itemType;
         this.fetchMovieListener = fetchMovieListener;
         this.posterBaseUri = posterBaseUri;
@@ -77,14 +83,23 @@ public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
             case POPULAR_MOVIES:
                 this.requestType = DISCOVER_MOVIE + "?sort_by=" + sortOrder + "&page=";
                 break;
+            case POPULAR_TV_SHOWS:
+                this.requestType = TV_POPULAR + "?page=";
+                break;
+            case TOP_RATED_TV_SHOWS:
+                this.requestType = TV_TOP_RATED + "?page=";
+                break;
+            case ON_THE_AIR_TV_SHOWS:
+                this.requestType = TV_ON_THE_AIR + "?page=";
+                break;
         }
     }
 
     @Override
-    protected void onPostExecute(ArrayList<MovieData> moviePosters) {
+    protected void onPostExecute(ArrayList<PosterData> moviePosters) {
         super.onPostExecute(moviePosters);
         if (moviePosters != null) {
-            for (MovieData res : moviePosters) {
+            for (PosterData res : moviePosters) {
                 adapter.add(res);
             }
             adapter.notifyDataSetChanged();
@@ -95,8 +110,8 @@ public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
     }
 
     @Override
-    protected ArrayList<MovieData> doInBackground(Integer... params) {
-        ArrayList<MovieData> moviePosters = new ArrayList<>();
+    protected ArrayList<PosterData> doInBackground(Integer... params) {
+        ArrayList<PosterData> posters = new ArrayList<>();
         try {
             JSONObject jObj = JSONLoader.load(requestType + params[0], apiKey);
             if (jObj == null) {
@@ -104,22 +119,18 @@ public class FetchMovie extends AsyncTask<Integer, Void, ArrayList<MovieData>> {
                 return null;
             }
 
-            JSONArray movieArray = jObj.getJSONArray("results");
-            JSONObject movie = null;
-            String moviePoster = null;
-            int movieId = 0;
-            String movieTitle = null;
-            for (int i = 0; i < movieArray.length(); i++) {
-                movie = movieArray.optJSONObject(i);
-                moviePoster = movie.getString("poster_path");
-                movieId = movie.getInt("id");
-                movieTitle = movie.getString("title");
-                MovieData data = new MovieData(posterBaseUri + moviePoster, movieId, movieTitle);
-                moviePosters.add(data);
+            String itemTitle = (itemType.equals(POPULAR_TV_SHOWS) || itemType.equals(TOP_RATED_TV_SHOWS)
+                    || itemType.equals(ON_THE_AIR_TV_SHOWS))? "name" : "title";
+            JSONArray itemsArray = jObj.getJSONArray("results");
+            JSONObject item = null;
+            for (int i = 0; i < itemsArray.length(); i++) {
+                item = itemsArray.optJSONObject(i);
+                posters.add(new PosterData(posterBaseUri + item.getString("poster_path"),
+                        item.getInt("id"), item.getString(itemTitle)));
             }
         } catch (JSONException e) {
             Log.e(TAG, "Error ", e);
         }
-        return moviePosters;
+        return posters;
     }
 }
