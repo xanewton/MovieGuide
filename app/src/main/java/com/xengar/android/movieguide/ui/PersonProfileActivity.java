@@ -39,7 +39,7 @@ import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.MovieAdapter;
 import com.xengar.android.movieguide.data.MovieCreditCast;
 import com.xengar.android.movieguide.data.MovieCreditCrew;
-import com.xengar.android.movieguide.data.MovieData;
+import com.xengar.android.movieguide.data.PosterData;
 import com.xengar.android.movieguide.data.PersonalProfileData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 import com.xengar.android.movieguide.utils.JSONLoader;
@@ -233,23 +233,23 @@ public class PersonProfileActivity extends AppCompatActivity {
      */
     private void PopulateMovieList(PersonalProfileData profileData) {
 
-        List<MovieData> data = new ArrayList<>();
+        List<PosterData> data = new ArrayList<>();
         int index = 0;
         int maxMovies = ActivityUtils.getPreferenceMaxMovieItems(getApplicationContext());
-        //Build the MovieData
+        //Build the PosterData
         for (final MovieCreditCast creditCast: profileData.getMovieCreditCastList()) {
             if ( index == maxMovies)
                 break;
             index++;
-            MovieData movieData = new MovieData(
+            PosterData posterData = new PosterData(
                     POSTER_BASE_URI + creditCast.getPosterPath(), creditCast.getId(),
                     creditCast.getMovieTitle());
-            data.add(movieData);
+            data.add(posterData);
         }
 
         // Add movie
         MovieAdapter adapter = new MovieAdapter(this);
-        for (final MovieData movie : data) {
+        for (final PosterData movie : data) {
             adapter.add(movie);
         }
         adapter.notifyDataSetChanged();
@@ -273,7 +273,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         for (MovieCreditCast creditcast: movieCreditCasts) {
             view = getLayoutInflater().inflate(R.layout.credit_list_item, null);
             date = (TextView) view.findViewById(R.id.movie_date);
-            title = (TextView) view.findViewById(R.id.movie_title);
+            title = (TextView) view.findViewById(R.id.poster_title);
             character = (TextView) view.findViewById(R.id.movie_character);
 
             date.setText("" + creditcast.getReleaseYear());
@@ -297,7 +297,7 @@ public class PersonProfileActivity extends AppCompatActivity {
         for (MovieCreditCrew creditcrew: movieCreditCrew) {
             view = getLayoutInflater().inflate(R.layout.credit_list_item, null);
             date = (TextView) view.findViewById(R.id.movie_date);
-            title = (TextView) view.findViewById(R.id.movie_title);
+            title = (TextView) view.findViewById(R.id.poster_title);
             character = (TextView) view.findViewById(R.id.movie_character);
 
             date.setText("" + creditcrew.getReleaseYear());

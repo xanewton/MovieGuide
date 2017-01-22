@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.data.MovieData;
+import com.xengar.android.movieguide.data.PosterData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import java.util.HashSet;
 public class MovieAdapter extends BaseAdapter {
 
     private static final String TAG = MovieAdapter.class.getSimpleName();
-    private final ArrayList<MovieData> movies = new ArrayList<>();
+    private final ArrayList<PosterData> movies = new ArrayList<>();
     private final HashSet<Integer> moviesIdSet = new HashSet<>();
     private final Context mContext;
 
@@ -58,7 +58,7 @@ public class MovieAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return movies.get(position).getMovieId();
+        return movies.get(position).getPosterId();
     }
 
     @Override
@@ -71,20 +71,20 @@ public class MovieAdapter extends BaseAdapter {
             view = convertView;
         }
 
-        MovieData movie = movies.get(position);
+        PosterData movie = movies.get(position);
         view.setTag(movie);
         TextView title = (TextView) view.findViewById(R.id.name);
-        Log.v(TAG, "movie.getMovieTitle() " + movie.getMovieTitle());
+        Log.v(TAG, "movie.getPosterTitle() " + movie.getPosterTitle());
         ImageView poster = (ImageView) view.findViewById(R.id.image);
-        if (movie.getMovieTitle() == null) {
+        if (movie.getPosterTitle() == null) {
             title.setVisibility(View.GONE);
         } else {
-            title.setText(movie.getMovieTitle());
+            title.setText(movie.getPosterTitle());
         }
-        if (movie.getMoviePoster() == null) {
+        if (movie.getPosterPath() == null) {
             poster.setVisibility(View.GONE);
         } else {
-            ActivityUtils.loadImage(mContext, movie.getMoviePoster(), true,
+            ActivityUtils.loadImage(mContext, movie.getPosterPath(), true,
                     R.drawable.no_movie_poster, poster, null);
         }
 
@@ -92,20 +92,20 @@ public class MovieAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MovieData data = (MovieData) v.getTag();
-                ActivityUtils.launchMovieDetailsActivity(mContext, data.getMovieId());
+                PosterData data = (PosterData) v.getTag();
+                ActivityUtils.launchMovieDetailsActivity(mContext, data.getPosterId());
             }
         });
 
         return view;
     }
 
-    public void add(MovieData movie) {
-        if (moviesIdSet.contains(movie.getMovieId())) {
-            Log.w(TAG, "Movie duplicate found, movieID = " + movie.getMovieId());
+    public void add(PosterData movie) {
+        if (moviesIdSet.contains(movie.getPosterId())) {
+            Log.w(TAG, "Movie duplicate found, movieID = " + movie.getPosterId());
             return;
         }
         movies.add(movie);
-        moviesIdSet.add(movie.getMovieId());
+        moviesIdSet.add(movie.getPosterId());
     }
 }

@@ -21,13 +21,13 @@ import java.util.List;
  * Components of a Detail Data View for a Movie
  */
 public class MovieDetails {
-    private final MovieDetailsData detailsData;
+    private final MovieData detailsData;
     private final List<TrailerData> trailersData;
     private final List<ReviewData> reviewsData;
     private final List<CastData> castData;
 
     // Constructor
-    public MovieDetails(MovieDetailsData detailsData, List<TrailerData> trailersData,
+    public MovieDetails(MovieData detailsData, List<TrailerData> trailersData,
                         List<ReviewData> reviewsData, List<CastData> castData) {
         this.detailsData = detailsData;
         this.trailersData = trailersData;
@@ -36,7 +36,7 @@ public class MovieDetails {
     }
 
     // Getters
-    public MovieDetailsData getDetailsData() {
+    public MovieData getDetailsData() {
         return detailsData;
     }
 

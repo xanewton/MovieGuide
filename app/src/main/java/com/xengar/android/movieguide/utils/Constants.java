@@ -21,7 +21,7 @@ package com.xengar.android.movieguide.utils;
 public final class  Constants {
 
     public static final String SHARED_PREF_NAME = "com.xengar.android.movieguide";
-    public static final String MOVIE_CATEGORY = "movie_category";
+    public static final String ITEM_CATEGORY = "item_category";
     public static final String UPCOMING_MOVIES = "UpcomingMovies";
     public static final String POPULAR_MOVIES = "PopularMovies";
     public static final String NOW_PLAYING_MOVIES = "NowPlayingMovies";
@@ -39,4 +39,8 @@ public final class  Constants {
     public static final String MAIN_ACTIVITY = "main_activity";
     public static final String MOVIE_DETAILS_ACTIVITY = "movie_details_activity";
     public static final String PERSON_PROFILE_ACTIVITY = "person_profile_activity";
+
+    public static final String POPULAR_TV_SHOWS = "PopularTVShows";
+    public static final String TOP_RATED_TV_SHOWS = "TopRatedTVShows";
+    public static final String ON_THE_AIR_TV_SHOWS = "OnTheAirTVShows";
 }

@@ -37,11 +37,14 @@ import com.xengar.android.movieguide.utils.ActivityUtils;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_CATEGORY;
+import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 
 /**
@@ -89,7 +92,7 @@ public class MainActivity extends AppCompatActivity
 
         // Set the initial fragment
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-        String itemType = prefs.getString(MOVIE_CATEGORY, UPCOMING_MOVIES);
+        String itemType = prefs.getString(ITEM_CATEGORY, UPCOMING_MOVIES);
         launchFragment(itemType);
 
         // change title
@@ -113,6 +116,18 @@ public class MainActivity extends AppCompatActivity
             case FAVORITE_MOVIES:
                 getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
                 navigationView.setCheckedItem(R.id.nav_favorite_movies);
+                break;
+            case POPULAR_TV_SHOWS:
+                getSupportActionBar().setTitle(R.string.menu_option_popular_tv_shows);
+                navigationView.setCheckedItem(R.id.nav_popular_tv_shows);
+                break;
+            case TOP_RATED_TV_SHOWS:
+                getSupportActionBar().setTitle(R.string.menu_option_top_rated_tv_shows);
+                navigationView.setCheckedItem(R.id.nav_top_rated_tv_shows);
+                break;
+            case ON_THE_AIR_TV_SHOWS:
+                getSupportActionBar().setTitle(R.string.menu_option_on_the_air_tv_shows);
+                navigationView.setCheckedItem(R.id.nav_on_the_air_tv_shows);
                 break;
         }
     }
@@ -177,12 +192,15 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
 
         } else if (id == R.id.nav_popular_tv_shows) {
+            launchFragment(POPULAR_TV_SHOWS);
             getSupportActionBar().setTitle(R.string.menu_option_popular_tv_shows);
 
         } else if (id == R.id.nav_top_rated_tv_shows) {
+            launchFragment(TOP_RATED_TV_SHOWS);
             getSupportActionBar().setTitle(R.string.menu_option_top_rated_tv_shows);
 
         } else if (id == R.id.nav_on_the_air_tv_shows) {
+            launchFragment(ON_THE_AIR_TV_SHOWS);
             getSupportActionBar().setTitle(R.string.menu_option_on_the_air_tv_shows);
 
         } else if (id == R.id.nav_share) {
@@ -204,7 +222,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void launchFragment(String category) {
         // Set sorting preference
-        ActivityUtils.saveStringToPreferences(this, MOVIE_CATEGORY, category);
+        ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, category);
 
         // Handle selecting item action
         UniversalFragment fragment = new UniversalFragment();
@@ -216,8 +234,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemSelectionClick(int movieId) {
-        Log.v(TAG, "onItemSelectionClick movieId = " + movieId);
-        ActivityUtils.launchMovieDetailsActivity(getApplicationContext(), movieId);
+    public void onItemSelectionClick(String itemType, int itemId) {
+        Log.v(TAG, "onItemSelectionClick itemId = " + itemId + " itemType = " + itemType);
+        if (itemType.equals(POPULAR_TV_SHOWS) || itemType.equals(TOP_RATED_TV_SHOWS)
+                || itemType.equals(ON_THE_AIR_TV_SHOWS)) {
+
+        } else {
+            ActivityUtils.launchMovieDetailsActivity(getApplicationContext(), itemId);
+        }
     }
 }

@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.data.MovieData;
+import com.xengar.android.movieguide.data.PosterData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
@@ -34,15 +34,15 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Image adapter used to fill the list of Movie posters.
+ * Image adapter used to fill the list of Movie/TVShow posters.
  */
 public class ImageAdapter extends BaseAdapter {
 
     private static final String TAG = ImageAdapter.class.getSimpleName();
     private static final int IMAGE_WIDTH = 185;
     private static final int IMAGE_HEIGHT = 278;
-    private final ArrayList<MovieData> finalMoviePosters = new ArrayList<>();
-    private final HashSet<Integer> movieIdSet = new HashSet<>();
+    private final ArrayList<PosterData> posters = new ArrayList<>();
+    private final HashSet<Integer> idSet = new HashSet<>();
     private final float density;
     private final Context mContext;
 
@@ -54,17 +54,17 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return finalMoviePosters.size();
+        return posters.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return finalMoviePosters.get(position);
+        return posters.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return finalMoviePosters.get(position).getMovieId();
+        return posters.get(position).getPosterId();
     }
 
     // Creates a new ImageView for each item referenced by the Adapter.
@@ -78,41 +78,41 @@ public class ImageAdapter extends BaseAdapter {
             view = convertView;
         }
 
-        MovieData data = finalMoviePosters.get(position);
-        ImageView imageView = (ImageView) view.findViewById(R.id.movie_poster_view);
+        PosterData data = posters.get(position);
+        ImageView imageView = (ImageView) view.findViewById(R.id.poster_view);
         view.setLayoutParams(new GridView.LayoutParams((int) (IMAGE_WIDTH * density),
                 (int) (IMAGE_HEIGHT * density)));
 
-        if (data.getMoviePoster() == null) {
-            TextView textView = (TextView) view.findViewById(R.id.movie_title);
-            textView.setText(data.getMovieTitle());
+        if (data.getPosterPath() == null) {
+            TextView textView = (TextView) view.findViewById(R.id.poster_title);
+            textView.setText(data.getPosterTitle());
         }
 
-        ActivityUtils.loadImage(mContext, data.getMoviePoster(), false, 0, imageView, null);
+        ActivityUtils.loadImage(mContext, data.getPosterPath(), false, 0, imageView, null);
         return view;
     }
 
 
-    public void add(MovieData res) {
-        if (movieIdSet.contains(res.getMovieId())) {
-            Log.w(TAG, "Movie duplicate found, movieID = " + res.getMovieId());
+    public void add(PosterData res) {
+        if (idSet.contains(res.getPosterId())) {
+            Log.w(TAG, "Poster item duplicate found, itemID = " + res.getPosterId());
             return;
         }
-        finalMoviePosters.add(res);
-        movieIdSet.add(res.getMovieId());
+        posters.add(res);
+        idSet.add(res.getPosterId());
     }
 
-    public void addAll(List<MovieData> res) {
-        finalMoviePosters.addAll(res);
+    public void addAll(List<PosterData> res) {
+        posters.addAll(res);
     }
 
     public void clearData() {
-        finalMoviePosters.clear();
-        movieIdSet.clear();
+        posters.clear();
+        idSet.clear();
         notifyDataSetChanged();
     }
 
-    public List<MovieData> getMovieData() {
-        return finalMoviePosters;
+    public List<PosterData> getPosters() {
+        return posters;
     }
 }
