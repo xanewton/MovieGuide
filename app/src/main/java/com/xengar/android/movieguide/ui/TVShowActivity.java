@@ -15,7 +15,10 @@
  */
 package com.xengar.android.movieguide.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,9 +32,16 @@ import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ID;
 
 public class TVShowActivity extends AppCompatActivity {
+
+    private static final String TAG = TVShowActivity.class.getSimpleName();
+    private int tvShowId;
+    private CollapsingToolbarLayout collapsingToolbar;
+    private final String[] tvShowTitle = {" "};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +56,10 @@ public class TVShowActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+        tvShowId = prefs.getInt(TV_SHOW_ID, -1);
+        tvShowTitle[0] = "Sample TV Show";
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +71,9 @@ public class TVShowActivity extends AppCompatActivity {
 
         ActivityUtils.loadNoBackgroundPoster(getApplicationContext(),
                 (ImageView) findViewById(R.id.background_poster));
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
+                (AppBarLayout) findViewById(R.id.appbar), tvShowTitle);
     }
 
     @Override
