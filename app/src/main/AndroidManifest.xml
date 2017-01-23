@@ -13,7 +13,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xengar.android.movieguide">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -57,6 +58,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
         </activity>
+        <activity
+            android:name=".ui.TVShowActivity"
+            android:label="@string/title_activity_tvshow" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
 
         <provider
             android:name=".data.FavoriteMoviesProvider"
@@ -64,10 +72,6 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity
-            android:name=".ui.TVShowActivity"
-            android:label="@string/title_activity_tvshow"
-            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
