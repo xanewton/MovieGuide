@@ -20,11 +20,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.utils.ActivityUtils;
+
+import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
 
 public class TVShowActivity extends AppCompatActivity {
 
@@ -32,6 +37,11 @@ public class TVShowActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tvshow);
+
+        // Save name of activity, in case of calling SettingsActivity
+        ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
+                TV_SHOW_ACTIVITY);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -47,5 +57,24 @@ public class TVShowActivity extends AppCompatActivity {
 
         ActivityUtils.loadNoBackgroundPoster(getApplicationContext(),
                 (ImageView) findViewById(R.id.background_poster));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            ActivityUtils.launchSettingsActivity(getApplicationContext());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
