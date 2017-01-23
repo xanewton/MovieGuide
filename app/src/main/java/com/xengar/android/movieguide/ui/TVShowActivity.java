@@ -21,8 +21,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.utils.ActivityUtils;
 
 public class TVShowActivity extends AppCompatActivity {
 
@@ -42,5 +44,8 @@ public class TVShowActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        ActivityUtils.loadNoBackgroundPoster(getApplicationContext(),
+                (ImageView) findViewById(R.id.background_poster));
     }
 }
