@@ -38,8 +38,9 @@ public final class  Constants {
     public static final String IMDB_URI = "http://www.imdb.com/title";
     public static final String LAST_ACTIVITY = "last_activity";
     public static final String MAIN_ACTIVITY = "main_activity";
-    public static final String MOVIE_DETAILS_ACTIVITY = "movie_details_activity";
-    public static final String PERSON_PROFILE_ACTIVITY = "person_profile_activity";
+    public static final String MOVIE_ACTIVITY = "movie_activity";
+    public static final String PERSON_ACTIVITY = "person_activity";
+    public static final String TV_SHOW_ACTIVITY = "tv_show_activity";
 
     public static final String POPULAR_TV_SHOWS = "PopularTVShows";
     public static final String TOP_RATED_TV_SHOWS = "TopRatedTVShows";

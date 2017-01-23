@@ -86,7 +86,7 @@ import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.IMDB_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_DETAILS_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -161,7 +161,7 @@ public class MovieActivity extends AppCompatActivity
 
         // Save name of activity, in case of calling SettingsActivity
         ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
-                MOVIE_DETAILS_ACTIVITY);
+                MOVIE_ACTIVITY);
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -46,9 +46,10 @@ import java.util.List;
 
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_DETAILS_ACTIVITY;
-import static com.xengar.android.movieguide.utils.Constants.PERSON_PROFILE_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.PERSON_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
+import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -321,11 +322,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity
                 SharedPreferences prefs = context.getSharedPreferences(SHARED_PREF_NAME, 0);
                 String lastActivity = prefs.getString(LAST_ACTIVITY, MAIN_ACTIVITY);
                 switch (lastActivity) {
-                    case MOVIE_DETAILS_ACTIVITY:
+                    case MOVIE_ACTIVITY:
                         startActivity(new Intent(getActivity(), MovieActivity.class));
                         break;
-                    case PERSON_PROFILE_ACTIVITY:
+                    case PERSON_ACTIVITY:
                         startActivity(new Intent(getActivity(), PersonActivity.class));
+                        break;
+                    case TV_SHOW_ACTIVITY:
+                        startActivity(new Intent(getActivity(), TVShowActivity.class));
                         break;
                     default:
                         startActivity(new Intent(getActivity(), MainActivity.class));
