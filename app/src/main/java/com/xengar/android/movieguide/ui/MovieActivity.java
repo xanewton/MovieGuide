@@ -320,15 +320,16 @@ public class MovieActivity extends AppCompatActivity
      */
     private void populateDetails(final MovieData container) {
 
+        if (container == null) {
+            return;
+        }
+
         final Palette.PaletteAsyncListener paletteAsyncListener =
                 ActivityUtils.definePaletteAsyncListener(this, title, textRating, rating, starRating);
 
         Callback callback =
                 ActivityUtils.defineCallback(paletteAsyncListener, backgroundPoster, moviePoster);
 
-        if (container == null) {
-            return;
-        }
         PopulateDetailsTitle(container);
         PopulateDetailsPoster(container, callback);
         PopulateDetailsDateDurationRating(container);

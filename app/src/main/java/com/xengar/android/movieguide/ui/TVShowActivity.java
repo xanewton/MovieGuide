@@ -16,6 +16,7 @@
 package com.xengar.android.movieguide.ui;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -23,6 +24,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -32,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.TVShowData;
 import com.xengar.android.movieguide.data.TVShowDetails;
@@ -41,7 +44,10 @@ import com.xengar.android.movieguide.utils.JSONLoader;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
+import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ID;
@@ -67,6 +73,7 @@ public class TVShowActivity extends AppCompatActivity {
     private TextView textRating;
     private ImageView starRating;
     private ImageView backgroundPoster;
+    private ImageView tvShowPoster;
 
 
     @Override
@@ -100,6 +107,7 @@ public class TVShowActivity extends AppCompatActivity {
         textRating = (TextView) findViewById(R.id.text_rating);
         starRating = (ImageView) findViewById(R.id.star_rating);
         backgroundPoster = (ImageView) findViewById(R.id.background_poster);
+        tvShowPoster = (ImageView) findViewById(R.id.tvshow_poster);
 
         // Get TV Show Details data
         fetchTVShowData();
@@ -159,7 +167,15 @@ public class TVShowActivity extends AppCompatActivity {
         if (container == null) {
             return;
         }
+
+        final Palette.PaletteAsyncListener paletteAsyncListener =
+                ActivityUtils.definePaletteAsyncListener(this, title, textRating, rating, starRating);
+
+        Callback callback =
+                ActivityUtils.defineCallback(paletteAsyncListener, backgroundPoster, tvShowPoster);
+
         PopulateDetailsTitle(container);
+        PopulateDetailsPoster(container, callback);
     }
 
     /**
@@ -170,6 +186,30 @@ public class TVShowActivity extends AppCompatActivity {
         tvShowTitle[0] = container.getName();
         collapsingToolbar.setTitle(tvShowTitle[0]);
         title.setText(tvShowTitle[0]);
+    }
+
+    /**
+     * Populates poster in screen.
+     * @param container
+     * @param callback
+     */
+    private void PopulateDetailsPoster(final TVShowData container, Callback callback) {
+
+        ActivityUtils.loadImage(this, POSTER_BASE_URI + container.getPosterPath(), true,
+                R.drawable.no_movie_poster, tvShowPoster, null);
+
+        String backgroundPosterPath = container.getBackgroundPath();
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            ActivityUtils.loadImage(this, BACKGROUND_BASE_URI + backgroundPosterPath, true,
+                    R.drawable.no_background_poster, backgroundPoster, callback);
+        } else {
+            ActivityUtils.loadImage(this, BACKGROUND_BASE_URI + backgroundPosterPath, false,
+                    R.drawable.no_background_poster, backgroundPoster, callback);
+        }
+
+        // Save background movie image poster to use in PersonProfile page.
+        ActivityUtils.saveStringToPreferences(this, MOVIE_BACKGROUND_POSTER,
+                container.getBackgroundPath());
     }
 
 
