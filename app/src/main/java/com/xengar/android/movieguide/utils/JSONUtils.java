@@ -96,7 +96,7 @@ public final class JSONUtils {
             JSONArray jArray = jobj.getJSONArray(name);
             String result = jArray.getString(0);
             for (int i = 1; i < jArray.length(); i++) {
-                result += " ," + jArray.getString(i);
+                result += "," + jArray.getString(i);
             }
             return result;
         }
