@@ -16,6 +16,7 @@
 package com.xengar.android.movieguide.ui;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -23,18 +24,32 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.data.TVShowData;
+import com.xengar.android.movieguide.data.TVShowDetails;
 import com.xengar.android.movieguide.utils.ActivityUtils;
+import com.xengar.android.movieguide.utils.JSONLoader;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ID;
+import static com.xengar.android.movieguide.utils.JSONUtils.getArrayValue;
+import static com.xengar.android.movieguide.utils.JSONUtils.getDoubleValue;
+import static com.xengar.android.movieguide.utils.JSONUtils.getIntValue;
+import static com.xengar.android.movieguide.utils.JSONUtils.getListValue;
+import static com.xengar.android.movieguide.utils.JSONUtils.getStringValue;
 
 public class TVShowActivity extends AppCompatActivity {
 
@@ -42,6 +57,17 @@ public class TVShowActivity extends AppCompatActivity {
     private int tvShowId;
     private CollapsingToolbarLayout collapsingToolbar;
     private final String[] tvShowTitle = {" "};
+
+    private TVShowDetails data = null;
+    private TVShowData detailsData;
+
+    // Details components
+    private TextView title;
+    private LinearLayout rating;
+    private TextView textRating;
+    private ImageView starRating;
+    private ImageView backgroundPoster;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +95,15 @@ public class TVShowActivity extends AppCompatActivity {
             }
         });
 
+        title = (TextView) findViewById(R.id.title);
+        rating = (LinearLayout) findViewById(R.id.rating);
+        textRating = (TextView) findViewById(R.id.text_rating);
+        starRating = (ImageView) findViewById(R.id.star_rating);
+        backgroundPoster = (ImageView) findViewById(R.id.background_poster);
+
+        // Get TV Show Details data
+        fetchTVShowData();
+
         ActivityUtils.loadNoBackgroundPoster(getApplicationContext(),
                 (ImageView) findViewById(R.id.background_poster));
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -93,5 +128,117 @@ public class TVShowActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        data = new TVShowDetails(detailsData);
+
+    }
+
+    /**
+     * Get the TV Show data.
+     */
+    private void fetchTVShowData() {
+
+        if (data == null) {
+            FetchTVShowTask detailsTask = new FetchTVShowTask(FetchTVShowTask.TV_SHOW_DETAILS);
+            detailsTask.execute(tvShowId);
+        } else {
+            Log.v(TAG, "data = " + data.getDetailsData());
+            populateDetails(detailsData = data.getDetailsData());
+        }
+    }
+
+    /**
+     * Fills the TV Show Details in screen.
+     * @param container
+     */
+    private void populateDetails(final TVShowData container) {
+        if (container == null) {
+            return;
+        }
+        PopulateDetailsTitle(container);
+    }
+
+    /**
+     * Populates Title in screen.
+     * @param container
+     */
+    private void PopulateDetailsTitle(final TVShowData container) {
+        tvShowTitle[0] = container.getName();
+        collapsingToolbar.setTitle(tvShowTitle[0]);
+        title.setText(tvShowTitle[0]);
+    }
+
+
+
+    /**
+     * Fetch task to get data
+     */
+    private class FetchTVShowTask extends AsyncTask<Integer, Void, JSONObject> {
+
+        public static final String TV_SHOW_DETAILS = "TVShowDetails";
+        private String requestType = null;
+
+        // Constructor
+        public FetchTVShowTask(String requestType){
+            this.requestType = requestType;
+        }
+
+        @Override
+        protected JSONObject doInBackground(Integer... params) {
+            String request = null;
+            switch(requestType){
+                case TV_SHOW_DETAILS:
+                    request = "/tv/" + params[0];
+                    break;
+            }
+
+            return JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
+        }
+
+        @Override
+        protected void onPostExecute(final JSONObject jObj) {
+            super.onPostExecute(jObj);
+
+            switch(requestType){
+                case TV_SHOW_DETAILS:
+                    processTVShowDetails(jObj);
+                    break;
+            }
+        }
+
+        /**
+         * Process the Movie Details data.
+         * @param jObj
+         */
+        private void processTVShowDetails(JSONObject jObj) {
+            if (jObj != null) {
+                try {
+                    detailsData = new TVShowData(tvShowId, getStringValue(jObj, "poster_path"),
+                            getStringValue(jObj, "name"), getStringValue(jObj, "overview"),
+                            getDoubleValue(jObj, "vote_average", 0.0),
+                            getIntValue(jObj, "vote_count", 0),
+                            getStringValue(jObj, "backdrop_path"),
+                            getStringValue(jObj, "original_language"),
+                            getArrayValue(jObj, "origin_country"),
+                            getListValue(jObj, "genres", "name"),
+                            getStringValue(jObj, "status"),
+                            getListValue(jObj, "production_companies", "name"),
+                            getStringValue(jObj, "homepage"), getStringValue(jObj, "first_air_date"),
+                            getStringValue(jObj, "last_air_date"),
+                            getIntValue(jObj, "number_of_episodes", 0),
+                            getIntValue(jObj, "number_of_seasons", 0));
+                    populateDetails(detailsData);
+                } catch (JSONException e) {
+                    Log.e(TAG, "", e);
+                }
+
+            } else {
+                // TODO: Have a table to query from the favorites.
+            }
+        }
     }
 }

@@ -113,7 +113,7 @@
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/movie_details_title_min_height"
                 android:paddingLeft="@dimen/movie_details_title_padding_left"
-                android:text="@string/movie_title"
+                android:text="@string/tvshow_title"
                 android:textSize="@dimen/movie_details_title_text_size"
                 android:textStyle="normal" />
 
@@ -261,7 +261,7 @@
 
                         </LinearLayout>
                     </LinearLayout>
-                    
+
                     <TextView
                         android:id="@+id/movie_plot"
                         style="@style/DetailViewTextMedium"
