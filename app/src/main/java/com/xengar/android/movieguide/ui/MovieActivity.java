@@ -125,7 +125,6 @@ public class MovieActivity extends AppCompatActivity
     private ImageView moviePoster;
     private TextView movieDate;
     private TextView movieDuration;
-    private TextView movieVoteAverage;
     private TextView textLanguage;
     private TextView textStatus;
     private TextView textGenres;
@@ -399,8 +398,6 @@ public class MovieActivity extends AppCompatActivity
             textRating.setText(container.getVoteAverage()
                     + getString(R.string.details_view_text_vote_average_divider)
                     + " of " + container.getVoteCount());
-        } else {
-            movieVoteAverage.setVisibility(View.GONE);
         }
     }
 

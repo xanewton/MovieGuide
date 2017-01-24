@@ -186,6 +186,12 @@ public class TVShowActivity extends AppCompatActivity {
         tvShowTitle[0] = container.getName();
         collapsingToolbar.setTitle(tvShowTitle[0]);
         title.setText(tvShowTitle[0]);
+
+        if (container.getVoteAverage() != null) {
+            textRating.setText(container.getVoteAverage()
+                    + getString(R.string.details_view_text_vote_average_divider)
+                    + " of " + container.getVoteCount());
+        }
     }
 
     /**
