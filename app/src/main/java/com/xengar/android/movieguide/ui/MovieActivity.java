@@ -494,8 +494,7 @@ public class MovieActivity extends AppCompatActivity
         if (container.getStatus() != null) {
             textStatus.setText(container.getStatus());
             textStatus.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             textStatus.setVisibility(View.GONE);
         }
 
@@ -519,8 +518,7 @@ public class MovieActivity extends AppCompatActivity
             String builder = IMDB_URI + "/" +  container.getImdbUri();
             textIMDbId.setText(builder);
             textIMDbId.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else{
             textIMDbId.setVisibility(View.GONE);
         }
     }

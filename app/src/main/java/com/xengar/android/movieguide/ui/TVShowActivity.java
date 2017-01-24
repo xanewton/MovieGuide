@@ -77,6 +77,8 @@ public class TVShowActivity extends AppCompatActivity {
     private TextView textGenres;
     private TextView textCountries;
     private TextView textProdCompanies;
+    private TextView homepage;
+    private TextView textStatus;
 
 
     @Override
@@ -114,6 +116,8 @@ public class TVShowActivity extends AppCompatActivity {
         textGenres = (TextView) findViewById(R.id.genre);
         textCountries = (TextView) findViewById(R.id.countries);
         textProdCompanies = (TextView) findViewById(R.id.prod_companies);
+        homepage = (TextView) findViewById(R.id.homepage);
+        textStatus = (TextView) findViewById(R.id.status);
 
         // Get TV Show Details data
         fetchTVShowData();
@@ -184,6 +188,7 @@ public class TVShowActivity extends AppCompatActivity {
         PopulateDetailsPoster(container, callback);
         PopulateDetailsGenresCountries(container);
         PopulateDetailsProdCompanies(container);
+        PopulateDetailsStatus(container);
     }
 
     /**
@@ -268,6 +273,25 @@ public class TVShowActivity extends AppCompatActivity {
         }
         else{
             textProdCompanies.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Populates status, homepage in screen.
+     * @param container
+     */
+    private void PopulateDetailsStatus(final TVShowData container) {
+        if (container.getStatus() != null) {
+            textStatus.setText(container.getStatus());
+            textStatus.setVisibility(View.VISIBLE);
+        } else {
+            textStatus.setVisibility(View.GONE);
+        }
+
+        if (container.getHomepage() != null) {
+            homepage.setText(container.getHomepage());
+        } else {
+            homepage.setVisibility(View.GONE);
         }
     }
 
