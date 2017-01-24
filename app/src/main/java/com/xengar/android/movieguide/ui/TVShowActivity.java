@@ -74,6 +74,7 @@ public class TVShowActivity extends AppCompatActivity {
     private ImageView starRating;
     private ImageView backgroundPoster;
     private ImageView tvShowPoster;
+    private TextView textGenres;
 
 
     @Override
@@ -108,6 +109,7 @@ public class TVShowActivity extends AppCompatActivity {
         starRating = (ImageView) findViewById(R.id.star_rating);
         backgroundPoster = (ImageView) findViewById(R.id.background_poster);
         tvShowPoster = (ImageView) findViewById(R.id.tvshow_poster);
+        textGenres = (TextView) findViewById(R.id.genre);
 
         // Get TV Show Details data
         fetchTVShowData();
@@ -176,6 +178,7 @@ public class TVShowActivity extends AppCompatActivity {
 
         PopulateDetailsTitle(container);
         PopulateDetailsPoster(container, callback);
+        PopulateDetailsGenres(container);
     }
 
     /**
@@ -217,6 +220,27 @@ public class TVShowActivity extends AppCompatActivity {
         ActivityUtils.saveStringToPreferences(this, MOVIE_BACKGROUND_POSTER,
                 container.getBackgroundPath());
     }
+
+    /**
+     * Populates genres in screen.
+     * @param container
+     */
+    private void PopulateDetailsGenres(final TVShowData container) {
+        if(!container.getGenres().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for(String genre: container.getGenres() ) {
+                builder.append(genre);
+                builder.append(" | ");
+            }
+            builder.delete(builder.length()-3, builder.length());
+            textGenres.setText(builder.toString());
+            textGenres.setVisibility(View.VISIBLE);
+        }
+        else{
+            textGenres.setVisibility(View.GONE);
+        }
+    }
+
 
 
 
