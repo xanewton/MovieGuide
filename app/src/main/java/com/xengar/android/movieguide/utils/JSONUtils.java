@@ -62,7 +62,15 @@ public final class JSONUtils {
         }
     }
 
-    public static List<String> getListValue(JSONObject jobj, String name)
+    /**
+     * Return a list of strings with data from the field.
+     * @param jobj
+     * @param name
+     * @param field
+     * @return
+     * @throws JSONException
+     */
+    public static List<String> getListValue(JSONObject jobj, String name, String field)
             throws JSONException {
 
         if (jobj.isNull(name)) {
@@ -73,9 +81,24 @@ public final class JSONUtils {
             JSONObject Jobject;
             for (int i = 0; i < jArray.length(); i++) {
                 Jobject = jArray.getJSONObject(i);
-                results.add(Jobject.getString("name"));
+                results.add(Jobject.getString(field));
             }
             return results;
+        }
+    }
+
+    public static String getArrayValue(JSONObject jobj, String name)
+            throws JSONException {
+
+        if (jobj.isNull(name)) {
+            return null;
+        } else {
+            JSONArray jArray = jobj.getJSONArray(name);
+            String result = jArray.getString(0);
+            for (int i = 1; i < jArray.length(); i++) {
+                result += " ," + jArray.getString(i);
+            }
+            return result;
         }
     }
 

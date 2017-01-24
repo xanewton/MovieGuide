@@ -123,6 +123,7 @@
     <string name="trailers">Trailers</string>
     <string name="reviews">Reviews</string>
     <string name="title_activity_tvshow">TVShowActivity</string>
+    <string name="tvshow_title">TV Show title</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
