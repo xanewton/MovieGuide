@@ -75,6 +75,7 @@ public class TVShowActivity extends AppCompatActivity {
     private ImageView backgroundPoster;
     private ImageView tvShowPoster;
     private TextView textGenres;
+    private TextView textCountries;
 
 
     @Override
@@ -110,6 +111,7 @@ public class TVShowActivity extends AppCompatActivity {
         backgroundPoster = (ImageView) findViewById(R.id.background_poster);
         tvShowPoster = (ImageView) findViewById(R.id.tvshow_poster);
         textGenres = (TextView) findViewById(R.id.genre);
+        textCountries = (TextView) findViewById(R.id.countries);
 
         // Get TV Show Details data
         fetchTVShowData();
@@ -178,7 +180,7 @@ public class TVShowActivity extends AppCompatActivity {
 
         PopulateDetailsTitle(container);
         PopulateDetailsPoster(container, callback);
-        PopulateDetailsGenres(container);
+        PopulateDetailsGenresCountries(container);
     }
 
     /**
@@ -222,10 +224,10 @@ public class TVShowActivity extends AppCompatActivity {
     }
 
     /**
-     * Populates genres in screen.
+     * Populates genres and countries in screen.
      * @param container
      */
-    private void PopulateDetailsGenres(final TVShowData container) {
+    private void PopulateDetailsGenresCountries(final TVShowData container) {
         if(!container.getGenres().isEmpty()) {
             StringBuilder builder = new StringBuilder();
             for(String genre: container.getGenres() ) {
@@ -235,9 +237,14 @@ public class TVShowActivity extends AppCompatActivity {
             builder.delete(builder.length()-3, builder.length());
             textGenres.setText(builder.toString());
             textGenres.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else{
             textGenres.setVisibility(View.GONE);
+        }
+
+        if(!container.getOriginalCountries().isEmpty()) {
+            textCountries.setText(container.getOriginalCountries());
+        } else {
+            textCountries.setVisibility(View.GONE);
         }
     }
 

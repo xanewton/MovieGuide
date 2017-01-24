@@ -460,7 +460,6 @@ public class MovieActivity extends AppCompatActivity
             }
             builder.delete(builder.length()-3, builder.length());
             textCountries.setText(builder.toString());
-            textCountries.setVisibility(View.VISIBLE);
         }
         else{
             textCountries.setVisibility(View.GONE);
