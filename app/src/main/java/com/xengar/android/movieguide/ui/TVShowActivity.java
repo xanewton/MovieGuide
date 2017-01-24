@@ -76,6 +76,7 @@ public class TVShowActivity extends AppCompatActivity {
     private ImageView tvShowPoster;
     private TextView textGenres;
     private TextView textCountries;
+    private TextView textProdCompanies;
 
 
     @Override
@@ -112,6 +113,7 @@ public class TVShowActivity extends AppCompatActivity {
         tvShowPoster = (ImageView) findViewById(R.id.tvshow_poster);
         textGenres = (TextView) findViewById(R.id.genre);
         textCountries = (TextView) findViewById(R.id.countries);
+        textProdCompanies = (TextView) findViewById(R.id.prod_companies);
 
         // Get TV Show Details data
         fetchTVShowData();
@@ -181,6 +183,7 @@ public class TVShowActivity extends AppCompatActivity {
         PopulateDetailsTitle(container);
         PopulateDetailsPoster(container, callback);
         PopulateDetailsGenresCountries(container);
+        PopulateDetailsProdCompanies(container);
     }
 
     /**
@@ -248,7 +251,25 @@ public class TVShowActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Populates Production Companies in screen.
+     * @param container
+     */
+    private void PopulateDetailsProdCompanies(final TVShowData container) {
+        if(!container.getProductionCompanies().isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for(String podCompany: container.getProductionCompanies() ) {
+                builder.append(podCompany);
+                builder.append(" | ");
+            }
+            builder.delete(builder.length()-3, builder.length());
+            textProdCompanies.setText(builder.toString());
+            textProdCompanies.setVisibility(View.VISIBLE);
+        }
+        else{
+            textProdCompanies.setVisibility(View.GONE);
+        }
+    }
 
 
     /**
