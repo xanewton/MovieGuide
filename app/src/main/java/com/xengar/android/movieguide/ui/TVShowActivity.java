@@ -81,6 +81,7 @@ public class TVShowActivity extends AppCompatActivity {
     private TextView homepage;
     private TextView textStatus;
     private TextView overview;
+    private TextView textLanguage;
 
 
     @Override
@@ -120,6 +121,7 @@ public class TVShowActivity extends AppCompatActivity {
         textProdCompanies = (TextView) findViewById(R.id.prod_companies);
         homepage = (TextView) findViewById(R.id.homepage);
         textStatus = (TextView) findViewById(R.id.status);
+        textLanguage = (TextView) findViewById(R.id.text_language);
         overview = (TextView) findViewById(R.id.overview);
 
         // Get TV Show Details data
@@ -280,7 +282,7 @@ public class TVShowActivity extends AppCompatActivity {
     }
 
     /**
-     * Populates status, homepage, overview in screen.
+     * Populates status, homepage, overview, languages in screen.
      * @param container
      */
     private void PopulateDetailsStatus(final TVShowData container) {
@@ -301,6 +303,12 @@ public class TVShowActivity extends AppCompatActivity {
             overview.setText(R.string.details_view_no_description);
         } else {
             overview.setText(container.getOverview());
+        }
+
+        if (container.getOriginalLanguage() != null){
+            textLanguage.setText(container.getOriginalLanguage());
+        } else {
+            textLanguage.setVisibility(View.GONE);
         }
     }
 
