@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,6 +41,9 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.adapters.ImageAdapter;
+import com.xengar.android.movieguide.data.CastData;
+import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.data.TVShowData;
 import com.xengar.android.movieguide.data.TVShowDetails;
 import com.xengar.android.movieguide.data.TrailerData;
@@ -103,6 +107,10 @@ public class TVShowActivity extends AppCompatActivity
     private YouTubePlayer youTubePlayer;
     private LinearLayout trailerList;
 
+    private List<CastData> castData;
+    private GridView gridview; // Cast list
+    private final boolean[] gridViewResized = {false}; // boolean for resize gridview hack
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +154,7 @@ public class TVShowActivity extends AppCompatActivity
         textLastAirDate = (TextView) findViewById(R.id.last_air_date);
         textNumEpisodes = (TextView) findViewById(R.id.num_episodes);
         textNumSeasons = (TextView) findViewById(R.id.num_seasons);
+        gridview = (GridView) findViewById(R.id.cast_data);
         trailerList = (LinearLayout) findViewById(R.id.tvshow_trailers);
 
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
@@ -183,7 +192,7 @@ public class TVShowActivity extends AppCompatActivity
     @Override
     public void onStop() {
         super.onStop();
-        data = new TVShowDetails(detailsData, trailerData);
+        data = new TVShowDetails(detailsData, trailerData, castData);
         if (youTubePlayer != null) {
             youTubePlayer.release();
         }
@@ -201,10 +210,13 @@ public class TVShowActivity extends AppCompatActivity
             detailsTask.execute(tvShowId);
             FetchTVShowTask trailersTask = new FetchTVShowTask(FetchTVShowTask.TV_SHOW_TRAILERS);
             trailersTask.execute(tvShowId);
+            FetchTVShowTask castTask = new FetchTVShowTask(FetchTVShowTask.TV_SHOW_CAST);
+            castTask.execute(tvShowId);
         } else {
             Log.v(TAG, "data = " + data.getDetailsData());
             populateDetails(detailsData = data.getDetailsData());
             populateTrailerList(trailerData = data.getTrailersData());
+            populateCastList(castData = data.getCastData());
         }
     }
 
@@ -435,6 +447,36 @@ public class TVShowActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Populates the Cast list in screen.
+     * @param data
+     */
+    private void populateCastList(final List<CastData> data) {
+        if (data == null || data.isEmpty()) {
+            gridview.setVisibility(View.GONE);
+            return;
+        }
+
+        // Add cast
+        int index = 0;
+        int maxCast = ActivityUtils.getPreferenceMaxCastItems(getApplicationContext());
+        ImageAdapter adapter = new ImageAdapter(getApplicationContext(), ImageAdapter.CAST_IMAGE);
+        // Assume the cast will always come sorted
+        for (final CastData cast : data) {
+            if (index == maxCast) {
+                break;
+            }
+            index++;
+            adapter.add(new ImageItem(cast.getCastImagePath(), cast.getPersonId(),
+                    cast.getCastName(), cast.getCharacter()));
+        }
+        adapter.notifyDataSetChanged();
+        gridview.setAdapter(adapter);
+        gridview.setVisibility(View.VISIBLE);
+
+        ActivityUtils.changeGridViewHeight(gridview, adapter.getCount(), gridViewResized);
+    }
+
 
 
 
@@ -445,6 +487,7 @@ public class TVShowActivity extends AppCompatActivity
 
         public static final String TV_SHOW_DETAILS = "TVShowDetails";
         public static final String TV_SHOW_TRAILERS = "TVShowTrailers";
+        public static final String TV_SHOW_CAST = "TVShowCast";
         private static final String TRAILER_BASE_URI = "http://www.youtube.com/watch?v=";
         private String requestType = null;
 
@@ -463,6 +506,9 @@ public class TVShowActivity extends AppCompatActivity
                 case TV_SHOW_TRAILERS:
                     request = "/tv/" + params[0] + "/videos";
                     break;
+                case TV_SHOW_CAST:
+                    request = "/tv/" + params[0] + "/credits";
+                    break;
             }
 
             return JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
@@ -478,6 +524,9 @@ public class TVShowActivity extends AppCompatActivity
                     break;
                 case TV_SHOW_TRAILERS:
                     processTVShowTrailers(jObj);
+                    break;
+                case TV_SHOW_CAST:
+                    processTVShowCast(jObj);
                     break;
             }
         }
@@ -532,6 +581,31 @@ public class TVShowActivity extends AppCompatActivity
                     Log.e(TAG, "", e);
                 }
                 populateTrailerList(trailerData);
+            }
+        }
+
+        /**
+         * Process the TVShow cast data.
+         * @param jObj
+         */
+        private void processTVShowCast(JSONObject jObj) {
+            if (jObj != null) {
+                castData = new ArrayList<CastData>();
+                try {
+                    JSONArray array = jObj.getJSONArray("cast");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        castData.add(
+                                new CastData(object.getString("name"),
+                                        object.getString("profile_path"),
+                                        object.getString("character"),
+                                        object.getInt("id"),
+                                        object.getInt("order")));
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "", e);
+                }
+                populateCastList(castData);
             }
         }
     }
