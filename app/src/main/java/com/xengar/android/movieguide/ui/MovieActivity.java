@@ -181,12 +181,12 @@ public class MovieActivity extends AppCompatActivity
         textCountries = (TextView) findViewById(R.id.countries);
         textIMDbId = (TextView) findViewById(R.id.imdb_id);
         moviePlot = (TextView) findViewById(R.id.movie_plot);
-        trailerList = (LinearLayout) findViewById(R.id.movie_trailers);
         reviewList = (LinearLayout) findViewById(R.id.movie_reviews);
         gridview = (GridView) findViewById(R.id.cast_data);
         budget = (TextView) findViewById(R.id.budget);
         revenue = (TextView) findViewById(R.id.revenue);
         homepage = (TextView) findViewById(R.id.homepage);
+        trailerList = (LinearLayout) findViewById(R.id.movie_trailers);
 
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
         getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
@@ -543,7 +543,7 @@ public class MovieActivity extends AppCompatActivity
         Log.v(TAG, "populateTrailerList - data = " + data);
 
         for (final TrailerData trailer : data) {
-            View view = getLayoutInflater().inflate(R.layout.movie_trailer_list_item, null);
+            View view = getLayoutInflater().inflate(R.layout.trailer_list_item, null);
             view.setTag(trailer);
             TextView trailerName = (TextView) view.findViewById(R.id.trailer_name);
             trailerName.setText(trailer.getTrailerName());
