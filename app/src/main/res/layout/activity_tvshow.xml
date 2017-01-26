@@ -263,7 +263,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/movie_plot"
+                        android:id="@+id/overview"
                         style="@style/DetailViewTextMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
