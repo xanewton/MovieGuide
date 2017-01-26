@@ -15,19 +15,27 @@
  */
 package com.xengar.android.movieguide.data;
 
+import java.util.List;
+
 /**
  * TVShowDetails
  */
 public class TVShowDetails {
     private final TVShowData detailsData;
+    private final List<TrailerData> trailersData;
 
     // Constructor
-    public TVShowDetails(TVShowData detailsData) {
+    public TVShowDetails(TVShowData detailsData, List<TrailerData> trailersData) {
         this.detailsData = detailsData;
+        this.trailersData = trailersData;
     }
 
     //Getters
     public TVShowData getDetailsData() {
         return detailsData;
+    }
+
+    public List<TrailerData> getTrailersData() {
+        return trailersData;
     }
 }

@@ -17,6 +17,7 @@ package com.xengar.android.movieguide.ui;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -34,17 +35,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.TVShowData;
 import com.xengar.android.movieguide.data.TVShowDetails;
+import com.xengar.android.movieguide.data.TrailerData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
@@ -60,7 +68,8 @@ import static com.xengar.android.movieguide.utils.JSONUtils.getIntValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getListValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getStringValue;
 
-public class TVShowActivity extends AppCompatActivity {
+public class TVShowActivity extends AppCompatActivity
+        implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = TVShowActivity.class.getSimpleName();
     private int tvShowId;
@@ -69,6 +78,7 @@ public class TVShowActivity extends AppCompatActivity {
 
     private TVShowDetails data = null;
     private TVShowData detailsData;
+    private List<TrailerData> trailerData;
 
     // Details components
     private TextView title;
@@ -88,6 +98,10 @@ public class TVShowActivity extends AppCompatActivity {
     private TextView textLastAirDate;
     private TextView textNumEpisodes;
     private TextView textNumSeasons;
+
+    private YouTubePlayerFragment youTubePlayerFragment;
+    private YouTubePlayer youTubePlayer;
+    private LinearLayout trailerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +146,10 @@ public class TVShowActivity extends AppCompatActivity {
         textLastAirDate = (TextView) findViewById(R.id.last_air_date);
         textNumEpisodes = (TextView) findViewById(R.id.num_episodes);
         textNumSeasons = (TextView) findViewById(R.id.num_seasons);
+        trailerList = (LinearLayout) findViewById(R.id.tvshow_trailers);
+
+        youTubePlayerFragment = YouTubePlayerFragment.newInstance();
+        getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
 
         // Get TV Show Details data
         fetchTVShowData();
@@ -165,21 +183,28 @@ public class TVShowActivity extends AppCompatActivity {
     @Override
     public void onStop() {
         super.onStop();
-        data = new TVShowDetails(detailsData);
-
+        data = new TVShowDetails(detailsData, trailerData);
+        if (youTubePlayer != null) {
+            youTubePlayer.release();
+        }
     }
 
     /**
      * Get the TV Show data.
      */
     private void fetchTVShowData() {
+        if (trailerList != null)
+            trailerList.removeAllViews();
 
         if (data == null) {
             FetchTVShowTask detailsTask = new FetchTVShowTask(FetchTVShowTask.TV_SHOW_DETAILS);
             detailsTask.execute(tvShowId);
+            FetchTVShowTask trailersTask = new FetchTVShowTask(FetchTVShowTask.TV_SHOW_TRAILERS);
+            trailersTask.execute(tvShowId);
         } else {
             Log.v(TAG, "data = " + data.getDetailsData());
             populateDetails(detailsData = data.getDetailsData());
+            populateTrailerList(trailerData = data.getTrailersData());
         }
     }
 
@@ -351,6 +376,67 @@ public class TVShowActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Populates the trailers list in screen.
+     * @param data
+     */
+    private void populateTrailerList(List<TrailerData> data) {
+        Log.v(TAG, "populateTrailerList - data = " + data);
+
+        for (final TrailerData trailer : data) {
+            View view = getLayoutInflater().inflate(R.layout.trailer_list_item, null);
+            view.setTag(trailer);
+            TextView trailerName = (TextView) view.findViewById(R.id.trailer_name);
+            trailerName.setText(trailer.getTrailerName());
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TrailerData data = (TrailerData) v.getTag();
+                    youTubePlayer.loadVideo(data.getTrailerUri().getQueryParameter("v"));
+                }
+            });
+            trailerList.addView(view);
+        }
+
+        if (!data.isEmpty()) {
+            youTubePlayerFragment.initialize(getString(R.string.YOUTUBE_DATA_API_V3), this);
+        } else {
+            findViewById(R.id.youtube_fragment).setVisibility(View.GONE);
+            findViewById(R.id.tvshow_trailers).setVisibility(View.GONE);
+        }
+    }
+
+    public List<TrailerData> getTrailerData() {
+        return trailerData;
+    }
+
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider,
+                                        YouTubeInitializationResult youTubeInitializationResult) {
+    }
+
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider,
+                                        YouTubePlayer youTubePlayer, boolean wasRestored) {
+        if (!wasRestored) {
+            Log.v(TAG, "trailerData " + trailerData);
+            if (trailerData != null && !trailerData.isEmpty()) {
+                Uri uri = trailerData.get(0).getTrailerUri();
+
+                Log.v(TAG, "trailerData " + trailerData.size());
+                String trailerCode = uri.getQueryParameter("v");
+                if (trailerCode != null) {
+                    this.youTubePlayer = youTubePlayer;
+                    youTubePlayer.cueVideo(trailerCode);
+                }
+            } else {
+                getFragmentManager().beginTransaction().remove(youTubePlayerFragment).commit();
+            }
+        }
+    }
+
+
+
 
     /**
      * Fetch task to get data
@@ -358,6 +444,8 @@ public class TVShowActivity extends AppCompatActivity {
     private class FetchTVShowTask extends AsyncTask<Integer, Void, JSONObject> {
 
         public static final String TV_SHOW_DETAILS = "TVShowDetails";
+        public static final String TV_SHOW_TRAILERS = "TVShowTrailers";
+        private static final String TRAILER_BASE_URI = "http://www.youtube.com/watch?v=";
         private String requestType = null;
 
         // Constructor
@@ -372,6 +460,9 @@ public class TVShowActivity extends AppCompatActivity {
                 case TV_SHOW_DETAILS:
                     request = "/tv/" + params[0];
                     break;
+                case TV_SHOW_TRAILERS:
+                    request = "/tv/" + params[0] + "/videos";
+                    break;
             }
 
             return JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
@@ -384,6 +475,9 @@ public class TVShowActivity extends AppCompatActivity {
             switch(requestType){
                 case TV_SHOW_DETAILS:
                     processTVShowDetails(jObj);
+                    break;
+                case TV_SHOW_TRAILERS:
+                    processTVShowTrailers(jObj);
                     break;
             }
         }
@@ -416,6 +510,28 @@ public class TVShowActivity extends AppCompatActivity {
 
             } else {
                 // TODO: Have a table to query from the favorites.
+            }
+        }
+
+        /**
+         * Process the TVShow Trailers data.
+         * @param jObj
+         */
+        private void processTVShowTrailers(JSONObject jObj) {
+            if (jObj != null) {
+                trailerData = new ArrayList<TrailerData>();
+                try {
+                    JSONArray array = jObj.getJSONArray("results");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject object = array.getJSONObject(i);
+                        trailerData.add(new TrailerData(
+                                Uri.parse(TRAILER_BASE_URI + object.getString("key")),
+                                object.getString("name")));
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, "", e);
+                }
+                populateTrailerList(trailerData);
             }
         }
     }
