@@ -45,6 +45,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
@@ -82,7 +84,10 @@ public class TVShowActivity extends AppCompatActivity {
     private TextView textStatus;
     private TextView overview;
     private TextView textLanguage;
-
+    private TextView textFirstAirDate;
+    private TextView textLastAirDate;
+    private TextView textNumEpisodes;
+    private TextView textNumSeasons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +128,10 @@ public class TVShowActivity extends AppCompatActivity {
         textStatus = (TextView) findViewById(R.id.status);
         textLanguage = (TextView) findViewById(R.id.text_language);
         overview = (TextView) findViewById(R.id.overview);
+        textFirstAirDate = (TextView) findViewById(R.id.first_air_date);
+        textLastAirDate = (TextView) findViewById(R.id.last_air_date);
+        textNumEpisodes = (TextView) findViewById(R.id.num_episodes);
+        textNumSeasons = (TextView) findViewById(R.id.num_seasons);
 
         // Get TV Show Details data
         fetchTVShowData();
@@ -194,6 +203,7 @@ public class TVShowActivity extends AppCompatActivity {
         PopulateDetailsGenresCountries(container);
         PopulateDetailsProdCompanies(container);
         PopulateDetailsStatus(container);
+        PopulateDetailsDates(container);
     }
 
     /**
@@ -282,7 +292,7 @@ public class TVShowActivity extends AppCompatActivity {
     }
 
     /**
-     * Populates status, homepage, overview, languages in screen.
+     * Populates status, homepage, overview and languages in screen.
      * @param container
      */
     private void PopulateDetailsStatus(final TVShowData container) {
@@ -309,6 +319,35 @@ public class TVShowActivity extends AppCompatActivity {
             textLanguage.setText(container.getOriginalLanguage());
         } else {
             textLanguage.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Populates first air date, last air date, episodes and seasons in screen.
+     * @param container
+     */
+    private void PopulateDetailsDates(final TVShowData container) {
+        if (container.getFirstAirDate() != null) {
+            textFirstAirDate.setText(container.getFirstAirDate());
+        } else {
+            textFirstAirDate.setVisibility(View.GONE);
+        }
+
+        if (container.getLastAirDate() != null) {
+            textLastAirDate.setText(container.getLastAirDate());
+        } else {
+            textLastAirDate.setVisibility(View.GONE);
+        }
+
+        if (container.getNumEpisodes() != 0) {
+            textNumEpisodes.setText(String.format(Locale.ENGLISH, "%d", container.getNumEpisodes()));
+        } else {
+            textNumEpisodes.setVisibility(View.GONE);
+        }
+        if (container.getNumSeasons() != 0) {
+            textNumSeasons.setText(String.format(Locale.ENGLISH, "%d", container.getNumSeasons()));
+        } else {
+            textNumSeasons.setVisibility(View.GONE);
         }
     }
 
