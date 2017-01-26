@@ -41,6 +41,7 @@ import com.xengar.android.movieguide.data.TVShowDetails;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -79,6 +80,7 @@ public class TVShowActivity extends AppCompatActivity {
     private TextView textProdCompanies;
     private TextView homepage;
     private TextView textStatus;
+    private TextView overview;
 
 
     @Override
@@ -118,6 +120,7 @@ public class TVShowActivity extends AppCompatActivity {
         textProdCompanies = (TextView) findViewById(R.id.prod_companies);
         homepage = (TextView) findViewById(R.id.homepage);
         textStatus = (TextView) findViewById(R.id.status);
+        overview = (TextView) findViewById(R.id.overview);
 
         // Get TV Show Details data
         fetchTVShowData();
@@ -277,7 +280,7 @@ public class TVShowActivity extends AppCompatActivity {
     }
 
     /**
-     * Populates status, homepage in screen.
+     * Populates status, homepage, overview in screen.
      * @param container
      */
     private void PopulateDetailsStatus(final TVShowData container) {
@@ -292,6 +295,12 @@ public class TVShowActivity extends AppCompatActivity {
             homepage.setText(container.getHomepage());
         } else {
             homepage.setVisibility(View.GONE);
+        }
+
+        if (StringUtils.isBlank(container.getOverview())) {
+            overview.setText(R.string.details_view_no_description);
+        } else {
+            overview.setText(container.getOverview());
         }
     }
 
