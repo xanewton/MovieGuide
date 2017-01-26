@@ -18,15 +18,16 @@ package com.xengar.android.movieguide.data;
 import android.provider.BaseColumns;
 
 /**
- * FavoriteMoviesContract
+ * FavoritesContract
  */
-public final class FavoriteMoviesContract {
-    private FavoriteMoviesContract() {
+public final class FavoritesContract {
+    private FavoritesContract() {
     }
 
     /* Inner class that defines the table contents */
-    public static final class FavoriteMovieColumn implements BaseColumns {
-        public static final String TABLE_NAME = "FAVORITE_MOVIES_TBL";
+    public static final class FavoriteColumns implements BaseColumns {
+        public static final String FAVORITE_MOVIES_TBL = "FAVORITE_MOVIES_TBL";
+        public static final String FAVORITE_TV_SHOWS_TBL = "FAVORITE_TV_SHOWS_TBL";
         public static final String COLUMN_NAME_MOVIE_ID = "movieid";
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_MOVIE_PLOT = "movieplot";

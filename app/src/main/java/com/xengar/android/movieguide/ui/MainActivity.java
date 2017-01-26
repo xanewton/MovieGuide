@@ -36,9 +36,10 @@ import com.xengar.android.movieguide.sync.OnItemClickListener;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.FAVORITE_TV_SHOWS;
+import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
-import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
@@ -128,6 +129,10 @@ public class MainActivity extends AppCompatActivity
                 getSupportActionBar().setTitle(R.string.menu_option_on_the_air_tv_shows);
                 navigationView.setCheckedItem(R.id.nav_on_the_air_tv_shows);
                 break;
+            case FAVORITE_TV_SHOWS:
+                getSupportActionBar().setTitle(R.string.menu_option_favorite_tv_shows);
+                navigationView.setCheckedItem(R.id.nav_favorite_tv_shows);
+                break;
         }
     }
 
@@ -202,6 +207,10 @@ public class MainActivity extends AppCompatActivity
             launchFragment(ON_THE_AIR_TV_SHOWS);
             getSupportActionBar().setTitle(R.string.menu_option_on_the_air_tv_shows);
 
+        } else if (id == R.id.nav_favorite_tv_shows) {
+            launchFragment(FAVORITE_TV_SHOWS);
+            getSupportActionBar().setTitle(R.string.menu_option_favorite_tv_shows);
+
         } else if (id == R.id.nav_share) {
             getSupportActionBar().setTitle(R.string.app_name);
 
@@ -236,7 +245,7 @@ public class MainActivity extends AppCompatActivity
     public void onItemSelectionClick(String itemType, int itemId) {
         Log.v(TAG, "onItemSelectionClick itemId = " + itemId + " itemType = " + itemType);
         if (itemType.equals(POPULAR_TV_SHOWS) || itemType.equals(TOP_RATED_TV_SHOWS)
-                || itemType.equals(ON_THE_AIR_TV_SHOWS)) {
+                || itemType.equals(ON_THE_AIR_TV_SHOWS) || itemType.equals(FAVORITE_TV_SHOWS)) {
             ActivityUtils.launchTVShowActivity(getApplicationContext(), itemId);
         } else {
             ActivityUtils.launchMoviActivity(getApplicationContext(), itemId);

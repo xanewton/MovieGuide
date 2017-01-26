@@ -22,15 +22,15 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.xengar.android.movieguide.adapters.ImageAdapter;
-import com.xengar.android.movieguide.data.FavoriteMoviesProvider;
+import com.xengar.android.movieguide.data.FavoritesProvider;
 import com.xengar.android.movieguide.data.ImageItem;
 
 import java.util.ArrayList;
 
-import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_MOVIE_ID;
-import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_TITLE;
-import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_POSTER_PATH;
-import static com.xengar.android.movieguide.data.FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME_MOVIE_ID;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME_TITLE;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_POSTER_PATH;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 
 /**
@@ -40,7 +40,7 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
 
     private static final String TAG = FetchFavorite.class.getSimpleName();
     private static final Uri FAVORITE_MOVIES_URI =
-            Uri.parse("content://" + FavoriteMoviesProvider.AUTHORITY + "/" + TABLE_NAME);
+            Uri.parse("content://" + FavoritesProvider.AUTHORITY + "/" + FAVORITE_MOVIES_TBL);
     private final String posterBaseUri;
     private final ImageAdapter adapter;
     private final ContentResolver contentResolver;
@@ -66,7 +66,7 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
 
     @Override
     protected ArrayList<ImageItem> doInBackground(Void... voids) {
-        ArrayList<ImageItem> moviePosters = new ArrayList<>();
+        ArrayList<ImageItem> posters = new ArrayList<>();
         final Cursor cursor = contentResolver.query(uri,
                 new String[]{ COLUMN_POSTER_PATH, COLUMN_NAME_MOVIE_ID, COLUMN_NAME_TITLE},
                 null, null, null);
@@ -76,14 +76,14 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
             while (cursor.moveToNext()) {
                 data = new ImageItem(posterBaseUri + cursor.getString(0), cursor.getInt(1),
                         cursor.getString(2), null);
-                moviePosters.add(data);
+                posters.add(data);
             }
         } else {
             Log.d(TAG, "Cursor is empty");
         }
         if (cursor != null)
             cursor.close();
-        return moviePosters;
+        return posters;
     }
 
     @Override

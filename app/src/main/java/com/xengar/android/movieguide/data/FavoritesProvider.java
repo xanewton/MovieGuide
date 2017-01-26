@@ -29,16 +29,16 @@ import android.util.Log;
 /**
  * {@link ContentProvider} for MovieGuide app.
  */
-public class FavoriteMoviesProvider extends ContentProvider {
+public class FavoritesProvider extends ContentProvider {
 
-    private static final String TAG = FavoriteMoviesProvider.class.getSimpleName();
+    private static final String TAG = FavoritesProvider.class.getSimpleName();
     public static final String AUTHORITY = "com.xengar.android.movieguide";
     // URI matcher code for the content URI for the FAVORITE_MOVIES_TBL table
     private static final int MOVIES = 100;
     // URI matcher code for the content URI for a single movie in the FAVORITE_MOVIES_TBL table
     private static final int MOVIE_ID = 101;
 
-    private FavoriteMoviesDbHelper helper;
+    private FavoritesDbHelper helper;
 
     /**
      * UriMatcher object to match a content URI to a corresponding code.
@@ -55,7 +55,7 @@ public class FavoriteMoviesProvider extends ContentProvider {
         // The content URI of the form "content://com.xengar.android.movieguide/movie" will map to
         // the integer code {@link #MOVIES}. This URI is used to provide access to MULTIPLE rows
         // of the verbs table.
-        sUriMatcher.addURI(AUTHORITY, FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME, MOVIES);
+        sUriMatcher.addURI(AUTHORITY, FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL, MOVIES);
 
         // The content URI of the form "content://com.xengar.android.movieguide/movie/#" will map
         // to the integer code {@link #MOVIE_ID}. This URI is used to provide access to ONE single
@@ -64,18 +64,18 @@ public class FavoriteMoviesProvider extends ContentProvider {
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
         // For example, "content://com.xengar.android.movieguide/movie/3" matches, but
         // "content://com.xengar.android.movieguide/movie" (without a number at the end) doesn't.
-        sUriMatcher.addURI(AUTHORITY, FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME + "/#", MOVIE_ID);
+        sUriMatcher.addURI(AUTHORITY, FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL + "/#", MOVIE_ID);
     }
 
 
     // Constructor
-    public FavoriteMoviesProvider() {
+    public FavoritesProvider() {
     }
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        return db.delete(FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME,
+        return db.delete(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL,
                 selection, selectionArgs);
     }
 
@@ -94,16 +94,16 @@ public class FavoriteMoviesProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        long rowId = db.insert(FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME, null, values);
+        long rowId = db.insert(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL, null, values);
 
         Log.v(TAG, "rowId = " + rowId);
         return ContentUris.withAppendedId(uri,
-                values.getAsInteger(FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_MOVIE_ID));
+                values.getAsInteger(FavoritesContract.FavoriteColumns.COLUMN_NAME_MOVIE_ID));
     }
 
     @Override
     public boolean onCreate() {
-        helper = new FavoriteMoviesDbHelper(getContext());
+        helper = new FavoritesDbHelper(getContext());
         return true;
     }
 
@@ -116,11 +116,11 @@ public class FavoriteMoviesProvider extends ContentProvider {
 
         switch (sUriMatcher.match(uri)) {
             case MOVIES:
-                builder.setTables(FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME);
+                builder.setTables(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL);
                 break;
             case MOVIE_ID:
-                builder.setTables(FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME);
-                builder.appendWhere(FavoriteMoviesContract.FavoriteMovieColumn.COLUMN_NAME_MOVIE_ID
+                builder.setTables(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL);
+                builder.appendWhere(FavoritesContract.FavoriteColumns.COLUMN_NAME_MOVIE_ID
                         + " = " + uri.getLastPathSegment());
                 break;
             default:
@@ -133,7 +133,7 @@ public class FavoriteMoviesProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        return db.update(FavoriteMoviesContract.FavoriteMovieColumn.TABLE_NAME, values, selection,
+        return db.update(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL, values, selection,
                 selectionArgs);
     }
 }

@@ -59,6 +59,10 @@
                     android:id="@+id/nav_on_the_air_tv_shows"
                     android:icon="@drawable/ic_menu_slideshow"
                     android:title="@string/menu_option_on_the_air" />
+                <item
+                    android:id="@+id/nav_favorite_tv_shows"
+                    android:icon="@drawable/ic_favorite_black_24dp"
+                    android:title="@string/menu_option_favorites" />
             </group>
         </menu>
     </item>
