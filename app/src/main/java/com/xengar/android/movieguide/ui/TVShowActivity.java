@@ -538,15 +538,14 @@ public class TVShowActivity extends AppCompatActivity
         private void processTVShowDetails(JSONObject jObj) {
             if (jObj != null) {
                 try {
-                    detailsData = new TVShowData(tvShowId, getStringValue(jObj, "poster_path"),
-                            getStringValue(jObj, "name"), getStringValue(jObj, "overview"),
+                    detailsData = new TVShowData(tvShowId, getStringValue(jObj, "name"),
+                            getStringValue(jObj, "overview"), getStringValue(jObj, "poster_path"),
+                            getStringValue(jObj, "backdrop_path"),
                             getDoubleValue(jObj, "vote_average", 0.0),
                             getIntValue(jObj, "vote_count", 0),
-                            getStringValue(jObj, "backdrop_path"),
                             getStringValue(jObj, "original_language"),
                             getArrayValue(jObj, "origin_country"),
-                            getListValue(jObj, "genres", "name"),
-                            getStringValue(jObj, "status"),
+                            getListValue(jObj, "genres", "name"), getStringValue(jObj, "status"),
                             getListValue(jObj, "production_companies", "name"),
                             getStringValue(jObj, "homepage"), getStringValue(jObj, "first_air_date"),
                             getStringValue(jObj, "last_air_date"),

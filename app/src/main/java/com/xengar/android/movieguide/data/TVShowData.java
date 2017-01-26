@@ -40,8 +40,8 @@ public class TVShowData {
     private final int numSeasons;
 
     // Constructor
-    public TVShowData(int tvShowId, String posterPath, String name, String overview,
-                      Double voteAverage, Integer voteCount, String backgroundPath,
+    public TVShowData(int tvShowId, String name, String overview, String posterPath,
+                      String backgroundPath, Double voteAverage, Integer voteCount,
                       String originalLanguage, String originalCountries, List<String> genres,
                       String status, List<String> productionCompanies, String homepage,
                       String firstAirDate, String lastAirDate, int numEpisodes, int numSeasons) {
