@@ -27,8 +27,8 @@ import com.xengar.android.movieguide.data.ImageItem;
 
 import java.util.ArrayList;
 
-import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME_MOVIE_ID;
-import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME_TITLE;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TITLE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_POSTER_PATH;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
@@ -68,7 +68,7 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
     protected ArrayList<ImageItem> doInBackground(Void... voids) {
         ArrayList<ImageItem> posters = new ArrayList<>();
         final Cursor cursor = contentResolver.query(uri,
-                new String[]{ COLUMN_POSTER_PATH, COLUMN_NAME_MOVIE_ID, COLUMN_NAME_TITLE},
+                new String[]{ COLUMN_POSTER_PATH, COLUMN_MOVIE_ID, COLUMN_TITLE},
                 null, null, null);
 
         if (cursor != null && cursor.getCount() != 0) {

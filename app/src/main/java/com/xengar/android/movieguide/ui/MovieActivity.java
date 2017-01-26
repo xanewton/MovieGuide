@@ -71,9 +71,9 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_DURATION;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_HOMEPAGE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_IMDB_ID;
-import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_MOVIE_PLOT;
-import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME_MOVIE_ID;
-import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME_TITLE;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PLOT;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TITLE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_ORIGINAL_LANGUAGE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_POSTER_PATH;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_REVENUE;
@@ -228,7 +228,7 @@ public class MovieActivity extends AppCompatActivity
         fabDel = (FloatingActionButton) findViewById(R.id.fab_minus);
 
         Cursor cursor = getContentResolver().query(ContentUris.withAppendedId(URI, movieID),
-                new String[]{COLUMN_NAME_MOVIE_ID}, null, null, null);
+                new String[]{COLUMN_MOVIE_ID}, null, null, null);
         if (cursor != null && cursor.getCount() != 0) {
             fabDel.setVisibility(View.VISIBLE);
         } else {
@@ -251,9 +251,9 @@ public class MovieActivity extends AppCompatActivity
                 Snackbar.make(view, getString(R.string.favorite_movie_add_message), DURATION)
                         .setAction("Action", null).show();
                 ContentValues values = new ContentValues();
-                values.put(COLUMN_NAME_MOVIE_ID, movieID);
-                values.put(COLUMN_NAME_TITLE, container.getTitle());
-                values.put(COLUMN_MOVIE_PLOT, container.getPlot());
+                values.put(COLUMN_MOVIE_ID, movieID);
+                values.put(COLUMN_TITLE, container.getTitle());
+                values.put(COLUMN_PLOT, container.getPlot());
                 values.put(COLUMN_POSTER_PATH, container.getPosterPath());
                 values.put(COLUMN_YEAR, container.getYear());
                 values.put(COLUMN_DURATION, container.getDuration());
@@ -277,7 +277,7 @@ public class MovieActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, getString(R.string.favorite_movie_del_message), DURATION)
                         .setAction("Action", null).show();
-                getContentResolver().delete(URI, COLUMN_NAME_MOVIE_ID + " = ?",
+                getContentResolver().delete(URI, COLUMN_MOVIE_ID + " = ?",
                         new String[]{Integer.toString(movieID)} );
 
                 fabAdd.setVisibility(View.VISIBLE);
@@ -785,7 +785,7 @@ public class MovieActivity extends AppCompatActivity
             } else {
                 final Cursor cursor = getContentResolver().query(
                         ContentUris.withAppendedId(URI, movieID),
-                        new String[]{ COLUMN_POSTER_PATH, COLUMN_NAME_TITLE, COLUMN_MOVIE_PLOT,
+                        new String[]{ COLUMN_POSTER_PATH, COLUMN_TITLE, COLUMN_PLOT,
                                 COLUMN_YEAR, COLUMN_DURATION, COLUMN_VOTE_AVERAGE, COLUMN_VOTE_COUNT,
                                 COLUMN_BACKGROUND_PATH, COLUMN_ORIGINAL_LANGUAGE,
                                 /*COLUMN_ORIGINAL_COUNTRIES, COLUMN_GENRES,*/ COLUMN_STATUS,

@@ -27,10 +27,9 @@ public final class FavoritesContract {
     /* Inner class that defines the table contents */
     public static final class FavoriteColumns implements BaseColumns {
         public static final String FAVORITE_MOVIES_TBL = "FAVORITE_MOVIES_TBL";
-        public static final String FAVORITE_TV_SHOWS_TBL = "FAVORITE_TV_SHOWS_TBL";
-        public static final String COLUMN_NAME_MOVIE_ID = "movieid";
-        public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_MOVIE_PLOT = "movieplot";
+        public static final String COLUMN_MOVIE_ID = "movieid";
+        public static final String COLUMN_TITLE = "title";
+        public static final String COLUMN_PLOT = "movieplot";
         public static final String COLUMN_POSTER_PATH = "path";
         public static final String COLUMN_YEAR = "year";
         public static final String COLUMN_DURATION = "duration";
@@ -46,5 +45,14 @@ public final class FavoritesContract {
         public static final String COLUMN_BUDGET = "budget";
         public static final String COLUMN_REVENUE = "revenue";
         public static final String COLUMN_HOMEPAGE = "homepage";
+
+        public static final String FAVORITE_TV_SHOWS_TBL = "FAVORITE_TV_SHOWS_TBL";
+        public static final String COLUMN_TV_SHOW_ID = "tvshowid";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_OVERVIEW = "overview";
+        public static final String COLUMN_FIRST_AIR_DATE = "first_air_date";
+        public static final String COLUMN_LAST_AIR_DATE = "last_air_date";
+        public static final String COLUMN_NUM_EPISODES = "num_episodes";
+        public static final String COLUMN_NUM_SEASONS = "num_seasons";
     }
 }

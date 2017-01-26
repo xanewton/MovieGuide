@@ -27,10 +27,10 @@ import com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns;
 public class FavoritesDbHelper extends SQLiteOpenHelper {
 
     // Name of the database file
-    private static final String DATABASE_NAME = "FavoriteMovies.db";
+    private static final String DATABASE_NAME = "Favorites.db";
 
     // Database version. If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 1;
 
     // Constructor
     public FavoritesDbHelper(Context context) {
@@ -41,9 +41,9 @@ public class FavoritesDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String SQL_CREATE_TABLE = "CREATE TABLE " + FavoriteColumns.FAVORITE_MOVIES_TBL + " ("
             + "_id INTEGER PRIMARY KEY, "
-            + FavoriteColumns.COLUMN_NAME_MOVIE_ID + " INTEGER, "
-            + FavoriteColumns.COLUMN_NAME_TITLE + " TEXT, "
-            + FavoriteColumns.COLUMN_MOVIE_PLOT + " TEXT, "
+            + FavoriteColumns.COLUMN_MOVIE_ID + " INTEGER, "
+            + FavoriteColumns.COLUMN_TITLE + " TEXT, "
+            + FavoriteColumns.COLUMN_PLOT + " TEXT, "
             + FavoriteColumns.COLUMN_POSTER_PATH + " TEXT, "
             + FavoriteColumns.COLUMN_YEAR + " TEXT, "
             + FavoriteColumns.COLUMN_DURATION + " INTEGER, "
@@ -55,14 +55,35 @@ public class FavoritesDbHelper extends SQLiteOpenHelper {
             + FavoriteColumns.COLUMN_BUDGET + " TEXT, "
             + FavoriteColumns.COLUMN_REVENUE + " TEXT, "
             + FavoriteColumns.COLUMN_HOMEPAGE + " TEXT )";
+        db.execSQL(SQL_CREATE_TABLE);
 
+        SQL_CREATE_TABLE = "CREATE TABLE " + FavoriteColumns.FAVORITE_TV_SHOWS_TBL + " ("
+                + "_id INTEGER PRIMARY KEY, "
+                + FavoriteColumns.COLUMN_TV_SHOW_ID + " INTEGER, "
+                + FavoriteColumns.COLUMN_NAME + " TEXT, "
+                + FavoriteColumns.COLUMN_OVERVIEW + " TEXT, "
+                + FavoriteColumns.COLUMN_POSTER_PATH + " TEXT, "
+                + FavoriteColumns.COLUMN_BACKGROUND_PATH + " TEXT, "
+                + FavoriteColumns.COLUMN_VOTE_AVERAGE + " REAL, "
+                + FavoriteColumns.COLUMN_VOTE_COUNT + " INTEGER, "
+                + FavoriteColumns.COLUMN_ORIGINAL_LANGUAGE + " TEXT, "
+                + FavoriteColumns.COLUMN_ORIGINAL_COUNTRIES + " TEXT, "
+                + FavoriteColumns.COLUMN_GENRES + " TEXT, "
+                + FavoriteColumns.COLUMN_STATUS + " TEXT, "
+                + FavoriteColumns.COLUMN_PROD_COMPANIES + " TEXT, "
+                + FavoriteColumns.COLUMN_HOMEPAGE + " TEXT, "
+                + FavoriteColumns.COLUMN_FIRST_AIR_DATE + " TEXT, "
+                + FavoriteColumns.COLUMN_LAST_AIR_DATE + " TEXT, "
+                + FavoriteColumns.COLUMN_NUM_SEASONS + " INTEGER, "
+                + FavoriteColumns.COLUMN_NUM_EPISODES + " INTEGER )";
         db.execSQL(SQL_CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + FavoriteColumns.FAVORITE_MOVIES_TBL;
-
+        db.execSQL(SQL_DROP_TABLE);
+        SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
         db.execSQL(SQL_DROP_TABLE);
         onCreate(db);
     }

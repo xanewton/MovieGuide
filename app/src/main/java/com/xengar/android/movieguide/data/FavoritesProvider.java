@@ -37,6 +37,10 @@ public class FavoritesProvider extends ContentProvider {
     private static final int MOVIES = 100;
     // URI matcher code for the content URI for a single movie in the FAVORITE_MOVIES_TBL table
     private static final int MOVIE_ID = 101;
+    // URI matcher code for the content URI for the FAVORITE_TV_SHOWS_TBL table
+    private static final int TV_SHOWS = 200;
+    // URI matcher code for the content URI for a single movie in the FAVORITE_TV_SHOWS_TBL table
+    private static final int TV_SHOW_ID = 201;
 
     private FavoritesDbHelper helper;
 
@@ -65,6 +69,9 @@ public class FavoritesProvider extends ContentProvider {
         // For example, "content://com.xengar.android.movieguide/movie/3" matches, but
         // "content://com.xengar.android.movieguide/movie" (without a number at the end) doesn't.
         sUriMatcher.addURI(AUTHORITY, FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL + "/#", MOVIE_ID);
+
+        sUriMatcher.addURI(AUTHORITY, FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL, TV_SHOWS);
+        sUriMatcher.addURI(AUTHORITY, FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL + "/#", TV_SHOW_ID);
     }
 
 
@@ -75,8 +82,20 @@ public class FavoritesProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        return db.delete(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL,
-                selection, selectionArgs);
+        int response = 0;
+        switch (sUriMatcher.match(uri)) {
+            case MOVIES:
+            case MOVIE_ID:
+                response = db.delete(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL,
+                        selection, selectionArgs);
+                break;
+            case TV_SHOWS:
+            case TV_SHOW_ID:
+                response = db.delete(FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL,
+                        selection, selectionArgs);
+                break;
+        }
+        return response;
     }
 
     @Override
@@ -86,6 +105,10 @@ public class FavoritesProvider extends ContentProvider {
                 return "vnd.android.cursor.dir/movie";
             case MOVIE_ID:
                 return "vnd.android.cursor.item/movie";
+            case TV_SHOWS:
+                return "vnd.android.cursor.dir/tvshow";
+            case TV_SHOW_ID:
+                return "vnd.android.cursor.item/tvshow";
             default:
                 return null;
         }
@@ -94,11 +117,23 @@ public class FavoritesProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        long rowId = db.insert(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL, null, values);
+        String table = null, column = null;
+        switch (sUriMatcher.match(uri)) {
+            case MOVIES:
+            case MOVIE_ID:
+                table = FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL;
+                column = FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID;
+                break;
+            case TV_SHOWS:
+            case TV_SHOW_ID:
+                table = FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
+                column = FavoritesContract.FavoriteColumns.COLUMN_TV_SHOW_ID;
+                break;
+        }
 
+        long rowId = db.insert(table, null, values);
         Log.v(TAG, "rowId = " + rowId);
-        return ContentUris.withAppendedId(uri,
-                values.getAsInteger(FavoritesContract.FavoriteColumns.COLUMN_NAME_MOVIE_ID));
+        return ContentUris.withAppendedId(uri, values.getAsInteger(column));
     }
 
     @Override
@@ -120,9 +155,16 @@ public class FavoritesProvider extends ContentProvider {
                 break;
             case MOVIE_ID:
                 builder.setTables(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL);
-                builder.appendWhere(FavoritesContract.FavoriteColumns.COLUMN_NAME_MOVIE_ID
+                builder.appendWhere(FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID
                         + " = " + uri.getLastPathSegment());
                 break;
+            case TV_SHOWS:
+                builder.setTables(FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL);
+                break;
+            case TV_SHOW_ID:
+                builder.setTables(FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL);
+                builder.appendWhere(FavoritesContract.FavoriteColumns.COLUMN_TV_SHOW_ID
+                        + " = " + uri.getLastPathSegment());
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
@@ -133,7 +175,18 @@ public class FavoritesProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        return db.update(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL, values, selection,
-                selectionArgs);
+        String table = null;
+        switch (sUriMatcher.match(uri)) {
+            case MOVIES:
+            case MOVIE_ID:
+                table = FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL;
+                break;
+            case TV_SHOWS:
+            case TV_SHOW_ID:
+                table = FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
+                break;
+        }
+
+        return db.update(table, values, selection, selectionArgs);
     }
 }
