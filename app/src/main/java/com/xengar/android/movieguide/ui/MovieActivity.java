@@ -47,7 +47,7 @@ import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
 import com.xengar.android.movieguide.data.CastData;
-import com.xengar.android.movieguide.data.FavoritesProvider;
+import com.xengar.android.movieguide.data.FavoritesContract;
 import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.data.MovieData;
 import com.xengar.android.movieguide.data.MovieDetails;
@@ -71,22 +71,21 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_DURATION;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_HOMEPAGE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_IMDB_ID;
-import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PLOT;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID;
-import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TITLE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_ORIGINAL_LANGUAGE;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PLOT;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_POSTER_PATH;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_REVENUE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_STATUS;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TITLE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_VOTE_AVERAGE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_VOTE_COUNT;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_YEAR;
-import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.IMDB_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -104,7 +103,7 @@ public class MovieActivity extends AppCompatActivity
 
     private static final String TAG = MovieActivity.class.getSimpleName();
     private static final Uri URI =
-            Uri.parse("content://" + FavoritesProvider.AUTHORITY + "/" + FAVORITE_MOVIES_TBL);
+            Uri.parse("content://" + FavoritesContract.AUTHORITY + "/" + FavoritesContract.PATH_MOVIE);
     private static final String SHORT_TEXT_PREVIEW = " \n <font color=#FF8A80>... show more</font>";
     private static final String LONG_TEXT_PREVIEW = " \n<font color=#FF8A80>... show less</font>";
     private static final String END_TEXT_PREVIEW = "\n<font color=#FF8A80> the end!</font>";
@@ -258,6 +257,7 @@ public class MovieActivity extends AppCompatActivity
                 values.put(COLUMN_YEAR, container.getYear());
                 values.put(COLUMN_DURATION, container.getDuration());
                 values.put(COLUMN_VOTE_AVERAGE, container.getVoteAverage());
+                values.put(COLUMN_VOTE_COUNT, container.getVoteCount());
                 values.put(COLUMN_BACKGROUND_PATH, container.getBackgroundPath());
                 values.put(COLUMN_ORIGINAL_LANGUAGE, container.getOriginalLanguage());
                 values.put(COLUMN_STATUS, container.getStatus());

@@ -134,9 +134,6 @@ public class UniversalFragment extends Fragment {
             return;
         }
 
-        // Hide Floating Action Button
-        getActivity().findViewById(R.id.fab).setVisibility(View.GONE);
-
         switch (itemType) {
             case POPULAR_TV_SHOWS:
                 gridview.setOnScrollListener(new ItemViewScrollListener(POPULAR_TV_SHOWS));
