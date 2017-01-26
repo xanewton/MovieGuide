@@ -15,8 +15,10 @@
  */
 package com.xengar.android.movieguide.ui;
 
+import android.content.ContentUris;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -43,6 +45,7 @@ import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
 import com.xengar.android.movieguide.data.CastData;
+import com.xengar.android.movieguide.data.FavoritesContract;
 import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.data.TVShowData;
 import com.xengar.android.movieguide.data.TVShowDetails;
@@ -56,9 +59,26 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_BACKGROUND_PATH;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_FIRST_AIR_DATE;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_GENRES;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_HOMEPAGE;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_LAST_AIR_DATE;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NUM_EPISODES;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NUM_SEASONS;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_ORIGINAL_COUNTRIES;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_ORIGINAL_LANGUAGE;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_OVERVIEW;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_POSTER_PATH;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PROD_COMPANIES;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_STATUS;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_VOTE_AVERAGE;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_VOTE_COUNT;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
@@ -76,6 +96,8 @@ public class TVShowActivity extends AppCompatActivity
         implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = TVShowActivity.class.getSimpleName();
+    private static final Uri URI =
+            Uri.parse("content://" + FavoritesContract.AUTHORITY + "/" + FavoritesContract.PATH_TV_SHOW);
     private int tvShowId;
     private CollapsingToolbarLayout collapsingToolbar;
     private final String[] tvShowTitle = {" "};
@@ -557,7 +579,29 @@ public class TVShowActivity extends AppCompatActivity
                 }
 
             } else {
-                // TODO: Have a table to query from the favorites.
+                final Cursor cursor = getContentResolver().query(
+                        ContentUris.withAppendedId(URI, tvShowId),
+                        new String[]{ COLUMN_NAME, COLUMN_OVERVIEW, COLUMN_POSTER_PATH,
+                                COLUMN_BACKGROUND_PATH, COLUMN_VOTE_AVERAGE, COLUMN_VOTE_COUNT,
+                                COLUMN_ORIGINAL_LANGUAGE, COLUMN_ORIGINAL_COUNTRIES, COLUMN_GENRES,
+                                COLUMN_STATUS, COLUMN_PROD_COMPANIES, COLUMN_HOMEPAGE,
+                                COLUMN_FIRST_AIR_DATE, COLUMN_LAST_AIR_DATE, COLUMN_NUM_EPISODES,
+                                COLUMN_NUM_SEASONS},
+                        null, null, null);
+
+                if (cursor.getCount() != 0) {
+                    Log.d(TAG, "Cursor = " + cursor.getCount());
+                    cursor.moveToFirst();
+                    // Note: Better if it matches the query order
+                    detailsData = new TVShowData(tvShowId, cursor.getString(0), cursor.getString(1),
+                            cursor.getString(2), cursor.getString(3), cursor.getDouble(4),
+                            cursor.getInt(5), cursor.getString(6), cursor.getString(7),
+                            Collections.<String>emptyList(), cursor.getString(9), Collections.<String>emptyList(),
+                            cursor.getString(11), cursor.getString(12), cursor.getString(13),
+                            cursor.getInt(14), cursor.getInt(15));
+                    populateDetails(detailsData);
+                }
+                cursor.close();
             }
         }
 

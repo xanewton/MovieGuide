@@ -21,6 +21,14 @@ import android.provider.BaseColumns;
  * FavoritesContract
  */
 public final class FavoritesContract {
+
+    public static final String AUTHORITY = "com.xengar.android.movieguide";
+    public static final String PATH_MOVIE = "movie";
+    public static final String PATH_MOVIE_ID = "movie/*";
+    public static final String PATH_TV_SHOW = "tvshow";
+    public static final String PATH_TV_SHOW_ID = "tvshow/*";
+
+
     private FavoritesContract() {
     }
 

@@ -30,7 +30,7 @@ public class FavoritesDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Favorites.db";
 
     // Database version. If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Constructor
     public FavoritesDbHelper(Context context) {
@@ -48,6 +48,7 @@ public class FavoritesDbHelper extends SQLiteOpenHelper {
             + FavoriteColumns.COLUMN_YEAR + " TEXT, "
             + FavoriteColumns.COLUMN_DURATION + " INTEGER, "
             + FavoriteColumns.COLUMN_VOTE_AVERAGE + " REAL, "
+            + FavoriteColumns.COLUMN_VOTE_COUNT + " INTEGER, "
             + FavoriteColumns.COLUMN_BACKGROUND_PATH + " TEXT, "
             + FavoriteColumns.COLUMN_ORIGINAL_LANGUAGE + " TEXT, "
             + FavoriteColumns.COLUMN_STATUS + " TEXT, "

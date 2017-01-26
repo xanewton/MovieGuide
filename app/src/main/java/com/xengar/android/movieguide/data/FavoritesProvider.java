@@ -32,7 +32,6 @@ import android.util.Log;
 public class FavoritesProvider extends ContentProvider {
 
     private static final String TAG = FavoritesProvider.class.getSimpleName();
-    public static final String AUTHORITY = "com.xengar.android.movieguide";
     // URI matcher code for the content URI for the FAVORITE_MOVIES_TBL table
     private static final int MOVIES = 100;
     // URI matcher code for the content URI for a single movie in the FAVORITE_MOVIES_TBL table
@@ -59,7 +58,7 @@ public class FavoritesProvider extends ContentProvider {
         // The content URI of the form "content://com.xengar.android.movieguide/movie" will map to
         // the integer code {@link #MOVIES}. This URI is used to provide access to MULTIPLE rows
         // of the verbs table.
-        sUriMatcher.addURI(AUTHORITY, FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL, MOVIES);
+        sUriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIE, MOVIES);
 
         // The content URI of the form "content://com.xengar.android.movieguide/movie/#" will map
         // to the integer code {@link #MOVIE_ID}. This URI is used to provide access to ONE single
@@ -68,10 +67,10 @@ public class FavoritesProvider extends ContentProvider {
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
         // For example, "content://com.xengar.android.movieguide/movie/3" matches, but
         // "content://com.xengar.android.movieguide/movie" (without a number at the end) doesn't.
-        sUriMatcher.addURI(AUTHORITY, FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL + "/#", MOVIE_ID);
+        sUriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIE_ID, MOVIE_ID);
 
-        sUriMatcher.addURI(AUTHORITY, FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL, TV_SHOWS);
-        sUriMatcher.addURI(AUTHORITY, FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL + "/#", TV_SHOW_ID);
+        sUriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_TV_SHOW, TV_SHOWS);
+        sUriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_TV_SHOW_ID, TV_SHOW_ID);
     }
 
 
@@ -82,20 +81,18 @@ public class FavoritesProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        int response = 0;
+        String table = null;
         switch (sUriMatcher.match(uri)) {
             case MOVIES:
             case MOVIE_ID:
-                response = db.delete(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL,
-                        selection, selectionArgs);
+                table = FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL;
                 break;
             case TV_SHOWS:
             case TV_SHOW_ID:
-                response = db.delete(FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL,
-                        selection, selectionArgs);
+                table = FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
                 break;
         }
-        return response;
+        return db.delete(table, selection, selectionArgs);
     }
 
     @Override
@@ -165,6 +162,7 @@ public class FavoritesProvider extends ContentProvider {
                 builder.setTables(FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL);
                 builder.appendWhere(FavoritesContract.FavoriteColumns.COLUMN_TV_SHOW_ID
                         + " = " + uri.getLastPathSegment());
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
