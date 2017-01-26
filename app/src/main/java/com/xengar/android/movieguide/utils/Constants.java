@@ -45,4 +45,5 @@ public final class  Constants {
     public static final String POPULAR_TV_SHOWS = "PopularTVShows";
     public static final String TOP_RATED_TV_SHOWS = "TopRatedTVShows";
     public static final String ON_THE_AIR_TV_SHOWS = "OnTheAirTVShows";
+    public static final String FAVORITE_TV_SHOWS = "FavoriteTVShows";
 }

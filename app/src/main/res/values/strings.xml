@@ -41,6 +41,7 @@
     <string name="menu_option_popular_tv_shows">Popular TV shows</string>
     <string name="menu_option_top_rated_tv_shows">Top rated TV shows</string>
     <string name="menu_option_on_the_air_tv_shows">On the air TV shows</string>
+    <string name="menu_option_favorite_tv_shows">Favorite TV shows</string>
 
     <!-- Details Movie -->
     <string name="cheese_ipsum">Jarlsberg lancashire edam. Dolcelatte hard cheese brie st. agur blue
