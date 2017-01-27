@@ -16,6 +16,7 @@
 package com.xengar.android.movieguide.ui;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -77,6 +78,7 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_POSTER_PATH;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PROD_COMPANIES;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_STATUS;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TV_SHOW_ID;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_VOTE_AVERAGE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_VOTE_COUNT;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
@@ -132,6 +134,9 @@ public class TVShowActivity extends AppCompatActivity
     private GridView gridview; // Cast list
     private final boolean[] gridViewResized = {false}; // boolean for resize gridview hack
 
+    private FloatingActionButton fabAdd, fabDel;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,15 +153,6 @@ public class TVShowActivity extends AppCompatActivity
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         tvShowId = prefs.getInt(TV_SHOW_ID, -1);
         tvShowTitle[0] = "Sample TV Show";
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         title = (TextView) findViewById(R.id.title);
         rating = (LinearLayout) findViewById(R.id.rating);
@@ -189,6 +185,7 @@ public class TVShowActivity extends AppCompatActivity
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), tvShowTitle);
+        showFavoriteButtons();
     }
 
     @Override
@@ -217,6 +214,75 @@ public class TVShowActivity extends AppCompatActivity
         if (youTubePlayer != null) {
             youTubePlayer.release();
         }
+    }
+
+    /**
+     * Defines if add or remove from Favorites should be initially visible for this movieId.
+     */
+    private void showFavoriteButtons() {
+        fabAdd = (FloatingActionButton) findViewById(R.id.fab_add);
+        fabDel = (FloatingActionButton) findViewById(R.id.fab_minus);
+
+        Cursor cursor = getContentResolver().query(ContentUris.withAppendedId(URI, tvShowId),
+                new String[]{COLUMN_TV_SHOW_ID}, null, null, null);
+        if (cursor != null && cursor.getCount() != 0) {
+            fabDel.setVisibility(View.VISIBLE);
+        } else {
+            fabAdd.setVisibility(View.VISIBLE);
+        }
+        if (cursor != null)
+            cursor.close();
+    }
+
+    /**
+     * Defines what to do when click on add/remove from Favorites buttons.
+     * @param container
+     */
+    private void defineClickFavoriteButtons(final TVShowData container) {
+        final int DURATION = 1000;
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, getString(R.string.favorite_tvshow_add_message), DURATION)
+                        .setAction("Action", null).show();
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_TV_SHOW_ID, tvShowId);
+                values.put(COLUMN_NAME, container.getName());
+                values.put(COLUMN_OVERVIEW, container.getOverview());
+                values.put(COLUMN_POSTER_PATH, container.getPosterPath());
+                values.put(COLUMN_BACKGROUND_PATH, container.getBackgroundPath());
+                values.put(COLUMN_VOTE_AVERAGE, container.getVoteAverage());
+                values.put(COLUMN_VOTE_COUNT, container.getVoteCount());
+                values.put(COLUMN_ORIGINAL_LANGUAGE, container.getOriginalLanguage());
+                values.put(COLUMN_ORIGINAL_COUNTRIES, container.getOriginalCountries());
+                values.put(COLUMN_GENRES, container.getGenres().toString());
+                values.put(COLUMN_STATUS, container.getStatus());
+                values.put(COLUMN_PROD_COMPANIES, container.getProductionCompanies().toString());
+                values.put(COLUMN_HOMEPAGE, container.getHomepage());
+                values.put(COLUMN_FIRST_AIR_DATE, container.getFirstAirDate());
+                values.put(COLUMN_LAST_AIR_DATE, container.getLastAirDate());
+                values.put(COLUMN_NUM_SEASONS, container.getNumSeasons());
+                values.put(COLUMN_NUM_EPISODES, container.getNumEpisodes());
+                getContentResolver().insert(URI, values);
+
+                fabAdd.setVisibility(View.INVISIBLE);
+                fabDel.setVisibility(View.VISIBLE);
+            }
+        });
+
+        fabDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, getString(R.string.favorite_tvshow_del_message), DURATION)
+                        .setAction("Action", null).show();
+                getContentResolver().delete(URI, COLUMN_TV_SHOW_ID + " = ?",
+                        new String[]{Integer.toString(tvShowId)} );
+
+                fabAdd.setVisibility(View.VISIBLE);
+                fabDel.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     /**
@@ -262,6 +328,7 @@ public class TVShowActivity extends AppCompatActivity
         PopulateDetailsProdCompanies(container);
         PopulateDetailsStatus(container);
         PopulateDetailsDates(container);
+        defineClickFavoriteButtons(container);
     }
 
     /**

@@ -338,47 +338,32 @@
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
-            <!--
-                                    <android.support.v7.widget.CardView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/card_margin"
-                                        android:layout_marginLeft="@dimen/card_margin"
-                                        android:layout_marginRight="@dimen/card_margin">
 
-                                        <LinearLayout
-                                            style="@style/Widget.CardContent"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content">
-
-                                            <TextView
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:text="@string/reviews"
-                                                android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-                                            <LinearLayout
-                                                android:id="@+id/movie_reviews"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:orientation="vertical" />
-
-                                        </LinearLayout>
-
-                                    </android.support.v7.widget.CardView>
-                        -->
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
+        android:id="@+id/fab_add"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
+        android:layout_width="wrap_content"
         app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/fab_plus"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        android:visibility="invisible" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_minus"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_anchor="@id/appbar"
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/fab_minus"
+        android:layout_margin="@dimen/fab_margin"
+        android:clickable="true"
+        android:visibility="invisible" />
 
 </android.support.design.widget.CoordinatorLayout>
