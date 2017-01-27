@@ -59,6 +59,8 @@
     <string name="details_view_text_vote_average_divider">/10</string>
     <string name="favorite_movie_add_message">Add Movie to Favorites</string>
     <string name="favorite_movie_del_message">Remove Movie from Favorites</string>
+    <string name="favorite_tvshow_add_message">Add TV Show to Favorites</string>
+    <string name="favorite_tvshow_del_message">Remove TV Show from Favorites</string>
     <string name="title_activity_settings">Settings</string>
 
 
