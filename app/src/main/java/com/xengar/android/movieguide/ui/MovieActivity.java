@@ -102,8 +102,7 @@ public class MovieActivity extends AppCompatActivity
         implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = MovieActivity.class.getSimpleName();
-    private static final Uri URI =
-            Uri.parse("content://" + FavoritesContract.AUTHORITY + "/" + FavoritesContract.PATH_MOVIE);
+    private static final Uri URI = FavoritesContract.FavoriteColumns.uriMovie;
     private static final String SHORT_TEXT_PREVIEW = " \n <font color=#FF8A80>... show more</font>";
     private static final String LONG_TEXT_PREVIEW = " \n<font color=#FF8A80>... show less</font>";
     private static final String END_TEXT_PREVIEW = "\n<font color=#FF8A80> the end!</font>";

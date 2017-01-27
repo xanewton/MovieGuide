@@ -41,10 +41,6 @@ import static com.xengar.android.movieguide.utils.Constants.FAVORITE_TV_SHOWS;
 public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
 
     private static final String TAG = FetchFavorite.class.getSimpleName();
-    private static final Uri FAVORITE_MOVIES_URI =
-            Uri.parse("content://" + FavoritesContract.AUTHORITY + "/" + FavoritesContract.PATH_MOVIE);
-    private static final Uri FAVORITE_TV_SHOW_URI =
-            Uri.parse("content://" + FavoritesContract.AUTHORITY + "/" + FavoritesContract.PATH_TV_SHOW);
     private final String posterBaseUri;
     private final ImageAdapter adapter;
     private final ContentResolver contentResolver;
@@ -61,11 +57,11 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
         this.posterBaseUri = posterBaseUri;
         switch (requestType){
             case FAVORITE_TV_SHOWS:
-                this.uri = FAVORITE_TV_SHOW_URI;
+                this.uri = FavoritesContract.FavoriteColumns.uriTVShow;
                 break;
             case FAVORITE_MOVIES:
             default:
-                this.uri = FAVORITE_MOVIES_URI;
+                this.uri = FavoritesContract.FavoriteColumns.uriMovie;
                 break;
         }
     }

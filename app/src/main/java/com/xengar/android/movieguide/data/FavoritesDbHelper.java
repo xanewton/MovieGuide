@@ -27,7 +27,7 @@ import com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns;
 public class FavoritesDbHelper extends SQLiteOpenHelper {
 
     // Name of the database file
-    private static final String DATABASE_NAME = "Favorites.db";
+    public static final String DATABASE_NAME = "Favorites.db";
 
     // Database version. If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 2;
