@@ -96,8 +96,7 @@ public class TVShowActivity extends AppCompatActivity
         implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = TVShowActivity.class.getSimpleName();
-    private static final Uri URI =
-            Uri.parse("content://" + FavoritesContract.AUTHORITY + "/" + FavoritesContract.PATH_TV_SHOW);
+    private static final Uri URI = FavoritesContract.FavoriteColumns.uriTVShow;
     private int tvShowId;
     private CollapsingToolbarLayout collapsingToolbar;
     private final String[] tvShowTitle = {" "};

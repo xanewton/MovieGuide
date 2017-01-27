@@ -24,6 +24,9 @@
     <string name="network_not_available_message">Network is not available!</string>
     <string name="remote_service_connection_error">Cannot load data from remote service!</string>
 
+    <string name="error_unknown_uri">Unknown URI: </string>
+    <string name="error_failed_insert_row">Failed to insert row into URI: </string>
+
     <!-- Slide menu options -->
     <string name="menu_title_movies">Movies</string>
     <string name="menu_option_top_rated">Top rated</string>

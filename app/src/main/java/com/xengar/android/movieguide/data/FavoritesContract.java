@@ -15,6 +15,7 @@
  */
 package com.xengar.android.movieguide.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 /**
@@ -23,6 +24,7 @@ import android.provider.BaseColumns;
 public final class FavoritesContract {
 
     public static final String AUTHORITY = "com.xengar.android.movieguide";
+    public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
     public static final String PATH_MOVIE = "movie";
     public static final String PATH_MOVIE_ID = "movie/*";
     public static final String PATH_TV_SHOW = "tvshow";
@@ -34,6 +36,9 @@ public final class FavoritesContract {
 
     /* Inner class that defines the table contents */
     public static final class FavoriteColumns implements BaseColumns {
+        public static final Uri uriMovie = BASE_URI.buildUpon().appendPath(PATH_MOVIE).build();
+        public static final Uri uriTVShow = BASE_URI.buildUpon().appendPath(PATH_TV_SHOW).build();
+
         public static final String FAVORITE_MOVIES_TBL = "FAVORITE_MOVIES_TBL";
         public static final String COLUMN_MOVIE_ID = "movieid";
         public static final String COLUMN_TITLE = "title";
@@ -62,5 +67,18 @@ public final class FavoritesContract {
         public static final String COLUMN_LAST_AIR_DATE = "last_air_date";
         public static final String COLUMN_NUM_EPISODES = "num_episodes";
         public static final String COLUMN_NUM_SEASONS = "num_seasons";
+
+
+        public static Uri makeUriForMovie(String symbol) {
+            return uriMovie.buildUpon().appendPath(symbol).build();
+        }
+
+        public static Uri makeUriForTVShow(String symbol) {
+            return uriTVShow.buildUpon().appendPath(symbol).build();
+        }
+
+        public static String getIdFromUri(Uri uri) {
+            return uri.getLastPathSegment();
+        }
     }
 }

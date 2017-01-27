@@ -26,6 +26,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.xengar.android.movieguide.R;
+
 /**
  * {@link ContentProvider} for MovieGuide app.
  */
@@ -33,13 +35,13 @@ public class FavoritesProvider extends ContentProvider {
 
     private static final String TAG = FavoritesProvider.class.getSimpleName();
     // URI matcher code for the content URI for the FAVORITE_MOVIES_TBL table
-    private static final int MOVIES = 100;
+    public static final int MOVIES = 100;
     // URI matcher code for the content URI for a single movie in the FAVORITE_MOVIES_TBL table
-    private static final int MOVIE_ID = 101;
+    public static final int MOVIE_ID = 101;
     // URI matcher code for the content URI for the FAVORITE_TV_SHOWS_TBL table
-    private static final int TV_SHOWS = 200;
+    public static final int TV_SHOWS = 200;
     // URI matcher code for the content URI for a single movie in the FAVORITE_TV_SHOWS_TBL table
-    private static final int TV_SHOW_ID = 201;
+    public static final int TV_SHOW_ID = 201;
 
     private FavoritesDbHelper helper;
 
@@ -48,9 +50,12 @@ public class FavoritesProvider extends ContentProvider {
      * The input passed into the constructor represents the code to return for the root URI.
      * It's common to use NO_MATCH as the input for this case.
      */
-    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    static final UriMatcher sUriMatcher = buildUriMatcher();
 
-    static {
+
+    static UriMatcher buildUriMatcher() {
+        UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+
         // The calls to addURI() go here, for all of the content URI patterns that the provider
         // should recognize. All paths added to the UriMatcher have a corresponding code to return
         // when a match is found.
@@ -58,7 +63,7 @@ public class FavoritesProvider extends ContentProvider {
         // The content URI of the form "content://com.xengar.android.movieguide/movie" will map to
         // the integer code {@link #MOVIES}. This URI is used to provide access to MULTIPLE rows
         // of the verbs table.
-        sUriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIE, MOVIES);
+        matcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIE, MOVIES);
 
         // The content URI of the form "content://com.xengar.android.movieguide/movie/#" will map
         // to the integer code {@link #MOVIE_ID}. This URI is used to provide access to ONE single
@@ -67,12 +72,13 @@ public class FavoritesProvider extends ContentProvider {
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
         // For example, "content://com.xengar.android.movieguide/movie/3" matches, but
         // "content://com.xengar.android.movieguide/movie" (without a number at the end) doesn't.
-        sUriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIE_ID, MOVIE_ID);
+        matcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_MOVIE_ID, MOVIE_ID);
 
-        sUriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_TV_SHOW, TV_SHOWS);
-        sUriMatcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_TV_SHOW_ID, TV_SHOW_ID);
+        matcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_TV_SHOW, TV_SHOWS);
+        matcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_TV_SHOW_ID, TV_SHOW_ID);
+
+        return matcher;
     }
-
 
     // Constructor
     public FavoritesProvider() {
@@ -91,8 +97,15 @@ public class FavoritesProvider extends ContentProvider {
             case TV_SHOW_ID:
                 table = FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
                 break;
+            default:
+                throw new UnsupportedOperationException(
+                        getContext().getString(R.string.error_unknown_uri) + uri);
         }
-        return db.delete(table, selection, selectionArgs);
+        int rowsDeleted = db.delete(table, selection, selectionArgs);
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsDeleted;
     }
 
     @Override
@@ -114,23 +127,31 @@ public class FavoritesProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        String table = null, column = null;
+        String table = null;
         switch (sUriMatcher.match(uri)) {
             case MOVIES:
             case MOVIE_ID:
                 table = FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL;
-                column = FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID;
                 break;
             case TV_SHOWS:
             case TV_SHOW_ID:
                 table = FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
-                column = FavoritesContract.FavoriteColumns.COLUMN_TV_SHOW_ID;
                 break;
+            default:
+                throw new UnsupportedOperationException(
+                        getContext().getString(R.string.error_unknown_uri) + uri);
         }
 
         long rowId = db.insert(table, null, values);
         Log.v(TAG, "rowId = " + rowId);
-        return ContentUris.withAppendedId(uri, values.getAsInteger(column));
+        Uri returnUri = null;
+        if (rowId > 0)
+            returnUri = ContentUris.withAppendedId(uri, rowId);
+        else
+            throw new android.database.SQLException(
+                    getContext().getString(R.string.error_failed_insert_row) + uri);
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnUri;
     }
 
     @Override
@@ -167,7 +188,10 @@ public class FavoritesProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
 
-        return builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor returnCursor =
+                builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return returnCursor;
     }
 
     @Override
@@ -183,8 +207,14 @@ public class FavoritesProvider extends ContentProvider {
             case TV_SHOW_ID:
                 table = FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
                 break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        return db.update(table, values, selection, selectionArgs);
+        int rowsUpdated = db.update(table, values, selection, selectionArgs);
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+        return rowsUpdated;
     }
 }
