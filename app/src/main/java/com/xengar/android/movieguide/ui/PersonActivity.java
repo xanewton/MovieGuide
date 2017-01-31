@@ -244,11 +244,13 @@ public class PersonActivity extends AppCompatActivity {
         }
 
         // Add movie
+        int adds = 0;
         ImageAdapter adapter = new ImageAdapter(getApplicationContext(), ImageAdapter.MOVIE_IMAGE);
         for (final ImageItem movie : data) {
-            adapter.add(movie);
+            adds += adapter.add(movie);
         }
-        adapter.notifyDataSetChanged();
+        if (adds != 0)
+            adapter.notifyDataSetChanged();
         gridview.setAdapter(adapter);
         gridview.setVisibility(View.VISIBLE);
 

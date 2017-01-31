@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity
                 || itemType.equals(ON_THE_AIR_TV_SHOWS) || itemType.equals(FAVORITE_TV_SHOWS)) {
             ActivityUtils.launchTVShowActivity(getApplicationContext(), itemId);
         } else {
-            ActivityUtils.launchMoviActivity(getApplicationContext(), itemId);
+            ActivityUtils.launchMovieActivity(getApplicationContext(), itemId);
         }
     }
 }
