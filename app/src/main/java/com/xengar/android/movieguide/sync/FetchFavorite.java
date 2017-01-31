@@ -99,10 +99,12 @@ public class FetchFavorite extends AsyncTask<Void, Void, ArrayList<ImageItem>> {
     protected void onPostExecute(ArrayList<ImageItem> posters) {
         super.onPostExecute(posters);
         if (posters != null) {
+            int adds = 0;
             for (ImageItem poster : posters) {
-                adapter.add(poster);
+                adds += adapter.add(poster);
             }
-            adapter.notifyDataSetChanged();
+            if (adds != 0)
+                adapter.notifyDataSetChanged();
         }
     }
 }

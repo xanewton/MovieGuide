@@ -116,7 +116,7 @@ public class ImageAdapter extends BaseAdapter {
             public void onClick(View v) {
                 ImageItem item = (ImageItem) v.getTag();
                 if (type.contentEquals(MOVIE_IMAGE)) {
-                    ActivityUtils.launchMoviActivity(mContext, item.getImageId());
+                    ActivityUtils.launchMovieActivity(mContext, item.getImageId());
                 } else if (type.contentEquals(CAST_IMAGE)) {
                     ActivityUtils.launchPersonActivity(mContext, item.getImageId());
                 }
@@ -198,13 +198,14 @@ public class ImageAdapter extends BaseAdapter {
      * Adds an image item.
      * @param item
      */
-    public void add(ImageItem item) {
+    public int add(ImageItem item) {
         if (idSet.contains(item.getImageId())) {
             Log.w(TAG, "Poster item duplicate found, itemID = " + item.getImageId());
-            return;
+            return 0;
         }
         images.add(item);
         idSet.add(item.getImageId());
+        return 1;
     }
 
     public void addAll(List<ImageItem> list) {

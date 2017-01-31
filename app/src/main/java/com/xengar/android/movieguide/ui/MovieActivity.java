@@ -674,7 +674,7 @@ public class MovieActivity extends AppCompatActivity
         }
 
         // Add cast
-        int index = 0;
+        int index = 0, adds = 0;
         int maxCast = ActivityUtils.getPreferenceMaxCastItems(getApplicationContext());
         ImageAdapter adapter = new ImageAdapter(getApplicationContext(), ImageAdapter.CAST_IMAGE);
         // Assume the cast will always come sorted
@@ -683,10 +683,11 @@ public class MovieActivity extends AppCompatActivity
                 break;
             }
             index++;
-            adapter.add(new ImageItem(cast.getCastImagePath(), cast.getPersonId(),
+            adds += adapter.add(new ImageItem(cast.getCastImagePath(), cast.getPersonId(),
                                         cast.getCastName(), cast.getCharacter()));
         }
-        adapter.notifyDataSetChanged();
+        if (adds != 0)
+            adapter.notifyDataSetChanged();
         gridview.setAdapter(adapter);
         gridview.setVisibility(View.VISIBLE);
 

@@ -337,7 +337,7 @@ public class ActivityUtils {
      * @param context
      * @param movieId
      */
-    public static void launchMoviActivity(final Context context, final int movieId) {
+    public static void launchMovieActivity(final Context context, final int movieId) {
         // Save movieId to Preferences
         saveIntToPreferences(context, MOVIE_ID, movieId);
 

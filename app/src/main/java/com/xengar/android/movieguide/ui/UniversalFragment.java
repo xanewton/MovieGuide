@@ -125,8 +125,7 @@ public class UniversalFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        boolean isConnected = checkInternetConnection();
-        if (!isConnected && !itemType.equals("favorites")) {
+        if (!checkInternetConnection()) {
             Log.e(TAG, "Network is not available");
             Toast toast = Toast.makeText(getActivity().getApplicationContext(),
                     R.string.network_not_available_message, Toast.LENGTH_LONG);
@@ -197,9 +196,9 @@ public class UniversalFragment extends Fragment {
             if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
                 if (!loadingState) {
-                    FetchPoster fetchTopRated =
+                    FetchPoster fetchPoster =
                             new FetchPoster(itemType, adapter, this, apiKey, posterBaseUri, sortOrder);
-                    fetchTopRated.execute(totalItemCount / PAGE_SIZE + 1);
+                    fetchPoster.execute(totalItemCount / PAGE_SIZE + 1);
                     loadingState = true;
                 }
             }

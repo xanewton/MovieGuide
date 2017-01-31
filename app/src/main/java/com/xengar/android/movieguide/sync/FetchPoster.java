@@ -50,7 +50,7 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
     private static final String TV_TOP_RATED = "/tv/top_rated";
     private static final String TV_ON_THE_AIR = "/tv/on_the_air";
 
-    private final FetchItemListener fetchMovieListener;
+    private final FetchItemListener fetchItemListener;
     private final String posterBaseUri;
     private final ImageAdapter adapter;
     private final String apiKey;
@@ -59,10 +59,10 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
 
     // Constructor
     public FetchPoster(String itemType, ImageAdapter adapter,
-                       FetchItemListener fetchMovieListener, String apiKey,
+                       FetchItemListener fetchItemListener, String apiKey,
                        String posterBaseUri, String sortOrder) {
         this.itemType = itemType;
-        this.fetchMovieListener = fetchMovieListener;
+        this.fetchItemListener = fetchItemListener;
         this.posterBaseUri = posterBaseUri;
         this.adapter = adapter;
         this.apiKey = apiKey;
@@ -94,16 +94,18 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
     }
 
     @Override
-    protected void onPostExecute(ArrayList<ImageItem> moviePosters) {
-        super.onPostExecute(moviePosters);
-        if (moviePosters != null) {
-            for (ImageItem res : moviePosters) {
-                adapter.add(res);
+    protected void onPostExecute(ArrayList<ImageItem> posters) {
+        super.onPostExecute(posters);
+        if (posters != null) {
+            int adds = 0;
+            for (ImageItem poster : posters) {
+                adds += adapter.add(poster);
             }
-            adapter.notifyDataSetChanged();
-            fetchMovieListener.onFetchCompleted();
+            if (adds != 0)
+                adapter.notifyDataSetChanged();
+            fetchItemListener.onFetchCompleted();
         } else {
-            fetchMovieListener.onFetchFailed();
+            fetchItemListener.onFetchFailed();
         }
     }
 
