@@ -33,7 +33,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private FrameLayout fragmentLayout;
+    //private FrameLayout fragmentLayout;
     private TabLayout tabLayout;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -82,6 +81,7 @@ public class MainActivity extends AppCompatActivity
             toolbar.setVisibility(View.GONE);
         }
 
+
         // Save name of activity, in case of calling SettingsActivity
         ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
                 MAIN_ACTIVITY);
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         String page = prefs.getString(ITEM_CATEGORY, MOVIES);
 
-        fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
+        //fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), page);
 
         // Set up the ViewPager with the sections adapter.
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         showPage(page);
-        launchFragment(POPULAR_TV_SHOWS);
+        //launchFragment(POPULAR_TV_SHOWS);
 
         // set selected
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -240,11 +240,13 @@ public class MainActivity extends AppCompatActivity
 
     private void showTabs(boolean show){
         if (show){
-            fragmentLayout.setVisibility(View.GONE);
-            tabLayout.setVisibility(View.VISIBLE);
+            //fragmentLayout.setVisibility(View.GONE);
+            if (ActivityUtils.getPreferenceShowToolbar(getApplicationContext())) {
+                tabLayout.setVisibility(View.VISIBLE);
+            }
             mViewPager.setVisibility(View.VISIBLE);
         } else {
-            fragmentLayout.setVisibility(View.VISIBLE);
+            //fragmentLayout.setVisibility(View.VISIBLE);
             tabLayout.setVisibility(View.GONE);
             mViewPager.setVisibility(View.GONE);
         }
