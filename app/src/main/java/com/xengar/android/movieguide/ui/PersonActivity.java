@@ -211,7 +211,7 @@ public class PersonActivity extends AppCompatActivity {
                                           final String backgroundPosterPath,
                                           Callback callback) {
 
-        ActivityUtils.loadImage(this, profilePosterPath, true, R.drawable.no_movie_poster,
+        ActivityUtils.loadImage(this, profilePosterPath, true, R.drawable.disk_reel,
                 personalProfImage, null);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {

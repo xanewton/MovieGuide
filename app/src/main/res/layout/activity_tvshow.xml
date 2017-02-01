@@ -143,7 +143,7 @@
                             android:id="@+id/tvshow_poster"
                             android:layout_width="@dimen/movie_details_image_layout_width"
                             android:layout_height="@dimen/movie_details_image_layout_height"
-                            android:src="@drawable/no_movie_poster"
+                            android:src="@drawable/disk_reel"
                             android:layout_marginBottom="1dp" />
 
                         <LinearLayout

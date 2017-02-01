@@ -358,7 +358,7 @@ public class MovieActivity extends AppCompatActivity
     private void PopulateDetailsPoster(final MovieData container, Callback callback) {
 
         ActivityUtils.loadImage(this, POSTER_BASE_URI + container.getPosterPath(), true,
-                R.drawable.no_movie_poster, moviePoster, null);
+                R.drawable.disk_reel, moviePoster, null);
 
         String backgroundPosterPath = container.getBackgroundPath();
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
