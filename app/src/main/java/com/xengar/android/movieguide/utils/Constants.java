@@ -24,6 +24,7 @@ public final class  Constants {
     public static final String ITEM_CATEGORY = "item_category";
     public static final String MOVIES = "Movies";
     public static final String TV_SHOWS = "TV Shows";
+    public static final String FAVORITES = "Favorites";
 
     public static final String UPCOMING_MOVIES = "UpcomingMovies";
     public static final String POPULAR_MOVIES = "PopularMovies";

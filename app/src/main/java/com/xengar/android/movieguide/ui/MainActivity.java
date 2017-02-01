@@ -41,6 +41,7 @@ import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
 
+import static com.xengar.android.movieguide.utils.Constants.FAVORITES;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         showPage(page);
-        launchFragment(page);
+        launchFragment(POPULAR_TV_SHOWS);
 
         // set selected
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -118,13 +119,8 @@ public class MainActivity extends AppCompatActivity
             case TV_SHOWS:
                 navigationView.setCheckedItem(R.id.nav_tv_shows);
                 break;
-            case FAVORITE_MOVIES:
-                getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
-                navigationView.setCheckedItem(R.id.nav_favorite_movies);
-                break;
-            case FAVORITE_TV_SHOWS:
-                getSupportActionBar().setTitle(R.string.menu_option_favorite_tv_shows);
-                navigationView.setCheckedItem(R.id.nav_favorite_tv_shows);
+            case FAVORITES:
+                navigationView.setCheckedItem(R.id.nav_favorites);
                 break;
         }
     }
@@ -168,38 +164,41 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_movies) {
-            if (!mSectionsPagerAdapter.getType().equals(MOVIES)) {
-                mSectionsPagerAdapter
-                        = new SectionsPagerAdapter(getSupportFragmentManager(), MOVIES);
-                mViewPager.setAdapter(mSectionsPagerAdapter);
-            }
-            showPage(MOVIES);
+        switch(id) {
+            case R.id.nav_movies:
+                switchPagerAdapter(MOVIES);
+                showPage(MOVIES);
+                break;
 
-        } else if (id == R.id.nav_tv_shows) {
-            if (!mSectionsPagerAdapter.getType().equals(TV_SHOWS)) {
-                mSectionsPagerAdapter
-                        = new SectionsPagerAdapter(getSupportFragmentManager(), TV_SHOWS);
-                mViewPager.setAdapter(mSectionsPagerAdapter);
-            }
-            showPage(TV_SHOWS);
+            case R.id.nav_tv_shows:
+                switchPagerAdapter(TV_SHOWS);
+                showPage(TV_SHOWS);
+                break;
 
-        } else if (id == R.id.nav_favorite_movies) {
-            showPage(FAVORITE_MOVIES);
+            case R.id.nav_favorites:
+                switchPagerAdapter(FAVORITES);
+                showPage(FAVORITES);
+                break;
 
-        } else if (id == R.id.nav_favorite_tv_shows) {
-            showPage(FAVORITE_TV_SHOWS);
+            case R.id.nav_share:
+                getSupportActionBar().setTitle(R.string.app_name);
+                break;
 
-        } else if (id == R.id.nav_share) {
-            getSupportActionBar().setTitle(R.string.app_name);
-
-        } else if (id == R.id.nav_send) {
-            getSupportActionBar().setTitle(R.string.app_name);
+            case R.id.nav_send:
+                getSupportActionBar().setTitle(R.string.app_name);
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void switchPagerAdapter(String page){
+        if (!mSectionsPagerAdapter.getType().equals(page)) {
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), page);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+        }
     }
 
     @Override
@@ -231,16 +230,10 @@ public class MainActivity extends AppCompatActivity
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, TV_SHOWS);
                 break;
 
-            case FAVORITE_MOVIES:
-                showTabs(false);
-                launchFragment(FAVORITE_MOVIES);
-                getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
-                break;
-
-            case FAVORITE_TV_SHOWS:
-                showTabs(false);
-                launchFragment(FAVORITE_TV_SHOWS);
-                getSupportActionBar().setTitle(R.string.menu_option_favorite_tv_shows);
+            case FAVORITES:
+                showTabs(true);
+                getSupportActionBar().setTitle(R.string.menu_option_favorites);
+                ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, FAVORITES);
                 break;
         }
     }
@@ -291,19 +284,20 @@ public class MainActivity extends AppCompatActivity
                 = {TOP_RATED_MOVIES, UPCOMING_MOVIES, NOW_PLAYING_MOVIES, POPULAR_MOVIES};
         private final String CATEGORY_TV_SHOWS[]
                 = {POPULAR_TV_SHOWS, TOP_RATED_TV_SHOWS, ON_THE_AIR_TV_SHOWS};
+        private final String CATEGORY_FAVORITES[] = {FAVORITE_MOVIES, FAVORITE_TV_SHOWS};
+
         private final String TITLE_CATEGORY_MOVIES[]
-                = { getString(R.string.title_top_rated),
-                    getString(R.string.title_upcomming),
-                    getString(R.string.title_now_playing),
-                    getString(R.string.title_popular)};
+                = { getString(R.string.title_top_rated), getString(R.string.title_upcomming),
+                    getString(R.string.title_now_playing), getString(R.string.title_popular)};
         private final String TITLE_CATEGORY_TV_SHOWS[]
-                = { getString(R.string.title_popular),
-                getString(R.string.title_top_rated),
-                getString(R.string.title_on_the_air)};
+                = { getString(R.string.title_popular), getString(R.string.title_top_rated),
+                    getString(R.string.title_on_the_air)};
+        private final String TITLE_CATEGORY_FAVORITES[]
+                = { getString(R.string.menu_title_movies), getString(R.string.menu_title_tv_shows)};
 
         private ArrayList<UniversalFragment> fragments;
-        private String tabs[];
-        private String titleTabs[];
+        private String tabs[] = null;
+        private String titleTabs[] = null;
         private String type;
 
         /**
@@ -313,19 +307,26 @@ public class MainActivity extends AppCompatActivity
          */
         public SectionsPagerAdapter(FragmentManager fm, String type) {
             super(fm);
-
             this.type = type;
-            fragments = new ArrayList<UniversalFragment>();
-            tabs = (type.contentEquals(MOVIES))? CATEGORY_MOVIES
-                    : (type.contentEquals(TV_SHOWS))? CATEGORY_TV_SHOWS : null;
-            titleTabs = (type.contentEquals(MOVIES))? TITLE_CATEGORY_MOVIES
-                    : (type.contentEquals(TV_SHOWS))? TITLE_CATEGORY_TV_SHOWS : null;
+            switch(type){
+                case MOVIES:
+                    tabs = CATEGORY_MOVIES;
+                    titleTabs = TITLE_CATEGORY_MOVIES;
+                    break;
+                case TV_SHOWS:
+                    tabs = CATEGORY_TV_SHOWS;
+                    titleTabs = TITLE_CATEGORY_TV_SHOWS;
+                    break;
+                case FAVORITES:
+                    tabs = CATEGORY_FAVORITES;
+                    titleTabs = TITLE_CATEGORY_FAVORITES;
+                    break;
+            }
 
-            Bundle bundle;
-            UniversalFragment fragment;
+            fragments = new ArrayList<UniversalFragment>();
             for (int i = 0; tabs != null && i < tabs.length; i++){
-                fragment = new UniversalFragment();
-                bundle = new Bundle();
+                UniversalFragment fragment = new UniversalFragment();
+                Bundle bundle = new Bundle();
                 bundle.putString(ITEM_CATEGORY, tabs[i]);
                 fragment.setArguments(bundle);
                 fragments.add( fragment );
@@ -339,8 +340,6 @@ public class MainActivity extends AppCompatActivity
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            //return PlaceholderFragment.newInstance(position + 1);
             UniversalFragment fragment = fragments.get(position);
             return fragment;
         }
