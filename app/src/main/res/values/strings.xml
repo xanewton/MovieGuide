@@ -29,6 +29,7 @@
 
     <!-- Slide menu options -->
     <string name="menu_title_movies">Movies</string>
+    <string name="menu_option_movies">Movies</string>
     <string name="menu_option_top_rated">Top rated</string>
     <string name="menu_option_upcomming">Upcoming</string>
     <string name="menu_option_now_playing">Now playing</string>
@@ -45,6 +46,12 @@
     <string name="menu_option_top_rated_tv_shows">Top rated TV shows</string>
     <string name="menu_option_on_the_air_tv_shows">On the air TV shows</string>
     <string name="menu_option_favorite_tv_shows">Favorite TV shows</string>
+
+    <string name="title_top_rated">Top rated</string>
+    <string name="title_upcomming">Upcoming</string>
+    <string name="title_now_playing">Now playing</string>
+    <string name="title_popular">Popular</string>
+    <string name="title_on_the_air">On the air</string>
 
     <!-- Details Movie -->
     <string name="cheese_ipsum">Jarlsberg lancashire edam. Dolcelatte hard cheese brie st. agur blue

@@ -17,7 +17,6 @@ package com.xengar.android.movieguide.ui;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -46,7 +45,6 @@ import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
-import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
@@ -64,32 +62,37 @@ public class UniversalFragment extends Fragment {
     private GridView gridview;
     private String apiKey;
     private String posterBaseUri;
-    private String itemType;
+    private String itemType = UPCOMING_MOVIES;
 
 
     public UniversalFragment() {
         // Required empty public constructor
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new ImageAdapter(getActivity(), ImageAdapter.POSTER_IMAGE);
         setRetainInstance(true);
-
-        SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
-        itemType = prefs.getString(ITEM_CATEGORY, UPCOMING_MOVIES);
-        if (itemType.equals(POPULAR_MOVIES)) {
-            sortOrder = "popularity.desc";
-        } else if (itemType.equals(NOW_PLAYING_MOVIES)) {
-            sortOrder = "current.desc";
-        }
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
+        //itemType = prefs.getString(ITEM_CATEGORY, UPCOMING_MOVIES);
+        if (getArguments() != null)
+            itemType = getArguments().getString(ITEM_CATEGORY, UPCOMING_MOVIES);
+
+        if (itemType.equals(POPULAR_MOVIES)) {
+            sortOrder = "popularity.desc";
+        } else if (itemType.equals(NOW_PLAYING_MOVIES)) {
+            sortOrder = "current.desc";
+        }
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.universal_fragment, container, false);
         Log.v(TAG, "onCreateView");
