@@ -168,7 +168,7 @@ public class ImageAdapter extends BaseAdapter {
             castImage.setVisibility(View.GONE);
         } else {
             ActivityUtils.loadImage(mContext, POSTER_PERSON_BASE_URI + image.getImagePath(),
-                    true, R.drawable.no_movie_poster, castImage, null);
+                    true, R.drawable.disk_reel, castImage, null);
         }
     }
 
@@ -190,7 +190,7 @@ public class ImageAdapter extends BaseAdapter {
             poster.setVisibility(View.GONE);
         } else {
             ActivityUtils.loadImage(mContext, image.getImagePath(), true,
-                    R.drawable.no_movie_poster, poster, null);
+                    R.drawable.disk_reel, poster, null);
         }
     }
 

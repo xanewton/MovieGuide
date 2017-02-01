@@ -355,7 +355,7 @@ public class TVShowActivity extends AppCompatActivity
     private void PopulateDetailsPoster(final TVShowData container, Callback callback) {
 
         ActivityUtils.loadImage(this, POSTER_BASE_URI + container.getPosterPath(), true,
-                R.drawable.no_movie_poster, tvShowPoster, null);
+                R.drawable.disk_reel, tvShowPoster, null);
 
         String backgroundPosterPath = container.getBackgroundPath();
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
