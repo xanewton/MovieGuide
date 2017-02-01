@@ -19,7 +19,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,16 +33,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 import com.xengar.android.movieguide.utils.ActivityUtils;
+
+import java.util.ArrayList;
 
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
@@ -45,6 +54,7 @@ import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_TV_SHOWS;
+import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 
 /**
@@ -54,6 +64,11 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    private FrameLayout fragmentLayout;
+    private TabLayout tabLayout;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +94,33 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Set the initial fragment
+
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-        String itemType = prefs.getString(ITEM_CATEGORY, UPCOMING_MOVIES);
-        launchFragment(itemType);
+        String page = prefs.getString(ITEM_CATEGORY, MOVIES);
+
+        fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
+        mSectionsPagerAdapter
+                = new SectionsPagerAdapter(getSupportFragmentManager(), page);
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
+        showPage(page);
+
+
+
+        // Set the initial fragment
+        //SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+        //String itemType = prefs.getString(ITEM_CATEGORY, UPCOMING_MOVIES);
+        launchFragment(page);
+
 
         // change title
+        /*
         switch (itemType){
             case UPCOMING_MOVIES:
                 getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
@@ -122,7 +158,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportActionBar().setTitle(R.string.menu_option_favorite_tv_shows);
                 navigationView.setCheckedItem(R.id.nav_favorite_tv_shows);
                 break;
-        }
+        }*/
     }
 
     @Override
@@ -164,7 +200,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_top_rated_movies) {
+        if (id == R.id.nav_movies) {
+            if (!mSectionsPagerAdapter.getType().equals(MOVIES)) {
+                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), MOVIES);
+                mViewPager.setAdapter(mSectionsPagerAdapter);
+            }
+            showPage(MOVIES);
+
+        } else if (id == R.id.nav_top_rated_movies) {
             launchFragment(TOP_RATED_MOVIES);
             getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
 
@@ -240,4 +283,110 @@ public class MainActivity extends AppCompatActivity
             ActivityUtils.launchMovieActivity(getApplicationContext(), itemId);
         }
     }
+
+    /***
+     * Shows the correct page on screen.
+     * @param page
+     */
+    private void showPage(String page) {
+        switch (page){
+            case MOVIES:
+                fragmentLayout.setVisibility(View.GONE);
+                tabLayout.setVisibility(View.VISIBLE);
+                mViewPager.setVisibility(View.VISIBLE);
+
+                getSupportActionBar().setTitle(R.string.menu_option_movies);
+                // Set sorting preference
+                ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, MOVIES);
+                break;
+        }
+    }
+
+
+
+    /**
+     * VIEW PAGER
+     *
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        private final String CATEGORY_MOVIES[]
+                = {TOP_RATED_MOVIES, UPCOMING_MOVIES, NOW_PLAYING_MOVIES, POPULAR_MOVIES};
+        private final String CATEGORY_TV_SHOWS[]
+                = {POPULAR_TV_SHOWS, TOP_RATED_TV_SHOWS, ON_THE_AIR_TV_SHOWS};
+        private final String TITLE_CATEGORY_MOVIES[]
+                = { getString(R.string.title_top_rated),
+                    getString(R.string.title_upcomming),
+                    getString(R.string.title_now_playing),
+                    getString(R.string.title_popular)};
+        private final String TITLE_CATEGORY_TV_SHOWS[]
+                = { getString(R.string.title_popular),
+                getString(R.string.title_top_rated),
+                getString(R.string.title_on_the_air)};
+
+        private ArrayList<UniversalFragment> fragments;
+        private String tabs[];
+        private String titleTabs[];
+        private String type;
+
+
+        /**
+         * Constructor.
+         * @param fm
+         * @param type
+         */
+        public SectionsPagerAdapter(FragmentManager fm, String type) {
+            super(fm);
+
+            this.type = type;
+            fragments = new ArrayList<UniversalFragment>();
+            tabs = (type.contentEquals(MOVIES))? CATEGORY_MOVIES
+                    : (type.contentEquals(TV_SHOWS))? CATEGORY_TV_SHOWS : null;
+            titleTabs = (type.contentEquals(MOVIES))? TITLE_CATEGORY_MOVIES
+                    : (type.contentEquals(TV_SHOWS))? TITLE_CATEGORY_TV_SHOWS : null;
+
+            Bundle bundle;
+            UniversalFragment fragment;
+            for (int i = 0; tabs != null && i < tabs.length; i++){
+                fragment = new UniversalFragment();
+                bundle = new Bundle();
+                bundle.putString(ITEM_CATEGORY, tabs[i]);
+                fragment.setArguments(bundle);
+                fragments.add( fragment );
+            }
+        }
+
+        /**
+         * Get the Type.
+         * @return
+         */
+        public String getType() {
+            return type;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            //return PlaceholderFragment.newInstance(position + 1);
+
+            UniversalFragment fragment = fragments.get(position);
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return (tabs != null)? tabs.length : 0;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            String title = (position < titleTabs.length)? titleTabs[position]: null;
+            return title;
+        }
+    }
+
+
 }
