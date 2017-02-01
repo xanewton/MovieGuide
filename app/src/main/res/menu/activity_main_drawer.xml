@@ -26,29 +26,11 @@
             android:id="@+id/nav_tv_shows"
             android:icon="@drawable/ic_tv_black_24dp"
             android:title="@string/menu_option_tv_shows" />
+        <item
+            android:id="@+id/nav_favorites"
+            android:icon="@drawable/ic_favorite_black_24dp"
+            android:title="@string/menu_option_favorites" />
     </group>
-
-    <item android:title="@string/menu_title_movies">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_favorite_movies"
-                    android:icon="@drawable/ic_favorite_black_24dp"
-                    android:title="@string/menu_option_favorites" />
-            </group>
-        </menu>
-    </item>
-
-    <item android:title="@string/menu_title_tv_shows">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_favorite_tv_shows"
-                    android:icon="@drawable/ic_favorite_black_24dp"
-                    android:title="@string/menu_option_favorites" />
-            </group>
-        </menu>
-    </item>
 
     <item android:title="Communicate">
         <menu>
