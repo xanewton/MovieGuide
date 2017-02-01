@@ -22,7 +22,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -91,16 +91,12 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
 
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         String page = prefs.getString(ITEM_CATEGORY, MOVIES);
 
         fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
-        mSectionsPagerAdapter
-                = new SectionsPagerAdapter(getSupportFragmentManager(), page);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), page);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -110,55 +106,27 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         showPage(page);
-
-
-
-        // Set the initial fragment
-        //SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-        //String itemType = prefs.getString(ITEM_CATEGORY, UPCOMING_MOVIES);
         launchFragment(page);
 
-
-        // change title
-        /*
-        switch (itemType){
-            case UPCOMING_MOVIES:
-                getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
-                navigationView.setCheckedItem(R.id.nav_upcomming_movies);
+        // set selected
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        switch (page){
+            case MOVIES:
+                navigationView.setCheckedItem(R.id.nav_movies);
                 break;
-            case TOP_RATED_MOVIES:
-                getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
-                navigationView.setCheckedItem(R.id.nav_top_rated_movies);
-                break;
-            case POPULAR_MOVIES:
-                getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
-                navigationView.setCheckedItem(R.id.nav_popular_movies);
-                break;
-            case NOW_PLAYING_MOVIES:
-                getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
-                navigationView.setCheckedItem(R.id.nav_now_playing_movies);
+            case TV_SHOWS:
+                navigationView.setCheckedItem(R.id.nav_tv_shows);
                 break;
             case FAVORITE_MOVIES:
                 getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
                 navigationView.setCheckedItem(R.id.nav_favorite_movies);
                 break;
-            case POPULAR_TV_SHOWS:
-                getSupportActionBar().setTitle(R.string.menu_option_popular_tv_shows);
-                navigationView.setCheckedItem(R.id.nav_popular_tv_shows);
-                break;
-            case TOP_RATED_TV_SHOWS:
-                getSupportActionBar().setTitle(R.string.menu_option_top_rated_tv_shows);
-                navigationView.setCheckedItem(R.id.nav_top_rated_tv_shows);
-                break;
-            case ON_THE_AIR_TV_SHOWS:
-                getSupportActionBar().setTitle(R.string.menu_option_on_the_air_tv_shows);
-                navigationView.setCheckedItem(R.id.nav_on_the_air_tv_shows);
-                break;
             case FAVORITE_TV_SHOWS:
                 getSupportActionBar().setTitle(R.string.menu_option_favorite_tv_shows);
                 navigationView.setCheckedItem(R.id.nav_favorite_tv_shows);
                 break;
-        }*/
+        }
     }
 
     @Override
@@ -202,46 +170,25 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_movies) {
             if (!mSectionsPagerAdapter.getType().equals(MOVIES)) {
-                mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), MOVIES);
+                mSectionsPagerAdapter
+                        = new SectionsPagerAdapter(getSupportFragmentManager(), MOVIES);
                 mViewPager.setAdapter(mSectionsPagerAdapter);
             }
             showPage(MOVIES);
 
-        } else if (id == R.id.nav_top_rated_movies) {
-            launchFragment(TOP_RATED_MOVIES);
-            getSupportActionBar().setTitle(R.string.menu_option_top_rated_movies);
-
-        } else if (id == R.id.nav_upcomming_movies) {
-            launchFragment(UPCOMING_MOVIES);
-            getSupportActionBar().setTitle(R.string.menu_option_upcomming_movies);
-
-        } else if (id == R.id.nav_now_playing_movies) {
-            launchFragment(NOW_PLAYING_MOVIES);
-            getSupportActionBar().setTitle(R.string.menu_option_now_playing_movies);
-
-        } else if (id == R.id.nav_popular_movies) {
-            launchFragment(POPULAR_MOVIES);
-            getSupportActionBar().setTitle(R.string.menu_option_popular_movies);
+        } else if (id == R.id.nav_tv_shows) {
+            if (!mSectionsPagerAdapter.getType().equals(TV_SHOWS)) {
+                mSectionsPagerAdapter
+                        = new SectionsPagerAdapter(getSupportFragmentManager(), TV_SHOWS);
+                mViewPager.setAdapter(mSectionsPagerAdapter);
+            }
+            showPage(TV_SHOWS);
 
         } else if (id == R.id.nav_favorite_movies) {
-            launchFragment(FAVORITE_MOVIES);
-            getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
-
-        } else if (id == R.id.nav_popular_tv_shows) {
-            launchFragment(POPULAR_TV_SHOWS);
-            getSupportActionBar().setTitle(R.string.menu_option_popular_tv_shows);
-
-        } else if (id == R.id.nav_top_rated_tv_shows) {
-            launchFragment(TOP_RATED_TV_SHOWS);
-            getSupportActionBar().setTitle(R.string.menu_option_top_rated_tv_shows);
-
-        } else if (id == R.id.nav_on_the_air_tv_shows) {
-            launchFragment(ON_THE_AIR_TV_SHOWS);
-            getSupportActionBar().setTitle(R.string.menu_option_on_the_air_tv_shows);
+            showPage(FAVORITE_MOVIES);
 
         } else if (id == R.id.nav_favorite_tv_shows) {
-            launchFragment(FAVORITE_TV_SHOWS);
-            getSupportActionBar().setTitle(R.string.menu_option_favorite_tv_shows);
+            showPage(FAVORITE_TV_SHOWS);
 
         } else if (id == R.id.nav_share) {
             getSupportActionBar().setTitle(R.string.app_name);
@@ -253,24 +200,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    /**
-     * Launches the selected fragment.
-     *
-     * @param category The type of search
-     */
-    private void launchFragment(String category) {
-        // Set sorting preference
-        ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, category);
-
-        // Handle selecting item action
-        UniversalFragment fragment = new UniversalFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
     }
 
     @Override
@@ -291,26 +220,72 @@ public class MainActivity extends AppCompatActivity
     private void showPage(String page) {
         switch (page){
             case MOVIES:
-                fragmentLayout.setVisibility(View.GONE);
-                tabLayout.setVisibility(View.VISIBLE);
-                mViewPager.setVisibility(View.VISIBLE);
-
+                showTabs(true);
                 getSupportActionBar().setTitle(R.string.menu_option_movies);
-                // Set sorting preference
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, MOVIES);
+                break;
+
+            case TV_SHOWS:
+                showTabs(true);
+                getSupportActionBar().setTitle(R.string.menu_option_tv_shows);
+                ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, TV_SHOWS);
+                break;
+
+            case FAVORITE_MOVIES:
+                showTabs(false);
+                launchFragment(FAVORITE_MOVIES);
+                getSupportActionBar().setTitle(R.string.menu_option_favorite_movies);
+                break;
+
+            case FAVORITE_TV_SHOWS:
+                showTabs(false);
+                launchFragment(FAVORITE_TV_SHOWS);
+                getSupportActionBar().setTitle(R.string.menu_option_favorite_tv_shows);
                 break;
         }
     }
 
+    private void showTabs(boolean show){
+        if (show){
+            fragmentLayout.setVisibility(View.GONE);
+            tabLayout.setVisibility(View.VISIBLE);
+            mViewPager.setVisibility(View.VISIBLE);
+        } else {
+            fragmentLayout.setVisibility(View.VISIBLE);
+            tabLayout.setVisibility(View.GONE);
+            mViewPager.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Launches the selected fragment.
+     * @param category The type of search
+     */
+    private void launchFragment(String category) {
+        // Save page type
+        ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, category);
+
+        Bundle bundle = new Bundle();
+        bundle.putString(ITEM_CATEGORY, category);
+
+        // Handle selecting item action
+        UniversalFragment fragment = new UniversalFragment();
+        fragment.setArguments(bundle);
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+
 
 
     /**
-     * VIEW PAGER
-     *
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * A {@link FragmentStatePagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         private final String CATEGORY_MOVIES[]
                 = {TOP_RATED_MOVIES, UPCOMING_MOVIES, NOW_PLAYING_MOVIES, POPULAR_MOVIES};
@@ -330,7 +305,6 @@ public class MainActivity extends AppCompatActivity
         private String tabs[];
         private String titleTabs[];
         private String type;
-
 
         /**
          * Constructor.
@@ -358,10 +332,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        /**
-         * Get the Type.
-         * @return
-         */
         public String getType() {
             return type;
         }
@@ -371,7 +341,6 @@ public class MainActivity extends AppCompatActivity
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             //return PlaceholderFragment.newInstance(position + 1);
-
             UniversalFragment fragment = fragments.get(position);
             return fragment;
         }
@@ -387,6 +356,5 @@ public class MainActivity extends AppCompatActivity
             return title;
         }
     }
-
 
 }
