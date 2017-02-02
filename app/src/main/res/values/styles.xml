@@ -74,4 +74,13 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="InMovieCircularProgressBar" parent="Theme.SmoothProgressBarDefaults">
+        <item name="cpb_color">@color/colorAccent</item>
+        <item name="cpb_stroke_width">4dp</item>
+        <item name="cpb_min_sweep_angle">10</item>
+        <item name="cpb_max_sweep_angle">300</item>
+        <item name="cpb_sweep_speed">0.9</item>
+        <item name="cpb_rotation_speed">0.9</item>
+    </style>
+
 </resources>
