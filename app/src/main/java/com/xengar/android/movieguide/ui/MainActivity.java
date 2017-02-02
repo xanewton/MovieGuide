@@ -33,6 +33,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
@@ -43,6 +44,7 @@ import java.util.ArrayList;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITES;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_TV_SHOWS;
+import static com.xengar.android.movieguide.utils.Constants.HOME;
 import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    //private FrameLayout fragmentLayout;
+    private FrameLayout fragmentLayout;
     private TabLayout tabLayout;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         String page = prefs.getString(ITEM_CATEGORY, MOVIES);
 
-        //fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
+        fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), page);
 
         // Set up the ViewPager with the sections adapter.
@@ -107,12 +109,15 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         showPage(page);
-        //launchFragment(POPULAR_TV_SHOWS);
+        launchFragment(HOME);
 
         // set selected
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         switch (page){
+            case HOME:
+                navigationView.setCheckedItem(R.id.nav_home);
+                break;
             case MOVIES:
                 navigationView.setCheckedItem(R.id.nav_movies);
                 break;
@@ -165,6 +170,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         switch(id) {
+            case R.id.nav_home:
+                showPage(HOME);
+                break;
+
             case R.id.nav_movies:
                 switchPagerAdapter(MOVIES);
                 showPage(MOVIES);
@@ -218,6 +227,12 @@ public class MainActivity extends AppCompatActivity
      */
     private void showPage(String page) {
         switch (page){
+            case HOME:
+                showTabs(false);
+                getSupportActionBar().setTitle(R.string.menu_option_home);
+                ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, HOME);
+                break;
+
             case MOVIES:
                 showTabs(true);
                 getSupportActionBar().setTitle(R.string.menu_option_movies);
@@ -240,13 +255,13 @@ public class MainActivity extends AppCompatActivity
 
     private void showTabs(boolean show){
         if (show){
-            //fragmentLayout.setVisibility(View.GONE);
+            fragmentLayout.setVisibility(View.GONE);
             if (ActivityUtils.getPreferenceShowToolbar(getApplicationContext())) {
                 tabLayout.setVisibility(View.VISIBLE);
             }
             mViewPager.setVisibility(View.VISIBLE);
         } else {
-            //fragmentLayout.setVisibility(View.VISIBLE);
+            fragmentLayout.setVisibility(View.VISIBLE);
             tabLayout.setVisibility(View.GONE);
             mViewPager.setVisibility(View.GONE);
         }
@@ -264,7 +279,9 @@ public class MainActivity extends AppCompatActivity
         bundle.putString(ITEM_CATEGORY, category);
 
         // Handle selecting item action
-        UniversalFragment fragment = new UniversalFragment();
+        //UniversalFragment fragment = new UniversalFragment();
+        //fragment.setArguments(bundle);
+        HomeFragment fragment = new HomeFragment();
         fragment.setArguments(bundle);
         android.support.v4.app.FragmentTransaction fragmentTransaction =
                 getSupportFragmentManager().beginTransaction();
