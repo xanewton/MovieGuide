@@ -27,73 +27,70 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.data.Movie;
+import com.xengar.android.movieguide.data.TV;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 import com.xengar.android.movieguide.utils.Constants;
 
 import java.util.List;
 
 /**
- * HomeMovieAdapter
+ * HomeTVAdapter
  */
-public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.MovieHolder> {
+public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> {
 
-    private List<Movie> mMovies;
+    private List<TV> mTVs;
 
-    public HomeMovieAdapter(List<Movie> movies) {
-        mMovies = movies;
+    public HomeTVAdapter(List<TV> tvs) {
+        mTVs = tvs;
     }
 
     @Override
-    public MovieHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TVHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View v = inflater.inflate(R.layout.item_home, parent, false);
-        return new MovieHolder(v);
+        return new TVHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(MovieHolder holder, int position) {
-        Movie movie = mMovies.get(position);
-        holder.bindMovie(movie);
+    public void onBindViewHolder(TVHolder holder, int position) {
+        TV tv = mTVs.get(position);
+        holder.bindTv(tv);
     }
 
     @Override
     public int getItemCount() {
-        return (mMovies != null) ? mMovies.size() : 0;
+        return (mTVs != null) ? mTVs.size() : 0;
     }
 
-
     /**
-     * MovieHolder
+     * TVHolder
      */
-    public class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class TVHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private Context mContext;
-        private Movie mMovie;
-        ImageView moviePoster;
-        TextView movieTitle;
+        private TV mTV;
+        ImageView tvPoster;
+        TextView tvTitle;
 
-        public MovieHolder(View itemView) {
+        public TVHolder(View itemView) {
             super(itemView);
-            moviePoster = (ImageView) itemView.findViewById(R.id.item_home_poster);
-            movieTitle = (TextView) itemView.findViewById(R.id.item_home_title);
+            tvPoster = (ImageView) itemView.findViewById(R.id.item_home_poster);
+            tvTitle = (TextView) itemView.findViewById(R.id.item_home_title);
             mContext = itemView.getContext();
             itemView.setOnClickListener(this);
         }
 
-        void bindMovie(Movie movie) {
-            mMovie = movie;
-            movieTitle.setText(movie.getTitle());
-            Drawable placeholder =
-                    ResourcesCompat.getDrawable(
-                            mContext.getResources(), R.drawable.disk_reel, null);
+        void bindTv(TV tv) {
+            mTV = tv;
+            tvTitle.setText(tv.getName());
+            Drawable placeholder = ResourcesCompat.getDrawable(
+                    mContext.getResources(), R.drawable.disk_reel, null);
             Picasso.with(mContext)
-                    .load(Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W342
-                            + movie.getPosterPath())
+                    .load(Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W342 + tv.getPosterPath())
                     .placeholder(placeholder)
                     .fit().centerCrop()
                     .noFade()
-                    .into(moviePoster);
+                    .into(tvPoster);
         }
 
         // Handles the item click.
@@ -102,9 +99,8 @@ public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.Movi
             int position = getAdapterPosition(); // gets item position
             // Check if an item was deleted, but the user clicked it before the UI removed it
             if (position != RecyclerView.NO_POSITION) {
-                ActivityUtils.launchMovieActivity(mContext, Integer.valueOf(mMovie.getId()));
+                ActivityUtils.launchTVShowActivity(mContext, Integer.valueOf(mTV.getId()));
             }
         }
-
     }
 }
