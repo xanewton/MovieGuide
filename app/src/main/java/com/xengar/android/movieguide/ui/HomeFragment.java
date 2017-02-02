@@ -24,11 +24,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.HomeMovieAdapter;
+import com.xengar.android.movieguide.adapters.HomeTVAdapter;
 import com.xengar.android.movieguide.data.Movie;
 import com.xengar.android.movieguide.data.MovieResults;
+import com.xengar.android.movieguide.data.TV;
+import com.xengar.android.movieguide.data.TVResults;
 import com.xengar.android.movieguide.service.DiscoverService;
 import com.xengar.android.movieguide.service.ServiceGenerator;
 import com.xengar.android.movieguide.utils.FragmentUtils;
@@ -42,16 +46,29 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.xengar.android.movieguide.utils.Constants.MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
+
 /**
  * HomeFragment
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener{
 
-    private RecyclerView mRecyclerView;
-    private CircularProgressBar progressBar;
-    private HomeMovieAdapter mAdapter;
+    private static final int MAX_ITEMS = 25;
+
+    private LinearLayout moreMovies;
+    private RecyclerView mRecyclerViewMovies;
+    private CircularProgressBar progressBarMovies;
+    private HomeMovieAdapter mAdapterMovies;
     private List<Movie> mMovies;
     private int mPage = 1;
+    private String mLang;
+
+    private LinearLayout moreTV;
+    private RecyclerView mRecyclerViewTV;
+    private CircularProgressBar progressBarTV;
+    private HomeTVAdapter mAdapterTV;
+    private List<TV> mTVList;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -60,30 +77,43 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mLang = FragmentUtils.getFormatLocale(getActivity());
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.home_fragment, container, false);
-        fillMoviesSection(view);
+
+        moreMovies = (LinearLayout) view.findViewById(R.id.home_in_theaters);
+        moreMovies.setOnClickListener(this);
+        mRecyclerViewMovies = (RecyclerView) view.findViewById(R.id.recycler_view_movies);
+        progressBarMovies = (CircularProgressBar) view.findViewById(R.id.progressBarMovies);
+        mMovies = new ArrayList<>();
+        mAdapterMovies = new HomeMovieAdapter(mMovies);
+        fillMoviesSection();
+
+        moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
+        moreTV.setOnClickListener(this);
+        mRecyclerViewTV = (RecyclerView) view.findViewById(R.id.recycler_view_tv);
+        progressBarTV = (CircularProgressBar) view.findViewById(R.id.progressBarTV);
+        mTVList = new ArrayList<>();
+        mAdapterTV = new HomeTVAdapter(mTVList);
+        fillTVSection();
+
         return view;
     }
 
     /**
-     * Fills the Movies section
-     * @param view
+     * Fills the Movies section.
      */
-    private void fillMoviesSection(View view){
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_movies);
-        progressBar = (CircularProgressBar) view.findViewById(R.id.progressBarMovies);
-        mMovies = new ArrayList<>();
-        mAdapter = new HomeMovieAdapter(mMovies);
-        mRecyclerView.setLayoutManager(
+    private void fillMoviesSection(){
+        mRecyclerViewMovies.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        mRecyclerView.setAdapter(mAdapter);
-        updateProgressBar(true);
+        mRecyclerViewMovies.setAdapter(mAdapterMovies);
+        updateProgressBar(progressBarMovies, true);
 
         DiscoverService discover = ServiceGenerator.createService(DiscoverService.class);
-        String lang = FragmentUtils.getFormatLocale(getActivity());
         Call<MovieResults> call = discover.inTheaters(getString(R.string.THE_MOVIE_DB_API_TOKEN),
-                lang, mPage, "popularity.desc", StringUtils.inTheatersLte(),
+                mLang, mPage, "popularity.desc", StringUtils.inTheatersLte(),
                 StringUtils.inTheatersGte());
         call.enqueue(new Callback<MovieResults>() {
             @Override
@@ -92,17 +122,17 @@ public class HomeFragment extends Fragment {
                     List<Movie> movies = response.body().getMovies();
                     mMovies.clear();
                     if (movies != null) {
-                        if (movies.size() < 10) {
+                        if (movies.size() < MAX_ITEMS) {
                             mMovies.addAll(movies);
                         } else {
-                            for (int i = 0; i < 10; i++) {
+                            for (int i = 0; i < MAX_ITEMS && i < movies.size(); i++) {
                                 Movie movie = movies.get(i);
                                 mMovies.add(movie);
                             }
                         }
-                        mAdapter.notifyDataSetChanged();
+                        mAdapterMovies.notifyDataSetChanged();
                     }
-                    updateProgressBar(false);
+                    updateProgressBar(progressBarMovies, false);
                 } else {
                     Log.i("TAG", "Res: " + response.code());
                 }
@@ -111,13 +141,73 @@ public class HomeFragment extends Fragment {
             @Override
             public void onFailure(Call<MovieResults> call, Throwable t) {
                 Log.i("TAG", "Error: " + t.getMessage());
-                updateProgressBar(false);
+                updateProgressBar(progressBarMovies, false);
             }
         });
     }
 
-    private void updateProgressBar(boolean visibility) {
+    private void updateProgressBar(CircularProgressBar progressBar, boolean visibility) {
         progressBar.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * Fills the TV section.
+     */
+    private void fillTVSection(){
+        mRecyclerViewTV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerViewTV.setAdapter(mAdapterTV);
+
+        updateProgressBar(progressBarTV, true);
+        DiscoverService service = ServiceGenerator.createService(DiscoverService.class);
+        Call<TVResults> call = service.onTv(StringUtils.getDateOnTheAir(),
+                StringUtils.getDateToday(), "popularity.desc", mLang, mPage,
+                getString(R.string.THE_MOVIE_DB_API_TOKEN));
+        call.enqueue(new Callback<TVResults>() {
+            @Override
+            public void onResponse(Call<TVResults> call, Response<TVResults> response) {
+                if (response.isSuccessful()) {
+                    List<TV> tvs = response.body().getTVs();
+                    mTVList.clear();
+                    if (tvs != null) {
+                        for (int i = 0; i < MAX_ITEMS && i < tvs.size() ; i++) {
+                            TV tv = tvs.get(i);
+                            mTVList.add(tv);
+                        }
+                        mAdapterTV.notifyDataSetChanged();
+                    }
+                    updateProgressBar(progressBarTV, false);
+                } else {
+                    Log.i("TAG", "Res: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TVResults> call, Throwable t) {
+                Log.i("TAG", "Error: " + t.getMessage());
+                updateProgressBar(progressBarTV, false);
+            }
+        });
+    }
+
+    /**
+     * Changes activity to the correct page.
+     * @param view
+     */
+    @Override
+    public void onClick(View view) {
+        MainActivity activity = (MainActivity) getActivity();
+        switch(view.getId()){
+            case R.id.home_in_theaters:
+                activity.switchPagerAdapter(MOVIES);
+                activity.showPage(MOVIES);
+                activity.assignCheckedItem(MOVIES);
+                break;
+
+            case R.id.home_on_tv:
+                activity.switchPagerAdapter(TV_SHOWS);
+                activity.showPage(TV_SHOWS);
+                activity.assignCheckedItem(TV_SHOWS);
+                break;
+        }
+    }
 }

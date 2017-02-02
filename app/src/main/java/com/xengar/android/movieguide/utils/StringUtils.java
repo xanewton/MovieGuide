@@ -46,4 +46,17 @@ public class StringUtils {
         gte.set(Calendar.DAY_OF_YEAR, gte.get(Calendar.DAY_OF_YEAR) - 25);
         return format.format(gte.getTime());
     }
+
+    public static String getDateOnTheAir() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar week = Calendar.getInstance();
+        week.set(Calendar.DAY_OF_YEAR, week.get(Calendar.DAY_OF_YEAR) + 7);
+        return format.format(week.getTime());
+    }
+
+    public static String getDateToday() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar today = Calendar.getInstance();
+        return format.format(today.getTime());
+    }
 }

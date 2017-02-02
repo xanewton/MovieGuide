@@ -110,7 +110,10 @@ public class MainActivity extends AppCompatActivity
 
         showPage(page);
         launchFragment(HOME);
+        assignCheckedItem(page);
+    }
 
+    public void assignCheckedItem(String page){
         // set selected
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -203,7 +206,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void switchPagerAdapter(String page){
+    public void switchPagerAdapter(String page){
         if (!mSectionsPagerAdapter.getType().equals(page)) {
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), page);
             mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -225,7 +228,7 @@ public class MainActivity extends AppCompatActivity
      * Shows the correct page on screen.
      * @param page
      */
-    private void showPage(String page) {
+    public void showPage(String page) {
         switch (page){
             case HOME:
                 showTabs(false);
