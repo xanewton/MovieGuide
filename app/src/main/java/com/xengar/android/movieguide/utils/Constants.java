@@ -51,4 +51,10 @@ public final class  Constants {
     public static final String TOP_RATED_TV_SHOWS = "TopRatedTVShows";
     public static final String ON_THE_AIR_TV_SHOWS = "OnTheAirTVShows";
     public static final String FAVORITE_TV_SHOWS = "FavoriteTVShows";
+
+
+    public static final String TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/";
+    public static final String POSTER_SIZE_W342 = "w342";
+
+    public static final String PREF_MOVIES_LANGUAGE = "movies_language";
 }

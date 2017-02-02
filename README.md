@@ -17,6 +17,9 @@ The app uses TMDb API for posters and information.
 - Picasso library https://github.com/square/picasso
 - Glide library https://github.com/bumptech/glide
 - Apache Commons Lang library https://commons.apache.org/proper/commons-lang/
+- Gson library https://guides.codepath.com/android/Leveraging-the-Gson-Library
+- Retrofit2 library https://github.com/square/retrofit
+- okhttp3 librabry https://github.com/square/okhttp
 
 ## Getting Started
 The app uses The Movie Database API and YouTubeAndroidPlayerApi.

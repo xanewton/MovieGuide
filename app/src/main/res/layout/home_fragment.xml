@@ -52,12 +52,29 @@
             android:text="@string/more"/>
     </LinearLayout>
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_weight="1"
-        android:id="@+id/fragment_movie_container"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
-        tools:layout="@layout/home_recycler_view"/>
+        android:layout_height="210dp" >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_movies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v7.widget.RecyclerView>
+
+        <fr.castorflex.android.circularprogressbar.CircularProgressBar
+            android:id="@+id/progressBarMovies"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:indeterminate="true"
+            android:layout_centerInParent="true"
+            style="@style/InMovieCircularProgressBar"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+    </RelativeLayout>
+
 
     <LinearLayout
         android:id="@+id/home.on_tv"
