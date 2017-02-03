@@ -41,6 +41,7 @@ import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.ArrayList;
 
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITES;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_TV_SHOWS;
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
+    private HomeFragment homeFragment;
+    private DiscoverFragment discoverFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +86,6 @@ public class MainActivity extends AppCompatActivity
         if (!showToolbar) {
             toolbar.setVisibility(View.GONE);
         }
-
 
         // Save name of activity, in case of calling SettingsActivity
         ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
@@ -108,10 +111,12 @@ public class MainActivity extends AppCompatActivity
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        homeFragment = new HomeFragment();
+        discoverFragment = new DiscoverFragment();
         showPage(page);
-        launchFragment(HOME);
         assignCheckedItem(page);
     }
+
 
     public void assignCheckedItem(String page){
         // set selected
@@ -129,6 +134,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case FAVORITES:
                 navigationView.setCheckedItem(R.id.nav_favorites);
+                break;
+            case DISCOVER:
+                navigationView.setCheckedItem(R.id.nav_discover);
                 break;
         }
     }
@@ -192,6 +200,10 @@ public class MainActivity extends AppCompatActivity
                 showPage(FAVORITES);
                 break;
 
+            case R.id.nav_discover:
+                showPage(DISCOVER);
+                break;
+
             case R.id.nav_share:
                 getSupportActionBar().setTitle(R.string.app_name);
                 break;
@@ -234,6 +246,7 @@ public class MainActivity extends AppCompatActivity
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_home);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, HOME);
+                launchFragment(HOME);
                 break;
 
             case MOVIES:
@@ -252,6 +265,13 @@ public class MainActivity extends AppCompatActivity
                 showTabs(true);
                 getSupportActionBar().setTitle(R.string.menu_option_favorites);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, FAVORITES);
+                break;
+
+            case DISCOVER:
+                showTabs(false);
+                getSupportActionBar().setTitle(R.string.menu_option_discover);
+                ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, DISCOVER);
+                launchFragment(DISCOVER);
                 break;
         }
     }
@@ -275,22 +295,21 @@ public class MainActivity extends AppCompatActivity
      * @param category The type of search
      */
     private void launchFragment(String category) {
-        // Save page type
-        ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, category);
+        android.support.v4.app.FragmentTransaction fragmentTransaction
+                = getSupportFragmentManager().beginTransaction();
+        switch (category) {
+            case HOME:
+                fragmentTransaction.replace(R.id.fragment_container, homeFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
 
-        Bundle bundle = new Bundle();
-        bundle.putString(ITEM_CATEGORY, category);
-
-        // Handle selecting item action
-        //UniversalFragment fragment = new UniversalFragment();
-        //fragment.setArguments(bundle);
-        HomeFragment fragment = new HomeFragment();
-        fragment.setArguments(bundle);
-        android.support.v4.app.FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+            case DISCOVER:
+                fragmentTransaction.replace(R.id.fragment_container, discoverFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
+        }
     }
 
 

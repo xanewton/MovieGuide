@@ -77,6 +77,14 @@
     <string name="favorite_tvshow_del_message">Remove TV Show from Favorites</string>
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Discover strings -->
+    <string name="discover_type">Type</string>
+    <string name="discover_genres">Genres</string>
+    <string name="discover_minimum_rating">Minimum Rating</string>
+    <string name="discover_sort">Sort By</string>
+    <string name="discover_any_genres">any</string>
+    <string name="show">Show</string>
+
 
     <!-- Strings related to Settings -->
     <!-- Example General settings -->
