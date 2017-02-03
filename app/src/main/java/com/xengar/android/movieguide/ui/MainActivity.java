@@ -42,6 +42,7 @@ import com.xengar.android.movieguide.utils.ActivityUtils;
 import java.util.ArrayList;
 
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_RESULT;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITES;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITE_TV_SHOWS;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity
 
     private HomeFragment homeFragment;
     private DiscoverFragment discoverFragment;
+    private DiscoverResultFragment discoverResultFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +115,7 @@ public class MainActivity extends AppCompatActivity
 
         homeFragment = new HomeFragment();
         discoverFragment = new DiscoverFragment();
+        discoverResultFragment = new DiscoverResultFragment();
         showPage(page);
         assignCheckedItem(page);
     }
@@ -136,6 +139,7 @@ public class MainActivity extends AppCompatActivity
                 navigationView.setCheckedItem(R.id.nav_favorites);
                 break;
             case DISCOVER:
+            case DISCOVER_RESULT:
                 navigationView.setCheckedItem(R.id.nav_discover);
                 break;
         }
@@ -273,6 +277,13 @@ public class MainActivity extends AppCompatActivity
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, DISCOVER);
                 launchFragment(DISCOVER);
                 break;
+
+            case DISCOVER_RESULT:
+                showTabs(false);
+                getSupportActionBar().setTitle(R.string.menu_option_discover);
+                ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, DISCOVER);
+                launchFragment(DISCOVER_RESULT);
+                break;
         }
     }
 
@@ -306,6 +317,12 @@ public class MainActivity extends AppCompatActivity
 
             case DISCOVER:
                 fragmentTransaction.replace(R.id.fragment_container, discoverFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
+
+            case DISCOVER_RESULT:
+                fragmentTransaction.replace(R.id.fragment_container, discoverResultFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;

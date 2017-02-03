@@ -27,6 +27,7 @@ public final class  Constants {
     public static final String FAVORITES = "Favorites";
     public static final String HOME = "Home";
     public static final String DISCOVER = "Discover";
+    public static final String DISCOVER_RESULT = "Discover Result";
 
     public static final String UPCOMING_MOVIES = "UpcomingMovies";
     public static final String POPULAR_MOVIES = "PopularMovies";

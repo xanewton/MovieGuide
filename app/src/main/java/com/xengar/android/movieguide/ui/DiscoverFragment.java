@@ -37,10 +37,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.data.FilterData;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_RESULT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,7 +96,7 @@ public class DiscoverFragment extends Fragment
         ratingView = (TextView) view.findViewById(R.id.discover_rating);
         ratingSeekBar = (AppCompatSeekBar) view.findViewById(R.id.discover_rating_bar);
 
-        //mType = DiscoverResultFragment.TYPE_MOVIES;
+        mType = DiscoverResultFragment.TYPE_MOVIES;
 
         mGenresList = new HashSet<>();
         mGenresValuesList = new HashSet<>();
@@ -115,13 +118,13 @@ public class DiscoverFragment extends Fragment
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        /*String[] sortValues;
+        String[] sortValues;
         if (mType == DiscoverResultFragment.TYPE_MOVIES) {
             sortValues = getResources().getStringArray(R.array.sortValuesMovie);
         } else {
-            sortValues = getResources().getStringArray(R.array.sortValuesTv);
+            sortValues = getResources().getStringArray(R.array.sortValuesTV);
         }
-        mSortValue = sortValues[adapterView.getSelectedItemPosition()];*/
+        mSortValue = sortValues[adapterView.getSelectedItemPosition()];
     }
 
     @Override
@@ -155,13 +158,12 @@ public class DiscoverFragment extends Fragment
                 break;
 
             case R.id.discover_discover:
-                /*
                 FilterData data = new FilterData();
                 data.setType(mType);
                 data.setGenres(mGenresValues);
                 data.setSortType(mSortValue);
                 data.setMinRating(mMinRating);
-                */
+                activity.showPage(DISCOVER_RESULT);
                 break;
         }
     }
@@ -169,7 +171,7 @@ public class DiscoverFragment extends Fragment
     // Called when a checkbox changes
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        //mType = b ? DiscoverResultFragment.TYPE_MOVIES : DiscoverResultFragment.TYPE_TV;
+        mType = b ? DiscoverResultFragment.TYPE_MOVIES : DiscoverResultFragment.TYPE_TV;
         int textColorLight = ContextCompat.getColor(getActivity(), R.color.colorPrimary);
         int textColorDark = ContextCompat.getColor(getActivity(), R.color.colorGray);
         moviesRadioButton.setTextColor(b ? textColorLight : textColorDark);
