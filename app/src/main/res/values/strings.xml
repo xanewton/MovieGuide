@@ -30,6 +30,7 @@
     <!-- Slide menu options -->
     <string name="menu_title_movies">Movies</string>
     <string name="menu_option_movies">Movies</string>
+    <string name="menu_option_discover">Discover</string>
     <string name="menu_option_home">Home</string>
     <string name="menu_option_tv_shows">TV Shows</string>
     <string name="menu_option_top_rated">Top rated</string>
