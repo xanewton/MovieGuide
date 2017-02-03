@@ -34,6 +34,10 @@
             android:id="@+id/nav_favorites"
             android:icon="@drawable/ic_favorite_black_24dp"
             android:title="@string/menu_option_favorites" />
+        <item
+            android:id="@+id/nav_discover"
+            android:icon="@drawable/ic_discover_black_24dp"
+            android:title="@string/menu_option_discover" />
     </group>
 
     <item android:title="Communicate">
