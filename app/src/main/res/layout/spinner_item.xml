@@ -14,17 +14,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
  -->
-<resources>
-    <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#FF000000</color>
-    <color name="colorAccent">#FF28496B</color>
-    <color name="colorGray">#FF777777</color>
-
-    <color name="colorBackground">#4f8293</color>
-
-    <color name="movie_details_text_color">#c63b3b</color>
-    <color name="textcolor">#024c61</color>
-    <color name="textcolorPrimary">#fde4a9</color>
-    <color name="textcolorSec">#8f2626</color>
-    <color name="trailerColor">#E8EAF6</color>
-</resources>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:ellipsize="marquee"
+    android:maxLines="1"
+    android:textAlignment="inherit"
+    android:textSize="14sp" />
