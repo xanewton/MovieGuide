@@ -66,5 +66,5 @@ public final class  Constants {
     public static final String POSTER_SIZE_W342 = "w342";
     public static final String PROFILE_SIZE_W185 = "w185";
 
-    public static final String PREF_MOVIES_LANGUAGE = "movies_language";
+    public static final String PREF_QUERY_LANGUAGE = "pref_query_language";
 }
