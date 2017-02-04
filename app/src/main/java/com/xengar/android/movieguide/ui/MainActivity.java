@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
 
     private HomeFragment homeFragment;
     private DiscoverFragment discoverFragment;
-    private DiscoverResultFragment discoverResultFragment;
+    //private DiscoverResultFragment discoverResultFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +115,8 @@ public class MainActivity extends AppCompatActivity
 
         homeFragment = new HomeFragment();
         discoverFragment = new DiscoverFragment();
-        discoverResultFragment = new DiscoverResultFragment();
-        showPage(page);
+        //discoverResultFragment = new DiscoverResultFragment();
+        showPage(page, null);
         assignCheckedItem(page);
     }
 
@@ -186,26 +186,26 @@ public class MainActivity extends AppCompatActivity
 
         switch(id) {
             case R.id.nav_home:
-                showPage(HOME);
+                showPage(HOME, null);
                 break;
 
             case R.id.nav_movies:
                 switchPagerAdapter(MOVIES);
-                showPage(MOVIES);
+                showPage(MOVIES, null);
                 break;
 
             case R.id.nav_tv_shows:
                 switchPagerAdapter(TV_SHOWS);
-                showPage(TV_SHOWS);
+                showPage(TV_SHOWS, null);
                 break;
 
             case R.id.nav_favorites:
                 switchPagerAdapter(FAVORITES);
-                showPage(FAVORITES);
+                showPage(FAVORITES, null);
                 break;
 
             case R.id.nav_discover:
-                showPage(DISCOVER);
+                showPage(DISCOVER, null);
                 break;
 
             case R.id.nav_share:
@@ -232,8 +232,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemSelectionClick(String itemType, int itemId) {
         Log.v(TAG, "onItemSelectionClick itemId = " + itemId + " itemType = " + itemType);
-        if (itemType.equals(POPULAR_TV_SHOWS) || itemType.equals(TOP_RATED_TV_SHOWS)
-                || itemType.equals(ON_THE_AIR_TV_SHOWS) || itemType.equals(FAVORITE_TV_SHOWS)) {
+        if (itemType.equals(TV_SHOWS) || itemType.equals(POPULAR_TV_SHOWS)
+                || itemType.equals(TOP_RATED_TV_SHOWS) || itemType.equals(ON_THE_AIR_TV_SHOWS)
+                || itemType.equals(FAVORITE_TV_SHOWS)) {
             ActivityUtils.launchTVShowActivity(getApplicationContext(), itemId);
         } else {
             ActivityUtils.launchMovieActivity(getApplicationContext(), itemId);
@@ -244,13 +245,13 @@ public class MainActivity extends AppCompatActivity
      * Shows the correct page on screen.
      * @param page
      */
-    public void showPage(String page) {
+    public void showPage(String page, Bundle args) {
         switch (page){
             case HOME:
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_home);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, HOME);
-                launchFragment(HOME);
+                launchFragment(HOME, null);
                 break;
 
             case MOVIES:
@@ -275,14 +276,14 @@ public class MainActivity extends AppCompatActivity
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_discover);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, DISCOVER);
-                launchFragment(DISCOVER);
+                launchFragment(DISCOVER, null);
                 break;
 
             case DISCOVER_RESULT:
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_discover);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, DISCOVER);
-                launchFragment(DISCOVER_RESULT);
+                launchFragment(DISCOVER_RESULT, args);
                 break;
         }
     }
@@ -305,23 +306,30 @@ public class MainActivity extends AppCompatActivity
      * Launches the selected fragment.
      * @param category The type of search
      */
-    private void launchFragment(String category) {
+    private void launchFragment(String category, Bundle args) {
         android.support.v4.app.FragmentTransaction fragmentTransaction
                 = getSupportFragmentManager().beginTransaction();
         switch (category) {
             case HOME:
+                if (args != null)
+                    homeFragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragment_container, homeFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
 
             case DISCOVER:
+                if (args != null)
+                    discoverFragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragment_container, discoverFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
 
             case DISCOVER_RESULT:
+                DiscoverResultFragment discoverResultFragment = new DiscoverResultFragment();
+                if (args != null)
+                    discoverResultFragment.setArguments(args);
                 fragmentTransaction.replace(R.id.fragment_container, discoverResultFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();

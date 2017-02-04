@@ -21,4 +21,5 @@ package com.xengar.android.movieguide.sync;
 public interface FetchItemListener {
     void onFetchCompleted();
     void onFetchFailed();
+    void lastPageReached();
 }

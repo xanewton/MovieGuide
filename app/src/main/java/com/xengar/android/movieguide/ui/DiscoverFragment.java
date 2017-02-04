@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import static com.xengar.android.movieguide.utils.Constants.ARG_FILTER_DATA;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_RESULT;
 
 /**
@@ -163,7 +164,10 @@ public class DiscoverFragment extends Fragment
                 data.setGenres(mGenresValues);
                 data.setSortType(mSortValue);
                 data.setMinRating(mMinRating);
-                activity.showPage(DISCOVER_RESULT);
+
+                Bundle args = new Bundle();
+                args.putSerializable(ARG_FILTER_DATA, data);
+                activity.showPage(DISCOVER_RESULT, args);
                 break;
         }
     }
