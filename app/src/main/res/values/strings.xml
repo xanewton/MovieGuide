@@ -21,6 +21,19 @@
 
     <string name="action_search">Search</string>
     <string name="action_settings">Settings</string>
+    <string name="feedback_email" translatable="false">support.xengar@gmail.com</string>
+    <string name="feedback_message" translatable="false">
+        "Hi Support Team,\n\n"
+        "I found the following problem in the Movie Guide application.\n"
+        "[PROBLEM TITLE HERE]\n\n"
+        "I was doing the following when it happened:\n"
+        "1. [ACTION 1]\n"
+        "2. [ACTION 2]\n"
+        "3. [ACTION 3]\n\n"
+        "Could you take a look at this?\n\n"
+        "Thanks,\n"
+        "[USER NAME]"
+    </string>
 
     <string name="network_not_available_message">Network is not available!</string>
     <string name="remote_service_connection_error">Cannot load data from remote service!</string>
@@ -83,7 +96,7 @@
     <string name="title">Title</string>
     <string name="character">character</string>
     <string name="settings">Settings</string>
-    <string name="send">Send</string>
+    <string name="feedback">Feedback</string>
     <string name="popularity">popularity</string>
     <string name="imdb_raiting">imdb_raiting</string>
     <string name="person">person</string>
@@ -111,7 +124,7 @@
     <string name="languages">languages</string>
     <string name="episodes">episodes</string>
     <string name="seasons">seasons</string>
-    
+
     <!-- Discover strings -->
     <string name="discover_type">Type</string>
     <string name="discover_genres">Genres</string>

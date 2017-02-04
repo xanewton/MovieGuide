@@ -15,6 +15,7 @@
  */
 package com.xengar.android.movieguide.ui;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
@@ -212,14 +214,33 @@ public class MainActivity extends AppCompatActivity
                 ActivityUtils.launchSettingsActivity(getApplicationContext());
                 break;
 
-            case R.id.nav_send:
-                getSupportActionBar().setTitle(R.string.app_name);
+            case R.id.nav_feedback:
+                sendFeedback();
                 break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    /**
+     * Send feedback email.
+     */
+    private void sendFeedback(){
+        Intent sendMessage = new Intent(Intent.ACTION_SEND);
+        sendMessage.setType("message/rfc822");
+        sendMessage.putExtra(Intent.EXTRA_EMAIL, new String[]{
+                getResources().getString(R.string.feedback_email)});
+        sendMessage.putExtra(Intent.EXTRA_SUBJECT, "Movie Guide Feedback");
+        sendMessage.putExtra(Intent.EXTRA_TEXT,
+                getResources().getString(R.string.feedback_message));
+        try {
+            startActivity(Intent.createChooser(sendMessage, "Send feedback"));
+        } catch (android.content.ActivityNotFoundException e) {
+            Toast.makeText(MainActivity.this, "Communication app not found",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void switchPagerAdapter(String page){
