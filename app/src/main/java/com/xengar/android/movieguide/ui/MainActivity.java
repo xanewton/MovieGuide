@@ -173,6 +173,9 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             ActivityUtils.launchSettingsActivity(getApplicationContext());
             return true;
+        } else if (id == R.id.action_search) {
+            ActivityUtils.launchSearchActivity(getApplicationContext());
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
