@@ -199,13 +199,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         switch(view.getId()){
             case R.id.home_in_theaters:
                 activity.switchPagerAdapter(MOVIES);
-                activity.showPage(MOVIES);
+                activity.showPage(MOVIES, null);
                 activity.assignCheckedItem(MOVIES);
                 break;
 
             case R.id.home_on_tv:
                 activity.switchPagerAdapter(TV_SHOWS);
-                activity.showPage(TV_SHOWS);
+                activity.showPage(TV_SHOWS, null);
                 activity.assignCheckedItem(TV_SHOWS);
                 break;
         }

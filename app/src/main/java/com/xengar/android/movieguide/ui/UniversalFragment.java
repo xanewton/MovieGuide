@@ -181,6 +181,7 @@ public class UniversalFragment extends Fragment {
             implements AbsListView.OnScrollListener, FetchItemListener {
 
         private static final int PAGE_SIZE = 20;
+        private boolean lastPageReached = false;
         private boolean loadingState = false;
         private String itemType = null;
 
@@ -217,6 +218,11 @@ public class UniversalFragment extends Fragment {
             loadingState = false;
             Toast.makeText(getActivity(), R.string.remote_service_connection_error,
                     Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void lastPageReached(){
+            lastPageReached = true;
         }
     }
 

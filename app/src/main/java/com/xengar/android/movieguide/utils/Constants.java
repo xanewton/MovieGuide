@@ -21,6 +21,7 @@ package com.xengar.android.movieguide.utils;
 public final class  Constants {
 
     public static final String SHARED_PREF_NAME = "com.xengar.android.movieguide";
+    public static final String ARG_FILTER_DATA = "filter_data";
     public static final String ITEM_CATEGORY = "item_category";
     public static final String MOVIES = "Movies";
     public static final String TV_SHOWS = "TV Shows";

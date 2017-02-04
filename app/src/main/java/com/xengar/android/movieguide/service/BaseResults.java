@@ -35,4 +35,12 @@ public class BaseResults {
     public void setPage(int page) {
         mPage = page;
     }
+
+    public int getTotalPages() {
+        return mTotalPages;
+    }
+
+    public int getTotalResults(){
+        return mTotalResults;
+    }
 }
