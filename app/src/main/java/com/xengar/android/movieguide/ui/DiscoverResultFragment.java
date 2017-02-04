@@ -16,6 +16,7 @@
 package com.xengar.android.movieguide.ui;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -30,7 +31,6 @@ import android.widget.GridView;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
-import com.xengar.android.movieguide.data.FilterData;
 import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.data.Movie;
 import com.xengar.android.movieguide.data.MovieResults;
@@ -50,9 +50,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.xengar.android.movieguide.utils.Constants.ARG_FILTER_DATA;
+import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_GENRES;
+import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_MIN_RATING;
+import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_SORT_TYPE;
+import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_TYPE;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 
 /**
@@ -68,7 +72,7 @@ public class DiscoverResultFragment extends Fragment {
     private CircularProgressBar progressBar;
     private CustomErrorView mCustomErrorView;
 
-    private FilterData mFilterData;
+    private int mType;
     private String mGenres;
     private String mSortBy;
     private String mMinRating;
@@ -100,15 +104,16 @@ public class DiscoverResultFragment extends Fragment {
         progressBar = (CircularProgressBar) view.findViewById(R.id.progressBar);
         mCustomErrorView = (CustomErrorView) view.findViewById(R.id.error);
 
-        mFilterData = (FilterData) getArguments().getSerializable(ARG_FILTER_DATA);
+        SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
         mLang = FragmentUtils.getFormatLocale(getActivity());
-        final int type = mFilterData.getType();
-        final String itemType = (type == TYPE_MOVIES)? MOVIES : TV_SHOWS;
 
-        mGenres = mFilterData.getGenres();
+        mType = prefs.getInt(FILTER_DATA_TYPE, TYPE_MOVIES);
+        final String itemType = (mType == TYPE_MOVIES)? MOVIES : TV_SHOWS;
+
+        mGenres = prefs.getString(FILTER_DATA_GENRES, null);
         mGenres = (mGenres == null) ? "" : mGenres;
-        mSortBy = mFilterData.getSortType();
-        mMinRating = mFilterData.getMinRating();
+        mSortBy = prefs.getString(FILTER_DATA_SORT_TYPE, null);
+        mMinRating = prefs.getString(FILTER_DATA_MIN_RATING, null);
 
         gridview = (GridView) view.findViewById(R.id.gridview);
         if (getActivity() instanceof OnItemClickListener) {
@@ -152,7 +157,9 @@ public class DiscoverResultFragment extends Fragment {
             return;
         }
 
-        switch (mFilterData.getType()){
+        adapter.clearData();
+        mTotalPages = 1;
+        switch (mType){
             case TYPE_MOVIES:
                 gridview.setOnScrollListener(new ItemViewScrollListener(MOVIES));
                 break;
