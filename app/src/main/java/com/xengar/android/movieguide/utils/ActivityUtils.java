@@ -44,6 +44,7 @@ import com.squareup.picasso.RequestCreator;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.ui.MovieActivity;
 import com.xengar.android.movieguide.ui.PersonActivity;
+import com.xengar.android.movieguide.ui.SearchActivity;
 import com.xengar.android.movieguide.ui.SettingsActivity;
 import com.xengar.android.movieguide.ui.TVShowActivity;
 
@@ -328,6 +329,16 @@ public class ActivityUtils {
                 SettingsActivity.GeneralPreferenceFragment.class.getName() );
         intent.putExtra( PreferenceActivity.EXTRA_NO_HEADERS, true );
         intent.putExtra( PreferenceActivity.EXTRA_SHOW_FRAGMENT_TITLE, R.string.action_settings);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Launches Search Activity.
+     * @param context
+     */
+    public static void launchSearchActivity(final Context context) {
+        Intent intent = new Intent(context, SearchActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
