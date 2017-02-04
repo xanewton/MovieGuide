@@ -26,6 +26,6 @@ public class FragmentUtils {
 
     public static String getFormatLocale(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return StringUtils.getFormatLocale(prefs.getString(Constants.PREF_MOVIES_LANGUAGE, ""));
+        return StringUtils.getFormatLocale(prefs.getString(Constants.PREF_QUERY_LANGUAGE, ""));
     }
 }
