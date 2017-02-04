@@ -22,6 +22,9 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
+/**
+ * DiscoverService
+ */
 public interface DiscoverService {
 
     @GET("discover/movie")

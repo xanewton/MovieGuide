@@ -62,7 +62,9 @@ public final class  Constants {
 
 
     public static final String TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/";
+    public static final String POSTER_SIZE_W154 = "w154";
     public static final String POSTER_SIZE_W342 = "w342";
+    public static final String PROFILE_SIZE_W185 = "w185";
 
     public static final String PREF_MOVIES_LANGUAGE = "movies_language";
 }

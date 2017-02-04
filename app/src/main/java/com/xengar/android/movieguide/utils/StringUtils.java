@@ -17,8 +17,10 @@ package com.xengar.android.movieguide.utils;
 
 import android.text.TextUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -58,5 +60,19 @@ public class StringUtils {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Calendar today = Calendar.getInstance();
         return format.format(today.getTime());
+    }
+
+    public static String getYear(String dateStr) {
+        dateStr = dateStr != null ? dateStr : "1970-01-01";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Calendar calendar = Calendar.getInstance();
+        try {
+            Date date = format.parse(dateStr);
+            calendar.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int year = calendar.get(Calendar.YEAR);
+        return String.valueOf(year);
     }
 }

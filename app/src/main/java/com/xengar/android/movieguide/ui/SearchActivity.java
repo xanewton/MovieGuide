@@ -15,26 +15,326 @@
  */
 package com.xengar.android.movieguide.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.data.MultiSearch;
+import com.xengar.android.movieguide.service.SearchService;
+import com.xengar.android.movieguide.service.ServiceGenerator;
+import com.xengar.android.movieguide.utils.ActivityUtils;
+import com.xengar.android.movieguide.utils.Constants;
+import com.xengar.android.movieguide.utils.FragmentUtils;
+import com.xengar.android.movieguide.utils.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * SearchActivity
  */
 public class SearchActivity extends AppCompatActivity {
 
+    private static final String TAG = SearchActivity.class.getSimpleName();
+
+    private Drawable placeholderImage;
+    private Toolbar mToolbar;
+    private RecyclerView mRecyclerView;
+    private SearchView mSearchView;
+    private SearchAdapter mAdapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        placeholderImage = ContextCompat.getDrawable(getApplicationContext(), R.drawable.disk_reel);
+        mRecyclerView = (RecyclerView) findViewById(R.id.search_recycler_view);
+        mSearchView = (SearchView) findViewById(R.id.search_view);
+
+        setupActionBar();
+        setupSearchView();
+
+        List<MultiSearch.MultiSearchItem> searchItems = new ArrayList<>();
+        mAdapter = new SearchAdapter(searchItems);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mAdapter);
     }
 
+    private void setupSearchView() {
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        mSearchView.setIconified(false);
+        mSearchView.setQueryHint(getString(R.string.action_search));
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mSearchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() >= 2) {
+                    mAdapter.getFilter().filter(newText);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+        mSearchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                finish();
+                return true;
+            }
+        });
+    }
+
+    private void setupActionBar() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     * SearchAdapter
+     */
+    class SearchAdapter extends RecyclerView.Adapter<SearchHolder> implements Filterable {
+
+        private List<MultiSearch.MultiSearchItem> mMultiSearchItems;
+
+        public SearchAdapter(List<MultiSearch.MultiSearchItem> multiMultiSearchItems) {
+            mMultiSearchItems = multiMultiSearchItems;
+        }
+
+        @Override
+        public SearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            View v = inflater.inflate(R.layout.item_search, parent, false);
+            return new SearchHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(SearchHolder holder, int position) {
+            MultiSearch.MultiSearchItem item = mMultiSearchItems.get(position);
+            holder.bindItem(item);
+        }
+
+        @Override
+        public int getItemCount() {
+            return (mMultiSearchItems != null) ? mMultiSearchItems.size() : 0;
+        }
+
+        @Override
+        public Filter getFilter() {
+            return new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence charSequence) {
+                    final FilterResults results = new FilterResults();
+                    String lang = FragmentUtils.getFormatLocale(SearchActivity.this);
+                    SearchService service = ServiceGenerator.createService(SearchService.class);
+                    Call<MultiSearch> call = service.multiSearch(charSequence.toString(),
+                            getString(R.string.THE_MOVIE_DB_API_TOKEN), lang, "1");
+                    call.enqueue(new Callback<MultiSearch>() {
+                        @Override
+                        public void onResponse(Call<MultiSearch> call,
+                                               Response<MultiSearch> response) {
+                            if (response.isSuccessful()) {
+                                List<MultiSearch.MultiSearchItem> movies
+                                        = response.body().getMultiSearchItems();
+                                results.values = movies;
+                                results.count = movies != null ? movies.size() : 0;
+                                mMultiSearchItems.clear();
+                                if (movies != null) {
+                                    mMultiSearchItems.addAll(movies);
+                                    notifyDataSetChanged();
+                                }
+                            } else {
+                                Log.i(TAG, "Error: " + response.code());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<MultiSearch> call, Throwable t) {
+                            Log.i(TAG, "Error: " + t.getMessage());
+                        }
+                    });
+
+                    return results;
+                }
+
+                @Override
+                protected void publishResults(CharSequence charSequence,
+                                              FilterResults filterResults) {
+                    if (filterResults.values != null) {
+                        mMultiSearchItems.addAll(
+                                (Collection<? extends MultiSearch.MultiSearchItem>)
+                                        filterResults.values);
+                    }
+                    notifyDataSetChanged();
+                }
+            };
+        }
+    }
+
+    /**
+     * SearchHolder
+     */
+    public class SearchHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private final String TYPE_MOVIE = "movie";
+        private final String TYPE_TV = "tv";
+        private final String TYPE_PERSON = "person";
+
+        private Context mContext;
+        private MultiSearch.MultiSearchItem mItem;
+
+        private ImageView poster;
+        private ImageView type;
+        private TextView name;
+        private TextView originalName;
+        private TextView voteAverage;
+        private TextView voteCount;
+        private TextView year;
+        private LinearLayout layout;
+
+        public SearchHolder(View itemView) {
+            super(itemView);
+            mContext = itemView.getContext();
+            poster = (ImageView) itemView.findViewById(R.id.search_poster);
+            type = (ImageView) itemView.findViewById(R.id.search_type);
+            name = (TextView) itemView.findViewById(R.id.search_name);
+            year = (TextView) itemView.findViewById(R.id.search_year);
+            originalName = (TextView) itemView.findViewById(R.id.search_original_name);
+            voteAverage = (TextView) itemView.findViewById(R.id.search_vote_average);
+            voteCount = (TextView) itemView.findViewById(R.id.search_vote_count);
+            layout = (LinearLayout) itemView.findViewById(R.id.search_root);
+            layout.setOnClickListener(this);
+        }
+
+        void bindItem(MultiSearch.MultiSearchItem item) {
+            mItem = item;
+            switch (item.getMediaType()) {
+                case TYPE_MOVIE:
+                    Picasso.with(mContext)
+                            .load(Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W154
+                                    + item.getPosterPath())
+                            .placeholder(placeholderImage)
+                            .fit().centerCrop()
+                            .noFade()
+                            .error(placeholderImage)
+                            .into(poster);
+                    name.setText(item.getTitle());
+                    originalName.setText(item.getOriginalName());
+                    voteAverage.setText(String.valueOf(item.getVoteAverage()));
+                    voteCount.setText(String.valueOf(item.getVoteCount()));
+                    year.setText(StringUtils.getYear(item.getReleaseDate()));
+                    ActivityUtils.setImage(getApplicationContext(), type,
+                            R.drawable.ic_local_movies_black_24dp);
+                    break;
+
+                case TYPE_TV:
+                    Picasso.with(mContext)
+                            .load(Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W154
+                                    + item.getPosterPath())
+                            .placeholder(placeholderImage)
+                            .fit().centerCrop()
+                            .noFade()
+                            .error(placeholderImage)
+                            .into(poster);
+                    name.setText(item.getName());
+                    originalName.setText(item.getOriginalName());
+                    voteAverage.setText(String.valueOf(item.getVoteAverage()));
+                    voteCount.setText(String.valueOf(item.getVoteCount()));
+                    year.setText(StringUtils.getYear(item.getFirstAirDate()));
+                    ActivityUtils.setImage(getApplicationContext(), type,
+                            R.drawable.ic_tv_black_24dp);
+                    break;
+
+                case TYPE_PERSON:
+                    Picasso.with(mContext)
+                            .load(Constants.TMDB_IMAGE_URL + Constants.PROFILE_SIZE_W185
+                                    + item.getProfilePath())
+                            .placeholder(placeholderImage)
+                            .fit().centerCrop()
+                            .noFade()
+                            .error(placeholderImage)
+                            .into(poster);
+                    name.setText(item.getName());
+                    originalName.setText(item.getKnownForString());
+                    voteAverage.setText(String.valueOf(item.getVoteAverage()));
+                    voteCount.setText(String.valueOf(item.getVoteCount()));
+                    year.setText(item.getReleaseDate());
+                    ActivityUtils.setImage(getApplicationContext(), type,
+                            R.drawable.ic_person_black_24dp);
+                    break;
+            }
+        }
+
+        void startDetailActivity() {
+            switch (mItem.getMediaType()) {
+                case TYPE_MOVIE:
+                    ActivityUtils.launchMovieActivity(getApplicationContext(),
+                            Integer.parseInt(mItem.getId()));
+                    break;
+
+                case TYPE_TV:
+                    ActivityUtils.launchTVShowActivity(getApplicationContext(),
+                            Integer.parseInt(mItem.getId()));
+                    break;
+
+                case TYPE_PERSON:
+                    ActivityUtils.launchPersonActivity(getApplicationContext(),
+                            Integer.parseInt(mItem.getId()));
+                    break;
+            }
+        }
+
+        @Override
+        public void onClick(View view) {
+            startDetailActivity();
+        }
+    }
 
 }
