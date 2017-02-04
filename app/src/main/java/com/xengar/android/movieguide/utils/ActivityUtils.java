@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
@@ -403,5 +404,19 @@ public class ActivityUtils {
             result = Html.fromHtml(html);
         }
         return result;
+    }
+
+    /**
+     * Sets the image id into the view.
+     * @param context
+     * @param view
+     * @param id
+     */
+    public static void setImage(final Context context, final ImageView view, final int id){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view.setImageDrawable(context.getResources().getDrawable(id, context.getTheme()));
+        } else {
+            view.setImageDrawable(context.getResources().getDrawable(id));
+        }
     }
 }

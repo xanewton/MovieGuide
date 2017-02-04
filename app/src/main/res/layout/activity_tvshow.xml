@@ -256,7 +256,7 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
                                 android:layout_marginTop="5dp"
-                                android:text="@string/prodution_companies" />
+                                android:text="@string/production_companies" />
 
                         </LinearLayout>
                     </LinearLayout>
