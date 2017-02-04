@@ -170,10 +170,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            ActivityUtils.launchSettingsActivity(getApplicationContext());
-            return true;
-        } else if (id == R.id.action_search) {
+        if (id == R.id.action_search) {
             ActivityUtils.launchSearchActivity(getApplicationContext());
             return true;
         }
@@ -211,8 +208,8 @@ public class MainActivity extends AppCompatActivity
                 showPage(DISCOVER);
                 break;
 
-            case R.id.nav_share:
-                getSupportActionBar().setTitle(R.string.app_name);
+            case R.id.nav_settings:
+                ActivityUtils.launchSettingsActivity(getApplicationContext());
                 break;
 
             case R.id.nav_send:

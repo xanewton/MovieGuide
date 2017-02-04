@@ -141,8 +141,8 @@ public class PersonActivity extends AppCompatActivity {
         int itemId = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (itemId == R.id.action_settings) {
-            ActivityUtils.launchSettingsActivity(getApplicationContext());
+        if (itemId == R.id.action_search) {
+            ActivityUtils.launchSearchActivity(getApplicationContext());
             return true;
         }
 
