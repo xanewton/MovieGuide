@@ -48,9 +48,9 @@
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="@string/settings" />
         <item
-            android:id="@+id/nav_send"
+            android:id="@+id/nav_feedback"
             android:icon="@drawable/ic_menu_send"
-            android:title="@string/send" />
+            android:title="@string/feedback" />
     </group>
 
 </menu>
