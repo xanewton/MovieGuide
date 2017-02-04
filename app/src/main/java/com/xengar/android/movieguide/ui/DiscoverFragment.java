@@ -37,14 +37,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.data.FilterData;
+import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import static com.xengar.android.movieguide.utils.Constants.ARG_FILTER_DATA;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_RESULT;
+import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_GENRES;
+import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_MIN_RATING;
+import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_SORT_TYPE;
+import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_TYPE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -159,15 +162,11 @@ public class DiscoverFragment extends Fragment
                 break;
 
             case R.id.discover_discover:
-                FilterData data = new FilterData();
-                data.setType(mType);
-                data.setGenres(mGenresValues);
-                data.setSortType(mSortValue);
-                data.setMinRating(mMinRating);
-
-                Bundle args = new Bundle();
-                args.putSerializable(ARG_FILTER_DATA, data);
-                activity.showPage(DISCOVER_RESULT, args);
+                ActivityUtils.saveIntToPreferences(getContext(), FILTER_DATA_TYPE, mType);
+                ActivityUtils.saveStringToPreferences(getContext(), FILTER_DATA_GENRES, mGenresValues);
+                ActivityUtils.saveStringToPreferences(getContext(), FILTER_DATA_SORT_TYPE, mSortValue);
+                ActivityUtils.saveStringToPreferences(getContext(), FILTER_DATA_MIN_RATING, mMinRating);
+                activity.showPage(DISCOVER_RESULT);
                 break;
         }
     }
