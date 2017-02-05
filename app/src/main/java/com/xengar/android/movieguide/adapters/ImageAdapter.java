@@ -139,7 +139,8 @@ public class ImageAdapter extends BaseAdapter {
             textView.setText(image.getImageTitle());
         }
 
-        ActivityUtils.loadImage(mContext, image.getImagePath(), false, 0, imageView, null);
+        ActivityUtils.loadImage(mContext, image.getImagePath(), false, R.drawable.disk_reel,
+                imageView, null);
     }
 
     /**
