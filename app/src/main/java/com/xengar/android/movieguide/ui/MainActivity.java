@@ -77,8 +77,10 @@ public class MainActivity extends AppCompatActivity
     private ViewPager mViewPager;
 
     private HomeFragment homeFragment;
+    private FavoritesFragment favoritesFragment;
     private DiscoverFragment discoverFragment;
     private DiscoverResultFragment discoverResultFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,7 @@ public class MainActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         homeFragment = new HomeFragment();
+        favoritesFragment = new FavoritesFragment();
         discoverFragment = new DiscoverFragment();
         discoverResultFragment = new DiscoverResultFragment();
         showPage(page);
@@ -202,7 +205,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_favorites:
-                switchPagerAdapter(FAVORITES);
+                //switchPagerAdapter(FAVORITES);
                 showPage(FAVORITES);
                 break;
 
@@ -288,9 +291,10 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case FAVORITES:
-                showTabs(true);
+                showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_favorites);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, FAVORITES);
+                launchFragment(FAVORITES);
                 break;
 
             case DISCOVER:
@@ -333,6 +337,12 @@ public class MainActivity extends AppCompatActivity
         switch (category) {
             case HOME:
                 fragmentTransaction.replace(R.id.fragment_container, homeFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
+
+            case FAVORITES:
+                fragmentTransaction.replace(R.id.fragment_container, favoritesFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;

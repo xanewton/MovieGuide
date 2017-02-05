@@ -81,12 +81,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mLang = FragmentUtils.getFormatLocale(getActivity());
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_summary, container, false);
 
         moreMovies = (LinearLayout) view.findViewById(R.id.home_in_theaters);
         moreMovies.setOnClickListener(this);
         mRecyclerViewMovies = (RecyclerView) view.findViewById(R.id.recycler_view_movies);
-        progressBarMovies = (CircularProgressBar) view.findViewById(R.id.progressBarMovies);
+        progressBarMovies = (CircularProgressBar) view.findViewById(R.id.progress_bar_movies);
         mMovies = new ArrayList<>();
         mAdapterMovies = new HomeMovieAdapter(mMovies);
         fillMoviesSection();
@@ -94,7 +94,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
         moreTV.setOnClickListener(this);
         mRecyclerViewTV = (RecyclerView) view.findViewById(R.id.recycler_view_tv);
-        progressBarTV = (CircularProgressBar) view.findViewById(R.id.progressBarTV);
+        progressBarTV = (CircularProgressBar) view.findViewById(R.id.progress_bar_tv);
         mTVList = new ArrayList<>();
         mAdapterTV = new HomeTVAdapter(mTVList);
         fillTVSection();
