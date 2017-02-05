@@ -46,8 +46,6 @@ import java.util.ArrayList;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_RESULT;
 import static com.xengar.android.movieguide.utils.Constants.FAVORITES;
-import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
-import static com.xengar.android.movieguide.utils.Constants.FAVORITE_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.HOME;
 import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
@@ -205,7 +203,6 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_favorites:
-                //switchPagerAdapter(FAVORITES);
                 showPage(FAVORITES);
                 break;
 
@@ -257,8 +254,7 @@ public class MainActivity extends AppCompatActivity
     public void onItemSelectionClick(String itemType, int itemId) {
         Log.v(TAG, "onItemSelectionClick itemId = " + itemId + " itemType = " + itemType);
         if (itemType.equals(TV_SHOWS) || itemType.equals(POPULAR_TV_SHOWS)
-                || itemType.equals(TOP_RATED_TV_SHOWS) || itemType.equals(ON_THE_AIR_TV_SHOWS)
-                || itemType.equals(FAVORITE_TV_SHOWS)) {
+                || itemType.equals(TOP_RATED_TV_SHOWS) || itemType.equals(ON_THE_AIR_TV_SHOWS)) {
             ActivityUtils.launchTVShowActivity(getApplicationContext(), itemId);
         } else {
             ActivityUtils.launchMovieActivity(getApplicationContext(), itemId);
@@ -374,7 +370,6 @@ public class MainActivity extends AppCompatActivity
                 = {TOP_RATED_MOVIES, UPCOMING_MOVIES, NOW_PLAYING_MOVIES, POPULAR_MOVIES};
         private final String CATEGORY_TV_SHOWS[]
                 = {POPULAR_TV_SHOWS, TOP_RATED_TV_SHOWS, ON_THE_AIR_TV_SHOWS};
-        private final String CATEGORY_FAVORITES[] = {FAVORITE_MOVIES, FAVORITE_TV_SHOWS};
 
         private final String TITLE_CATEGORY_MOVIES[]
                 = { getString(R.string.title_top_rated), getString(R.string.title_upcomming),
@@ -382,8 +377,6 @@ public class MainActivity extends AppCompatActivity
         private final String TITLE_CATEGORY_TV_SHOWS[]
                 = { getString(R.string.title_popular), getString(R.string.title_top_rated),
                     getString(R.string.title_on_the_air)};
-        private final String TITLE_CATEGORY_FAVORITES[]
-                = { getString(R.string.menu_title_movies), getString(R.string.menu_title_tv_shows)};
 
         private ArrayList<UniversalFragment> fragments;
         private String tabs[] = null;
@@ -406,10 +399,6 @@ public class MainActivity extends AppCompatActivity
                 case TV_SHOWS:
                     tabs = CATEGORY_TV_SHOWS;
                     titleTabs = TITLE_CATEGORY_TV_SHOWS;
-                    break;
-                case FAVORITES:
-                    tabs = CATEGORY_FAVORITES;
-                    titleTabs = TITLE_CATEGORY_FAVORITES;
                     break;
             }
 
