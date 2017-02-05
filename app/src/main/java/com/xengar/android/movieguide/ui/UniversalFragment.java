@@ -32,13 +32,10 @@ import android.widget.Toast;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
-import com.xengar.android.movieguide.sync.FetchFavorite;
 import com.xengar.android.movieguide.sync.FetchItemListener;
 import com.xengar.android.movieguide.sync.FetchPoster;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 
-import static com.xengar.android.movieguide.utils.Constants.FAVORITE_MOVIES;
-import static com.xengar.android.movieguide.utils.Constants.FAVORITE_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
@@ -81,8 +78,6 @@ public class UniversalFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
-        //itemType = prefs.getString(ITEM_CATEGORY, UPCOMING_MOVIES);
         if (getArguments() != null)
             itemType = getArguments().getString(ITEM_CATEGORY, UPCOMING_MOVIES);
 
@@ -146,18 +141,7 @@ public class UniversalFragment extends Fragment {
             case ON_THE_AIR_TV_SHOWS:
                 gridview.setOnScrollListener(new ItemViewScrollListener(ON_THE_AIR_TV_SHOWS));
                 break;
-            case FAVORITE_TV_SHOWS:
-                adapter.clearData();
-                FetchFavorite taskTVShows = new FetchFavorite(FAVORITE_TV_SHOWS, adapter,
-                        getActivity().getContentResolver(), posterBaseUri);
-                taskTVShows.execute();
-                break;
-            case FAVORITE_MOVIES:
-                adapter.clearData();
-                FetchFavorite taskMovies = new FetchFavorite(FAVORITE_MOVIES, adapter,
-                        getActivity().getContentResolver(), posterBaseUri);
-                taskMovies.execute();
-                break;
+
             case NOW_PLAYING_MOVIES:
                 gridview.setOnScrollListener(new ItemViewScrollListener(NOW_PLAYING_MOVIES));
                 break;
