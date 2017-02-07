@@ -54,7 +54,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.image_list_item, viewGroup, false);
+                .inflate(R.layout.poster_list_item, viewGroup, false);
         return new ViewHolder(view);
     }
 
@@ -98,15 +98,12 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
 
         public ViewHolder(View view) {
             super(view);
-
             imageView = (ImageView) view.findViewById(R.id.poster_view);
             view.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            //Snackbar.make(view, "Click item: " + imageId, Snackbar.LENGTH_LONG)
-            //        .setAction("Action", null).show();
             switch (type){
                 case  MOVIES:
                     ActivityUtils.launchMovieActivity(context, imageId);

@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,11 +41,8 @@ public class ImageAdapter extends BaseAdapter {
 
     public static final String CAST_IMAGE = "cast";
     public static final String MOVIE_IMAGE = "movie";
-    public static final String POSTER_IMAGE = "poster";
 
     private static final String TAG = ImageAdapter.class.getSimpleName();
-    private static final int IMAGE_WIDTH = 185;
-    private static final int IMAGE_HEIGHT = 278;
     private final ArrayList<ImageItem> images = new ArrayList<>();
     private final HashSet<Integer> idSet = new HashSet<>();
     private final float density;
@@ -80,19 +76,14 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            int layout = (type.contentEquals(POSTER_IMAGE))?
-                    R.layout.image_layout : R.layout.movie_list_item;
             view = ((LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(layout, parent, false);
+                    .inflate(R.layout.movie_list_item, parent, false);
         } else {
             view = convertView;
         }
         ImageItem data = images.get(position);
 
         switch (type){
-            case POSTER_IMAGE:
-                fillPosterView(view, data);
-                break;
             case CAST_IMAGE:
                 fillCastView(view, data);
                 defineOnclickAction(view);
@@ -122,25 +113,6 @@ public class ImageAdapter extends BaseAdapter {
                 }
             }
         });
-    }
-
-    /**
-     * Fills a poster image view.
-     * @param view
-     * @param image
-     */
-    private void fillPosterView(View view, ImageItem image) {
-        ImageView imageView = (ImageView) view.findViewById(R.id.poster_view);
-        view.setLayoutParams(new GridView.LayoutParams((int) (IMAGE_WIDTH * density),
-                (int) (IMAGE_HEIGHT * density)));
-
-        if (image.getImagePath() == null) {
-            TextView textView = (TextView) view.findViewById(R.id.poster_title);
-            textView.setText(image.getImageTitle());
-        }
-
-        ActivityUtils.loadImage(mContext, image.getImagePath(), false, R.drawable.disk_reel,
-                imageView, null);
     }
 
     /**

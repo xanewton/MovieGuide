@@ -21,29 +21,49 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.Toast;
 
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.adapters.ImageAdapter;
+import com.xengar.android.movieguide.adapters.PosterAdapter;
+import com.xengar.android.movieguide.data.ImageItem;
+import com.xengar.android.movieguide.data.Movie;
+import com.xengar.android.movieguide.data.MovieResults;
+import com.xengar.android.movieguide.data.TV;
+import com.xengar.android.movieguide.data.TVResults;
+import com.xengar.android.movieguide.service.DiscoverService;
+import com.xengar.android.movieguide.service.MovieService;
+import com.xengar.android.movieguide.service.ServiceGenerator;
+import com.xengar.android.movieguide.service.TVService;
 import com.xengar.android.movieguide.sync.FetchItemListener;
-import com.xengar.android.movieguide.sync.FetchPoster;
-import com.xengar.android.movieguide.sync.OnItemClickListener;
+import com.xengar.android.movieguide.utils.CustomErrorView;
+import com.xengar.android.movieguide.utils.FragmentUtils;
+import com.xengar.android.movieguide.utils.StringUtils;
 
+import java.util.List;
+
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
+import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
+import static com.xengar.android.movieguide.utils.Constants.POSTER_SIZE_W342;
+import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_TV_SHOWS;
+import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 
 /**
@@ -54,12 +74,15 @@ public class UniversalFragment extends Fragment {
 
     private static final String TAG = UniversalFragment.class.getSimpleName();
 
-    private ImageAdapter adapter;
-    private String sortOrder;
-    private GridView gridview;
-    private String apiKey;
-    private String posterBaseUri;
+    private PosterAdapter adapter;
     private String itemType = UPCOMING_MOVIES;
+
+    private CircularProgressBar progressBar;
+    private CustomErrorView mCustomErrorView;
+    private String mLang;
+    private RecyclerView recycler;
+    private int mPage = 1;
+    private int mTotalPages = 1;
 
 
     public UniversalFragment() {
@@ -70,7 +93,6 @@ public class UniversalFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ImageAdapter(getActivity(), ImageAdapter.POSTER_IMAGE);
         setRetainInstance(true);
     }
 
@@ -81,30 +103,31 @@ public class UniversalFragment extends Fragment {
         if (getArguments() != null)
             itemType = getArguments().getString(ITEM_CATEGORY, UPCOMING_MOVIES);
 
-        if (itemType.equals(POPULAR_MOVIES)) {
-            sortOrder = "popularity.desc";
-        } else if (itemType.equals(NOW_PLAYING_MOVIES)) {
-            sortOrder = "current.desc";
-        }
-
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_universal, container, false);
-        Log.v(TAG, "onCreateView");
-        gridview = (GridView) view.findViewById(R.id.gridview);
-        if (getActivity() instanceof OnItemClickListener) {
-            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View v,
-                                        int position, long id) {
-                    ((OnItemClickListener) getActivity()).onItemSelectionClick( itemType,
-                            (int) adapter.getItemId(position));
-                }
-            });
-        }
-        gridview.setAdapter(adapter);
-        posterBaseUri = POSTER_BASE_URI;
-        apiKey = getString(R.string.THE_MOVIE_DB_API_TOKEN);
+        progressBar = (CircularProgressBar) view.findViewById(R.id.progressBar);
+        mCustomErrorView = (CustomErrorView) view.findViewById(R.id.error);
+
+        mLang = FragmentUtils.getFormatLocale(getActivity());
+        recycler = (RecyclerView) view.findViewById(R.id.recycler);
+        recycler.setHasFixedSize(true);
+
+        int columns = (getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT) ? 2 : 3;
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), columns);
+        recycler.setLayoutManager(layoutManager);
+
+        String posterType = (itemType == POPULAR_MOVIES || itemType == UPCOMING_MOVIES
+                || itemType == NOW_PLAYING_MOVIES || itemType == TOP_RATED_MOVIES)? MOVIES : TV_SHOWS;
+        adapter = new PosterAdapter(getContext(), posterType);
+        recycler.setAdapter(adapter);
+        updateProgressBar(true);
         return view;
+    }
+
+    private void updateProgressBar(boolean visibility) {
+        if (progressBar != null) {
+            progressBar.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        }
     }
 
     /**
@@ -124,71 +147,227 @@ public class UniversalFragment extends Fragment {
         super.onResume();
 
         if (!checkInternetConnection()) {
-            Log.e(TAG, "Network is not available");
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(),
-                    R.string.network_not_available_message, Toast.LENGTH_LONG);
-            toast.show();
+            onLoadFailed(new Throwable(getString(R.string.network_not_available_message)));
             return;
         }
 
-        switch (itemType) {
-            case POPULAR_TV_SHOWS:
-                gridview.setOnScrollListener(new ItemViewScrollListener(POPULAR_TV_SHOWS));
-                break;
-            case TOP_RATED_TV_SHOWS:
-                gridview.setOnScrollListener(new ItemViewScrollListener(TOP_RATED_TV_SHOWS));
-                break;
-            case ON_THE_AIR_TV_SHOWS:
-                gridview.setOnScrollListener(new ItemViewScrollListener(ON_THE_AIR_TV_SHOWS));
+        if (itemType != POPULAR_TV_SHOWS && itemType != TOP_RATED_TV_SHOWS
+                && itemType != ON_THE_AIR_TV_SHOWS && itemType != NOW_PLAYING_MOVIES
+                && itemType != TOP_RATED_MOVIES && itemType != UPCOMING_MOVIES
+                && itemType != POPULAR_MOVIES)
+            return;
+
+        mTotalPages = 1;
+        LastItemListener listener = new LastItemListener(itemType);
+        recycler.addOnScrollListener(listener);
+        listener.loadPage();
+    }
+
+    private void onLoadFailed(Throwable t) {
+        mCustomErrorView.setError(t);
+        mCustomErrorView.setVisibility(View.VISIBLE);
+        updateProgressBar(false);
+    }
+
+    /**
+     * Query the movies page.
+     * @param listener
+     * @param itemType
+     */
+    private void loadMovies(final FetchItemListener listener, String itemType) {
+        DiscoverService discoverService = null;
+        MovieService movieService = null;
+        Call<MovieResults> call = null;
+        switch(itemType) {
+            case NOW_PLAYING_MOVIES:
+                discoverService = ServiceGenerator.createService(DiscoverService.class);
+                call = discoverService.inTheaters(getString(R.string.THE_MOVIE_DB_API_TOKEN),
+                                    mLang, mPage, "popularity.desc", StringUtils.inTheatersLte(),
+                                    StringUtils.inTheatersGte());
                 break;
 
-            case NOW_PLAYING_MOVIES:
-                gridview.setOnScrollListener(new ItemViewScrollListener(NOW_PLAYING_MOVIES));
-                break;
             case TOP_RATED_MOVIES:
-                gridview.setOnScrollListener(new ItemViewScrollListener(TOP_RATED_MOVIES));
+                movieService = ServiceGenerator.createService(MovieService.class);
+                call = movieService.topRated(getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage);
                 break;
+
             case UPCOMING_MOVIES:
-                gridview.setOnScrollListener(new ItemViewScrollListener(UPCOMING_MOVIES));
+                movieService = ServiceGenerator.createService(MovieService.class);
+                call = movieService.upcoming(getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage);
                 break;
-            default:
-                gridview.setOnScrollListener(new ItemViewScrollListener(POPULAR_MOVIES));
+
+            case POPULAR_MOVIES:
+                movieService = ServiceGenerator.createService(MovieService.class);
+                call = movieService.popular(getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage);
                 break;
         }
+        call.enqueue(new Callback<MovieResults>() {
+            @Override
+            public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
+                if (response.isSuccessful()) {
+                    List<Movie> movies = response.body().getMovies();
+                    int adds = 0;
+                    for (Movie movie : movies) {
+                        adds += adapter.add(
+                                new ImageItem(TMDB_IMAGE_URL + POSTER_SIZE_W342 + movie.getPosterPath(),
+                                        Integer.parseInt(movie.getId()), movie.getTitle(), null));
+                    }
+                    if (adds != 0) {
+                        adapter.notifyDataSetChanged();
+                        updateProgressBar(false);
+                        mTotalPages = response.body().getTotalPages();
+                        if (mPage < mTotalPages)
+                            mPage++;
+                        else
+                            listener.lastPageReached();
+                    }
+                    listener.onFetchCompleted();
+                } else {
+                    Log.i("TAG", "Res: " + response.code());
+                    listener.onFetchFailed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieResults> call, Throwable t) {
+                onLoadFailed(t);
+            }
+        });
+    }
+
+    /**
+     * Query the TV Show page.
+     * @param listener
+     * @param itemType
+     */
+    private void loadTVShows(final FetchItemListener listener, String itemType) {
+        DiscoverService discoverService = null;
+        TVService tvService = null;
+        Call<TVResults> call = null;
+        switch(itemType) {
+            case POPULAR_TV_SHOWS:
+                tvService = ServiceGenerator.createService(TVService.class);
+                call = tvService.popular(getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage);
+                break;
+
+            case TOP_RATED_TV_SHOWS:
+                tvService = ServiceGenerator.createService(TVService.class);
+                call = tvService.topRated(getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage);
+                break;
+
+            case ON_THE_AIR_TV_SHOWS:
+                discoverService = ServiceGenerator.createService(DiscoverService.class);
+                call = discoverService.onTv(StringUtils.getDateOnTheAir(), StringUtils.getDateToday(),
+                        "popularity.desc", mLang, mPage, getString(R.string.THE_MOVIE_DB_API_TOKEN));
+                break;
+
+        }
+        call.enqueue(new Callback<TVResults>() {
+            @Override
+            public void onResponse(Call<TVResults> call, Response<TVResults> response) {
+                if (response.isSuccessful()) {
+                    List<TV> tvs = response.body().getTVs();
+                    int adds = 0;
+                    for (TV tv : tvs) {
+                        adds += adapter.add( new ImageItem(POSTER_BASE_URI + tv.getPosterPath(),
+                                        Integer.parseInt(tv.getId()), tv.getName(), null));
+                    }
+                    if (adds != 0) {
+                        adapter.notifyDataSetChanged();
+                        updateProgressBar(false);
+                        mTotalPages = response.body().getTotalPages();
+                        if (mPage < mTotalPages)
+                            mPage++;
+                        else
+                            listener.lastPageReached();
+                    }
+                    listener.onFetchCompleted();
+                } else {
+                    Log.i("TAG", "Res: " + response.code());
+                    listener.onFetchFailed();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TVResults> call, Throwable t) {
+                onLoadFailed(t);
+            }
+        });
     }
 
 
-    /**
-     * ItemViewScrollListener
-     */
-    private class ItemViewScrollListener
-            implements AbsListView.OnScrollListener, FetchItemListener {
 
-        private static final int PAGE_SIZE = 20;
-        private boolean lastPageReached = false;
+    /**
+     * Listener to callback when the last item of the adpater is visible to the user.
+     * It should then be the time to load more items.
+     **/
+    private class LastItemListener extends RecyclerView.OnScrollListener implements FetchItemListener {
+
         private boolean loadingState = false;
+        private boolean lastPageReached = false;
         private String itemType = null;
 
         //Constructor
-        public ItemViewScrollListener(String itemType){
+        public LastItemListener(String itemType){
             this.itemType = itemType;
         }
 
         @Override
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            // init
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            RecyclerView.Adapter adapter = recyclerView.getAdapter();
+
+            if (layoutManager.getChildCount() > 0) {
+                // Calculate
+                int indexOfLastItemViewVisible = layoutManager.getChildCount() -1;
+                View lastItemViewVisible = layoutManager.getChildAt(indexOfLastItemViewVisible);
+                int adapterPosition = layoutManager.getPosition(lastItemViewVisible);
+                boolean isLastItemVisible = (adapterPosition == adapter.getItemCount() -1);
+
+                /**
+                 * Here you should load more items because user is seeing the last item of the list.
+                 * Advice: you should add a bollean value to the class
+                 * so that the method {@link #loadPage()} will be triggered only once
+                 * and not every time the user touch the screen ;)
+                 **/
+                if (isLastItemVisible)
+                    loadPage();
+            }
         }
 
-        @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                             int totalItemCount) {
-            if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+        /**
+         * Load page of posters.
+         */
+        public void loadPage() {
+            if (!loadingState && !lastPageReached) {
+                switch (itemType) {
+                    case POPULAR_TV_SHOWS:
+                        loadTVShows(this, POPULAR_TV_SHOWS);
+                        break;
+                    case TOP_RATED_TV_SHOWS:
+                        loadTVShows(this, TOP_RATED_TV_SHOWS);
+                        break;
+                    case ON_THE_AIR_TV_SHOWS:
+                        loadTVShows(this, ON_THE_AIR_TV_SHOWS);
+                        break;
 
-                if (!loadingState) {
-                    FetchPoster fetchPoster =
-                            new FetchPoster(itemType, adapter, this, apiKey, posterBaseUri, sortOrder);
-                    fetchPoster.execute(totalItemCount / PAGE_SIZE + 1);
-                    loadingState = true;
+                    case NOW_PLAYING_MOVIES:
+                        loadMovies(this, NOW_PLAYING_MOVIES);
+                        break;
+                    case TOP_RATED_MOVIES:
+                        loadMovies(this, TOP_RATED_MOVIES);
+                        break;
+                    case UPCOMING_MOVIES:
+                        loadMovies(this, UPCOMING_MOVIES);
+                        break;
+                    case POPULAR_MOVIES:
+                        loadMovies(this, POPULAR_MOVIES);
+                        break;
                 }
+                loadingState = true;
             }
         }
 
@@ -200,12 +379,11 @@ public class UniversalFragment extends Fragment {
         @Override
         public void onFetchFailed() {
             loadingState = false;
-            Toast.makeText(getActivity(), R.string.remote_service_connection_error,
-                    Toast.LENGTH_LONG).show();
+            onLoadFailed(new Throwable(getString(R.string.remote_service_connection_error)));
         }
 
         @Override
-        public void lastPageReached(){
+        public void lastPageReached() {
             lastPageReached = true;
         }
     }
