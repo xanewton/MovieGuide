@@ -20,11 +20,10 @@ package com.xengar.android.movieguide.utils;
  */
 public final class  Constants {
 
-    public static final String ARG_FILTER_DATA = "filter_data";
-    public static final String FILTER_DATA_TYPE = "filter_data_type";
-    public static final String FILTER_DATA_GENRES = "filter_data_genres";
-    public static final String FILTER_DATA_SORT_TYPE = "filter_data_sort_type";
-    public static final String FILTER_DATA_MIN_RATING = "filter_data_min_rating";
+    public static final String DISCOVER_TYPE = "discover_type";
+    public static final String DISCOVER_GENRES = "discover_genres";
+    public static final String DISCOVER_SORT_TYPE = "discover_sort_type";
+    public static final String DISCOVER_MIN_RATING = "discover_min_rating";
 
     public static final String SHARED_PREF_NAME = "com.xengar.android.movieguide";
     public static final String ITEM_CATEGORY = "item_category";

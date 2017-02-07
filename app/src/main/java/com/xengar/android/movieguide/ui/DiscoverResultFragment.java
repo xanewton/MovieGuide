@@ -21,16 +21,15 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.GridView;
 
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.adapters.ImageAdapter;
+import com.xengar.android.movieguide.adapters.PosterAdapter;
 import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.data.Movie;
 import com.xengar.android.movieguide.data.MovieResults;
@@ -39,7 +38,6 @@ import com.xengar.android.movieguide.data.TVResults;
 import com.xengar.android.movieguide.service.DiscoverService;
 import com.xengar.android.movieguide.service.ServiceGenerator;
 import com.xengar.android.movieguide.sync.FetchItemListener;
-import com.xengar.android.movieguide.sync.OnItemClickListener;
 import com.xengar.android.movieguide.utils.CustomErrorView;
 import com.xengar.android.movieguide.utils.FragmentUtils;
 
@@ -50,13 +48,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_GENRES;
-import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_MIN_RATING;
-import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_SORT_TYPE;
-import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_TYPE;
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_GENRES;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_MIN_RATING;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_SORT_TYPE;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_TYPE;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
+import static com.xengar.android.movieguide.utils.Constants.POSTER_SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
+import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 
 /**
@@ -66,20 +67,17 @@ public class DiscoverResultFragment extends Fragment {
 
     private static final String TAG = DiscoverResultFragment.class.getSimpleName();
 
-    public static final int TYPE_MOVIES = 0;
-    public static final int TYPE_TV = 1;
-
     private CircularProgressBar progressBar;
     private CustomErrorView mCustomErrorView;
 
-    private int mType;
+    private String itemType;
     private String mGenres;
     private String mSortBy;
     private String mMinRating;
     private String mLang;
 
-    private ImageAdapter adapter;
-    private GridView gridview;
+    private RecyclerView recycler;
+    private PosterAdapter adapter;
     private int mPage = 1;
     private int mTotalPages = 1;
 
@@ -91,7 +89,6 @@ public class DiscoverResultFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new ImageAdapter(getActivity(), ImageAdapter.POSTER_IMAGE);
         setRetainInstance(true);
     }
 
@@ -100,32 +97,28 @@ public class DiscoverResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_universal, container, false);
+        View view = inflater.inflate(R.layout.fragment_posters, container, false);
         progressBar = (CircularProgressBar) view.findViewById(R.id.progressBar);
         mCustomErrorView = (CustomErrorView) view.findViewById(R.id.error);
 
         SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
         mLang = FragmentUtils.getFormatLocale(getActivity());
 
-        mType = prefs.getInt(FILTER_DATA_TYPE, TYPE_MOVIES);
-        final String itemType = (mType == TYPE_MOVIES)? MOVIES : TV_SHOWS;
-
-        mGenres = prefs.getString(FILTER_DATA_GENRES, null);
+        mGenres = prefs.getString(DISCOVER_GENRES, null);
         mGenres = (mGenres == null) ? "" : mGenres;
-        mSortBy = prefs.getString(FILTER_DATA_SORT_TYPE, null);
-        mMinRating = prefs.getString(FILTER_DATA_MIN_RATING, null);
+        mSortBy = prefs.getString(DISCOVER_SORT_TYPE, null);
+        mMinRating = prefs.getString(DISCOVER_MIN_RATING, null);
 
-        gridview = (GridView) view.findViewById(R.id.gridview);
-        if (getActivity() instanceof OnItemClickListener) {
-            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View v,
-                                        int position, long id) {
-                    ((OnItemClickListener) getActivity()).onItemSelectionClick( itemType,
-                            (int) adapter.getItemId(position));
-                }
-            });
-        }
-        gridview.setAdapter(adapter);
+        recycler = (RecyclerView) view.findViewById(R.id.recycler);
+        recycler.setHasFixedSize(true);
+
+        int columns = (getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT) ? 2 : 3;
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), columns);
+        recycler.setLayoutManager(layoutManager);
+
+        itemType = prefs.getString(DISCOVER_TYPE, MOVIES);
+        adapter = new PosterAdapter(getContext(), itemType);
+        recycler.setAdapter(adapter);
         updateProgressBar(true);
         return view;
     }
@@ -157,15 +150,19 @@ public class DiscoverResultFragment extends Fragment {
             return;
         }
 
-        adapter.clearData();
         mTotalPages = 1;
-        switch (mType){
-            case TYPE_MOVIES:
-                gridview.setOnScrollListener(new ItemViewScrollListener(MOVIES));
+        LastItemListener listener = null;
+        switch (itemType){
+            case MOVIES:
+                listener = new LastItemListener(MOVIES);
+                recycler.addOnScrollListener(listener);
+                listener.loadPage();
                 break;
 
-            case TYPE_TV:
-                gridview.setOnScrollListener(new ItemViewScrollListener(TV_SHOWS));
+            case TV_SHOWS:
+                listener = new LastItemListener(TV_SHOWS);
+                recycler.addOnScrollListener(listener);
+                listener.loadPage();
                 break;
         }
     }
@@ -177,10 +174,9 @@ public class DiscoverResultFragment extends Fragment {
     }
 
     /**
-     * Look for the movies.
-     * @param fetchItemListener
+     * Look for the Movies.
      */
-    private void discoverMovies(final FetchItemListener fetchItemListener) {
+    private void discoverMovies(final FetchItemListener listener){
         DiscoverService discoverMoviesService = ServiceGenerator.createService(DiscoverService.class);
         Call<MovieResults> discoverMoviesCall =
                 discoverMoviesService.discoverMovie(
@@ -191,9 +187,9 @@ public class DiscoverResultFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<Movie> movies = response.body().getMovies();
                     int adds = 0;
-                    for (Movie movie:movies) {
+                    for (Movie movie : movies) {
                         adds += adapter.add(
-                                new ImageItem(POSTER_BASE_URI + movie.getPosterPath(),
+                                new ImageItem(TMDB_IMAGE_URL + POSTER_SIZE_W342 + movie.getPosterPath(),
                                         Integer.parseInt(movie.getId()), movie.getTitle(), null));
                     }
                     if (adds != 0) {
@@ -203,12 +199,12 @@ public class DiscoverResultFragment extends Fragment {
                         if (mPage < mTotalPages)
                             mPage++;
                         else
-                            fetchItemListener.lastPageReached();
+                            listener.lastPageReached();
                     }
-                    fetchItemListener.onFetchCompleted();
+                    listener.onFetchCompleted();
                 } else {
                     Log.i("TAG", "Res: " + response.code());
-                    fetchItemListener.onFetchFailed();
+                    listener.onFetchFailed();
                 }
             }
 
@@ -219,10 +215,11 @@ public class DiscoverResultFragment extends Fragment {
         });
     }
 
+
     /**
      * Look for the TV Shows.
      */
-    private void discoverTV(final FetchItemListener fetchItemListener) {
+    private void discoverTV(final FetchItemListener listener) {
         DiscoverService discoverTvService = ServiceGenerator.createService(DiscoverService.class);
         Call<TVResults> discoverTvCall = discoverTvService.discoverTv(
                 getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage, mSortBy, mMinRating, mGenres);
@@ -244,12 +241,12 @@ public class DiscoverResultFragment extends Fragment {
                         if (mPage < mTotalPages)
                             mPage++;
                         else
-                            fetchItemListener.lastPageReached();
+                            listener.lastPageReached();
                     }
-                    fetchItemListener.onFetchCompleted();
+                    listener.onFetchCompleted();
                 } else {
                     Log.i("TAG", "Res: " + response.code());
-                    fetchItemListener.onFetchFailed();
+                    listener.onFetchFailed();
                 }
             }
 
@@ -261,41 +258,61 @@ public class DiscoverResultFragment extends Fragment {
     }
 
 
-
     /**
-     * ItemViewScrollListener
-     */
-    private class ItemViewScrollListener implements AbsListView.OnScrollListener, FetchItemListener {
+     * Listener to callback when the last item of the adpater is visible to the user.
+     * It should then be the time to load more items.
+     **/
+    private class LastItemListener extends RecyclerView.OnScrollListener implements FetchItemListener {
 
         private boolean loadingState = false;
         private boolean lastPageReached = false;
         private String itemType = null;
 
         //Constructor
-        public ItemViewScrollListener(String itemType){
+        public LastItemListener(String itemType){
             this.itemType = itemType;
         }
 
         @Override
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            // init
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            RecyclerView.Adapter adapter = recyclerView.getAdapter();
+
+            if (layoutManager.getChildCount() > 0) {
+                // Calculate
+                int indexOfLastItemViewVisible = layoutManager.getChildCount() -1;
+                View lastItemViewVisible = layoutManager.getChildAt(indexOfLastItemViewVisible);
+                int adapterPosition = layoutManager.getPosition(lastItemViewVisible);
+                boolean isLastItemVisible = (adapterPosition == adapter.getItemCount() -1);
+
+                /**
+                 * Here you should load more items because user is seeing the last item of the list.
+                 * Advice: you should add a bollean value to the class
+                 * so that the method {@link #loadPage()} will be triggered only once
+                 * and not every time the user touch the screen ;)
+                 **/
+                if (isLastItemVisible)
+                    loadPage();
+            }
         }
 
-        @Override
-        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
-                             int totalItemCount) {
-            if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-
-                if (!loadingState && !lastPageReached) {
-                    switch (itemType) {
-                        case MOVIES:
-                            discoverMovies(this);
-                            break;
-                        case TV_SHOWS:
-                            discoverTV(this);
-                            break;
-                    }
-                    loadingState = true;
+        /**
+         * Load page of posters.
+         */
+        public void loadPage() {
+            if (!loadingState && !lastPageReached) {
+                switch (itemType) {
+                    case MOVIES:
+                        discoverMovies(this);
+                        break;
+                    case TV_SHOWS:
+                        discoverTV(this);
+                        break;
                 }
+                loadingState = true;
             }
         }
 
@@ -311,7 +328,7 @@ public class DiscoverResultFragment extends Fragment {
         }
 
         @Override
-        public void lastPageReached(){
+        public void lastPageReached() {
             lastPageReached = true;
         }
     }
