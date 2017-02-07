@@ -86,8 +86,14 @@
                     style="@style/InMovieCircularProgressBar"
                     android:visibility="gone"
                     tools:visibility="visible"/>
-            </RelativeLayout>
 
+                <com.xengar.android.movieguide.utils.CustomErrorView
+                    android:id="@+id/error"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/home_on_tv"

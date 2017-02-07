@@ -16,9 +16,6 @@
 package com.xengar.android.movieguide.ui;
 
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -120,33 +117,15 @@ public class UniversalFragment extends Fragment {
                 || itemType == NOW_PLAYING_MOVIES || itemType == TOP_RATED_MOVIES)? MOVIES : TV_SHOWS;
         adapter = new PosterAdapter(getContext(), posterType);
         recycler.setAdapter(adapter);
-        updateProgressBar(true);
+        FragmentUtils.updateProgressBar(progressBar, true);
         return view;
-    }
-
-    private void updateProgressBar(boolean visibility) {
-        if (progressBar != null) {
-            progressBar.setVisibility(visibility ? View.VISIBLE : View.GONE);
-        }
-    }
-
-    /**
-     * Checks for internet connection.
-     * @return true if connected or connecting
-     */
-    private boolean checkInternetConnection() {
-        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(
-                Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        if (!checkInternetConnection()) {
+        if (!FragmentUtils.checkInternetConnection(getActivity())) {
             onLoadFailed(new Throwable(getString(R.string.network_not_available_message)));
             return;
         }
@@ -166,7 +145,7 @@ public class UniversalFragment extends Fragment {
     private void onLoadFailed(Throwable t) {
         mCustomErrorView.setError(t);
         mCustomErrorView.setVisibility(View.VISIBLE);
-        updateProgressBar(false);
+        FragmentUtils.updateProgressBar(progressBar, false);
     }
 
     /**
@@ -214,7 +193,7 @@ public class UniversalFragment extends Fragment {
                     }
                     if (adds != 0) {
                         adapter.notifyDataSetChanged();
-                        updateProgressBar(false);
+                        FragmentUtils.updateProgressBar(progressBar, false);
                         mTotalPages = response.body().getTotalPages();
                         if (mPage < mTotalPages)
                             mPage++;
@@ -274,7 +253,7 @@ public class UniversalFragment extends Fragment {
                     }
                     if (adds != 0) {
                         adapter.notifyDataSetChanged();
-                        updateProgressBar(false);
+                        FragmentUtils.updateProgressBar(progressBar, false);
                         mTotalPages = response.body().getTotalPages();
                         if (mPage < mTotalPages)
                             mPage++;

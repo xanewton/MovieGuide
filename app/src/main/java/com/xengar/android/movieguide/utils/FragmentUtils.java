@@ -17,7 +17,13 @@ package com.xengar.android.movieguide.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
+import android.view.View;
+
+import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 /**
  * FragmentUtils
@@ -27,5 +33,27 @@ public class FragmentUtils {
     public static String getFormatLocale(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return StringUtils.getFormatLocale(prefs.getString(Constants.PREF_QUERY_LANGUAGE, ""));
+    }
+
+    /**
+     * Checks for internet connection.
+     * @return true if connected or connecting
+     */
+    public static boolean checkInternetConnection(FragmentActivity fragmentActivity) {
+        ConnectivityManager cm = (ConnectivityManager) fragmentActivity.getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
+    }
+
+    /**
+     * Changes to visible or gone the circular progress bar.
+     * @param progressBar
+     * @param visibility
+     */
+    public static void updateProgressBar(CircularProgressBar progressBar, boolean visibility) {
+        if (progressBar != null) {
+            progressBar.setVisibility(visibility ? View.VISIBLE : View.GONE);
+        }
     }
 }
