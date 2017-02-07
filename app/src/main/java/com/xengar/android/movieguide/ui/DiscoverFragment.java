@@ -44,10 +44,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_RESULT;
-import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_GENRES;
-import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_MIN_RATING;
-import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_SORT_TYPE;
-import static com.xengar.android.movieguide.utils.Constants.FILTER_DATA_TYPE;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_GENRES;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_MIN_RATING;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_SORT_TYPE;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_TYPE;
+import static com.xengar.android.movieguide.utils.Constants.MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,7 +69,7 @@ public class DiscoverFragment extends Fragment
     private TextView ratingView;
     private AppCompatSeekBar ratingSeekBar;
 
-    private int mType;
+    private String mType = MOVIES;
     private String mSortValue;
     private String mGenresValues;
     private String mMinRating;
@@ -100,8 +102,6 @@ public class DiscoverFragment extends Fragment
         ratingView = (TextView) view.findViewById(R.id.discover_rating);
         ratingSeekBar = (AppCompatSeekBar) view.findViewById(R.id.discover_rating_bar);
 
-        mType = DiscoverResultFragment.TYPE_MOVIES;
-
         mGenresList = new HashSet<>();
         mGenresValuesList = new HashSet<>();
         checkedGenres = new boolean[] {
@@ -123,7 +123,7 @@ public class DiscoverFragment extends Fragment
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String[] sortValues;
-        if (mType == DiscoverResultFragment.TYPE_MOVIES) {
+        if (mType == MOVIES) {
             sortValues = getResources().getStringArray(R.array.sortValuesMovie);
         } else {
             sortValues = getResources().getStringArray(R.array.sortValuesTV);
@@ -162,10 +162,10 @@ public class DiscoverFragment extends Fragment
                 break;
 
             case R.id.discover_discover:
-                ActivityUtils.saveIntToPreferences(getContext(), FILTER_DATA_TYPE, mType);
-                ActivityUtils.saveStringToPreferences(getContext(), FILTER_DATA_GENRES, mGenresValues);
-                ActivityUtils.saveStringToPreferences(getContext(), FILTER_DATA_SORT_TYPE, mSortValue);
-                ActivityUtils.saveStringToPreferences(getContext(), FILTER_DATA_MIN_RATING, mMinRating);
+                ActivityUtils.saveStringToPreferences(getContext(), DISCOVER_TYPE, mType);
+                ActivityUtils.saveStringToPreferences(getContext(), DISCOVER_GENRES, mGenresValues);
+                ActivityUtils.saveStringToPreferences(getContext(), DISCOVER_SORT_TYPE, mSortValue);
+                ActivityUtils.saveStringToPreferences(getContext(), DISCOVER_MIN_RATING, mMinRating);
                 activity.showPage(DISCOVER_RESULT);
                 break;
         }
@@ -174,7 +174,7 @@ public class DiscoverFragment extends Fragment
     // Called when a checkbox changes
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        mType = b ? DiscoverResultFragment.TYPE_MOVIES : DiscoverResultFragment.TYPE_TV;
+        mType = b ? MOVIES : TV_SHOWS;
         int textColorLight = ContextCompat.getColor(getActivity(), R.color.colorPrimary);
         int textColorDark = ContextCompat.getColor(getActivity(), R.color.colorGray);
         moviesRadioButton.setTextColor(b ? textColorLight : textColorDark);
