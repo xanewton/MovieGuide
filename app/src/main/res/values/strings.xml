@@ -24,8 +24,8 @@
     <string name="feedback_email" translatable="false">support.xengar@gmail.com</string>
     <string name="feedback_message" translatable="false">
         "Hi Support Team,\n\n"
-        "I found the following problem in the Movie Guide application.\n"
-        "[PROBLEM TITLE HERE]\n\n"
+        "I found the following [PROBLEM TITLE HERE] in the Movie Guide application.\n"
+        "[PROBLEM DESCRIPTION HERE]\n\n"
         "I was doing the following when it happened:\n"
         "1. [ACTION 1]\n"
         "2. [ACTION 2]\n"
@@ -357,9 +357,6 @@
         <item name="turkish">tr_TR</item>
     </string-array>
 
-    <string name="pref_show_main_toolbar">pref_show_main_toolbar</string>
-    <string name="pref_title_show_main_toolbar">Show toolbar</string>
     <string name="pref_title_query_language">Query Language</string>
-    <string name="pref_description_show_main_toolbar">Display main toolbar</string>
 
 </resources>

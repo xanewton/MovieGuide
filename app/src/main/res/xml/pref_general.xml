@@ -30,13 +30,6 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_title_query_language" />
 
-        <SwitchPreference
-            android:icon="@drawable/ic_toolbar_black_24dp"
-            android:defaultValue="true"
-            android:key="@string/pref_show_main_toolbar"
-            android:summary="@string/pref_description_show_main_toolbar"
-            android:title="@string/pref_title_show_main_toolbar" />
-
         <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to dismiss it. -->
         <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
         <ListPreference
