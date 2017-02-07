@@ -97,13 +97,12 @@ public class DiscoverResultFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_posters, container, false);
+        View view = inflater.inflate(R.layout.fragment_universal, container, false);
         progressBar = (CircularProgressBar) view.findViewById(R.id.progressBar);
         mCustomErrorView = (CustomErrorView) view.findViewById(R.id.error);
 
         SharedPreferences prefs = getActivity().getSharedPreferences(SHARED_PREF_NAME, 0);
         mLang = FragmentUtils.getFormatLocale(getActivity());
-
         mGenres = prefs.getString(DISCOVER_GENRES, null);
         mGenres = (mGenres == null) ? "" : mGenres;
         mSortBy = prefs.getString(DISCOVER_SORT_TYPE, null);
@@ -150,21 +149,13 @@ public class DiscoverResultFragment extends Fragment {
             return;
         }
 
-        mTotalPages = 1;
-        LastItemListener listener = null;
-        switch (itemType){
-            case MOVIES:
-                listener = new LastItemListener(MOVIES);
-                recycler.addOnScrollListener(listener);
-                listener.loadPage();
-                break;
+        if (itemType != MOVIES && itemType != TV_SHOWS)
+            return;
 
-            case TV_SHOWS:
-                listener = new LastItemListener(TV_SHOWS);
-                recycler.addOnScrollListener(listener);
-                listener.loadPage();
-                break;
-        }
+        mTotalPages = 1;
+        LastItemListener listener = new LastItemListener(itemType);
+        recycler.addOnScrollListener(listener);
+        listener.loadPage();
     }
 
     private void onLoadFailed(Throwable t) {
@@ -174,14 +165,15 @@ public class DiscoverResultFragment extends Fragment {
     }
 
     /**
-     * Look for the Movies.
+     * Query the Movies page.
+     * @param listener
      */
     private void discoverMovies(final FetchItemListener listener){
-        DiscoverService discoverMoviesService = ServiceGenerator.createService(DiscoverService.class);
-        Call<MovieResults> discoverMoviesCall =
-                discoverMoviesService.discoverMovie(
+        DiscoverService service = ServiceGenerator.createService(DiscoverService.class);
+        Call<MovieResults> call =
+                service.discoverMovie(
                         getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage, mSortBy, mMinRating, mGenres);
-        discoverMoviesCall.enqueue(new Callback<MovieResults>() {
+        call.enqueue(new Callback<MovieResults>() {
             @Override
             public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
                 if (response.isSuccessful()) {
@@ -215,15 +207,15 @@ public class DiscoverResultFragment extends Fragment {
         });
     }
 
-
     /**
-     * Look for the TV Shows.
+     * Query the TV Show page.
+     * @param listener
      */
     private void discoverTV(final FetchItemListener listener) {
-        DiscoverService discoverTvService = ServiceGenerator.createService(DiscoverService.class);
-        Call<TVResults> discoverTvCall = discoverTvService.discoverTv(
+        DiscoverService service = ServiceGenerator.createService(DiscoverService.class);
+        Call<TVResults> call = service.discoverTv(
                 getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage, mSortBy, mMinRating, mGenres);
-        discoverTvCall.enqueue(new Callback<TVResults>() {
+        call.enqueue(new Callback<TVResults>() {
             @Override
             public void onResponse(Call<TVResults> call, Response<TVResults> response) {
                 if (response.isSuccessful()) {
