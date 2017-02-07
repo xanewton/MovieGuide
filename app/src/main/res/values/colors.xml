@@ -27,4 +27,5 @@
     <color name="textcolorPrimary">#fde4a9</color>
     <color name="textcolorSec">#8f2626</color>
     <color name="trailerColor">#E8EAF6</color>
+    <color name="colorLink">#0000FF</color>
 </resources>
