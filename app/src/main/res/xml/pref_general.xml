@@ -52,6 +52,12 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_title_max_movie_elements" />
 
+        <Preference
+            android:key="@string/pref_version"
+            android:title="@string/pref_title_version"
+            android:icon="@drawable/ic_info_black_24dp">
+        </Preference>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

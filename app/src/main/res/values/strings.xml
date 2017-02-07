@@ -356,7 +356,11 @@
         <item name="ukrainian">uk_UA</item>
         <item name="turkish">tr_TR</item>
     </string-array>
-
     <string name="pref_title_query_language">Query Language</string>
+
+    <string name="pref_version" translatable="false">pref_version</string>
+    <string name="pref_title_version" translatable="false">Version</string>
+    <string name="about_credits" translatable="false">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
+    <string name="copyright" translatable="false">\@2017 Angel Garcia</string>
 
 </resources>
