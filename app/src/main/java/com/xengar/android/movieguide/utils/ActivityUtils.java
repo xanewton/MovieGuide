@@ -114,17 +114,6 @@ public class ActivityUtils {
     }
 
     /**
-     * Returns show toolbar from preferences.
-     * @param context
-     * @return
-     */
-    public static boolean getPreferenceShowToolbar(final Context context) {
-        String key = context.getString(R.string.pref_show_main_toolbar);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(key, true);
-    }
-
-    /**
      * Defines a palette listener.
      * @param title
      * @param textRating

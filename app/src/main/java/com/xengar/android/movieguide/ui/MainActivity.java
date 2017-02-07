@@ -86,10 +86,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        boolean showToolbar = ActivityUtils.getPreferenceShowToolbar(getApplicationContext());
-        if (!showToolbar) {
-            toolbar.setVisibility(View.GONE);
-        }
 
         // Save name of activity, in case of calling SettingsActivity
         ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
@@ -312,9 +308,7 @@ public class MainActivity extends AppCompatActivity
     private void showTabs(boolean show){
         if (show){
             fragmentLayout.setVisibility(View.GONE);
-            if (ActivityUtils.getPreferenceShowToolbar(getApplicationContext())) {
-                tabLayout.setVisibility(View.VISIBLE);
-            }
+            tabLayout.setVisibility(View.VISIBLE);
             mViewPager.setVisibility(View.VISIBLE);
         } else {
             fragmentLayout.setVisibility(View.VISIBLE);

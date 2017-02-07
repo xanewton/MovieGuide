@@ -43,7 +43,7 @@
             android:id="@+id/error_message_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/activity_horizontal_padding"
+            android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textIsSelectable="true"
             android:textColor="?android:attr/textColorSecondaryNoDisable"

@@ -281,7 +281,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_query_language)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_show_main_toolbar)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_cast_list)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_movie_list)));
         }
