@@ -35,6 +35,7 @@ import com.xengar.android.movieguide.adapters.HomeTVAdapter;
 import com.xengar.android.movieguide.data.FavoritesContract;
 import com.xengar.android.movieguide.data.Movie;
 import com.xengar.android.movieguide.data.TV;
+import com.xengar.android.movieguide.utils.FragmentUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,15 +110,11 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         mRecyclerViewMovies.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewMovies.setAdapter(mAdapterMovies);
-        updateProgressBar(progressBarMovies, true);
+        FragmentUtils.updateProgressBar(progressBarMovies, true);
 
         FetchFavoriteMovies fetch =
                 new FetchFavoriteMovies(mAdapterMovies, getActivity().getContentResolver());
         fetch.execute();
-    }
-
-    private void updateProgressBar(CircularProgressBar progressBar, boolean visibility) {
-        progressBar.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -127,7 +124,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         mRecyclerViewTV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewTV.setAdapter(mAdapterTV);
 
-        updateProgressBar(progressBarTV, true);
+        FragmentUtils.updateProgressBar(progressBarTV, true);
         FetchFavoriteTV fetch =
                 new FetchFavoriteTV(mAdapterTV, getActivity().getContentResolver());
         fetch.execute();
@@ -203,7 +200,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
                 mMovies.addAll(posters);
                 adapter.notifyDataSetChanged();
             }
-            updateProgressBar(progressBarMovies, false);
+            FragmentUtils.updateProgressBar(progressBarMovies, false);
         }
     }
 
@@ -254,7 +251,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
                 mTVList.addAll(posters);
                 adapter.notifyDataSetChanged();
             }
-            updateProgressBar(progressBarTV, false);
+            FragmentUtils.updateProgressBar(progressBarTV, false);
         }
     }
 

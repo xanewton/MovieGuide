@@ -35,6 +35,7 @@ import com.xengar.android.movieguide.data.TV;
 import com.xengar.android.movieguide.data.TVResults;
 import com.xengar.android.movieguide.service.DiscoverService;
 import com.xengar.android.movieguide.service.ServiceGenerator;
+import com.xengar.android.movieguide.utils.CustomErrorView;
 import com.xengar.android.movieguide.utils.FragmentUtils;
 import com.xengar.android.movieguide.utils.StringUtils;
 
@@ -46,6 +47,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.ContentValues.TAG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 
@@ -69,6 +71,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private CircularProgressBar progressBarTV;
     private HomeTVAdapter mAdapterTV;
     private List<TV> mTVList;
+    private CustomErrorView mCustomErrorView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -82,6 +85,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_summary, container, false);
+        mCustomErrorView = (CustomErrorView) view.findViewById(R.id.error);
 
         moreMovies = (LinearLayout) view.findViewById(R.id.home_in_theaters);
         moreMovies.setOnClickListener(this);
@@ -89,7 +93,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         progressBarMovies = (CircularProgressBar) view.findViewById(R.id.progress_bar_movies);
         mMovies = new ArrayList<>();
         mAdapterMovies = new HomeMovieAdapter(mMovies);
-        fillMoviesSection();
 
         moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
         moreTV.setOnClickListener(this);
@@ -97,10 +100,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         progressBarTV = (CircularProgressBar) view.findViewById(R.id.progress_bar_tv);
         mTVList = new ArrayList<>();
         mAdapterTV = new HomeTVAdapter(mTVList);
-        fillTVSection();
 
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!FragmentUtils.checkInternetConnection(getActivity())) {
+            Log.e(TAG, "Network is not available");
+            onLoadFailed(new Throwable(getString(R.string.network_not_available_message)));
+            return;
+        }
+
+        fillMoviesSection();
+        fillTVSection();
+    }
+
+    private void onLoadFailed(Throwable t) {
+        mCustomErrorView.setError(t);
+        mCustomErrorView.setVisibility(View.VISIBLE);
+        FragmentUtils.updateProgressBar(progressBarMovies, false);
+        FragmentUtils.updateProgressBar(progressBarTV, false);
+    }
+
 
     /**
      * Fills the Movies section.
@@ -109,7 +133,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mRecyclerViewMovies.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewMovies.setAdapter(mAdapterMovies);
-        updateProgressBar(progressBarMovies, true);
+        FragmentUtils.updateProgressBar(progressBarMovies, true);
 
         DiscoverService discover = ServiceGenerator.createService(DiscoverService.class);
         Call<MovieResults> call = discover.inTheaters(getString(R.string.THE_MOVIE_DB_API_TOKEN),
@@ -132,7 +156,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         }
                         mAdapterMovies.notifyDataSetChanged();
                     }
-                    updateProgressBar(progressBarMovies, false);
+                    FragmentUtils.updateProgressBar(progressBarMovies, false);
                 } else {
                     Log.i("TAG", "Res: " + response.code());
                 }
@@ -141,13 +165,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onFailure(Call<MovieResults> call, Throwable t) {
                 Log.i("TAG", "Error: " + t.getMessage());
-                updateProgressBar(progressBarMovies, false);
+                FragmentUtils.updateProgressBar(progressBarMovies, false);
             }
         });
-    }
-
-    private void updateProgressBar(CircularProgressBar progressBar, boolean visibility) {
-        progressBar.setVisibility(visibility ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -157,7 +177,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mRecyclerViewTV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewTV.setAdapter(mAdapterTV);
 
-        updateProgressBar(progressBarTV, true);
+        FragmentUtils.updateProgressBar(progressBarTV, true);
         DiscoverService service = ServiceGenerator.createService(DiscoverService.class);
         Call<TVResults> call = service.onTv(StringUtils.getDateOnTheAir(),
                 StringUtils.getDateToday(), "popularity.desc", mLang, mPage,
@@ -175,7 +195,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                         }
                         mAdapterTV.notifyDataSetChanged();
                     }
-                    updateProgressBar(progressBarTV, false);
+                    FragmentUtils.updateProgressBar(progressBarTV, false);
                 } else {
                     Log.i("TAG", "Res: " + response.code());
                 }
@@ -184,7 +204,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onFailure(Call<TVResults> call, Throwable t) {
                 Log.i("TAG", "Error: " + t.getMessage());
-                updateProgressBar(progressBarTV, false);
+                FragmentUtils.updateProgressBar(progressBarTV, false);
             }
         });
     }
