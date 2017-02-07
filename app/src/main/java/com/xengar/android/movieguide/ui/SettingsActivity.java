@@ -16,6 +16,7 @@
 package com.xengar.android.movieguide.ui;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,7 +40,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.xengar.android.movieguide.BuildConfig;
 import com.xengar.android.movieguide.R;
 
 import java.util.List;
@@ -283,6 +286,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_query_language)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_cast_list)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_max_movie_list)));
+
+            Preference preference = getPreferenceManager().findPreference(getString(R.string.pref_version));
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            //set up dialog
+                            Dialog dialog = new Dialog(getActivity());
+                            dialog.setContentView(R.layout.version_dialog);
+                            dialog.setCancelable(true);
+                            //set up text
+                            TextView text = (TextView) dialog.findViewById(R.id.version_number);
+                            text.setText(BuildConfig.VERSION_NAME);
+
+                            dialog.show();
+                            return true;
+                        }
+                    });
+            preference.setSummary(BuildConfig.VERSION_NAME);
+            bindPreferenceSummaryToValue(preference);
         }
 
         @Override
