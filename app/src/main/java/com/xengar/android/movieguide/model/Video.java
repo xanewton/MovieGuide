@@ -13,29 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xengar.android.movieguide.data;
+package com.xengar.android.movieguide.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Genre
+ * Video
  */
-public class Genre {
-    @SerializedName("id")
+public class Video {
+    @SerializedName("key")
     @Expose
-    private String mId;
-
+    private String mKey;
     @SerializedName("name")
     @Expose
     private String mName;
+    @SerializedName("site")
+    @Expose
+    private String mSite;
 
-    public String getId() {
-        return mId;
+    public String getKey() {
+        return mKey;
     }
 
-    public void setId(String id) {
-        mId = id;
+    public void setKey(String key) {
+        mKey = key;
     }
 
     public String getName() {
@@ -44,5 +46,13 @@ public class Genre {
 
     public void setName(String name) {
         mName = name;
+    }
+
+    public String getSite() {
+        return mSite;
+    }
+
+    public void setSite(String site) {
+        mSite = site;
     }
 }

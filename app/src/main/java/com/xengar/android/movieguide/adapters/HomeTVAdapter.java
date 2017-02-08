@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.data.TV;
+import com.xengar.android.movieguide.model.TV;
 import com.xengar.android.movieguide.utils.ActivityUtils;
 import com.xengar.android.movieguide.utils.Constants;
 

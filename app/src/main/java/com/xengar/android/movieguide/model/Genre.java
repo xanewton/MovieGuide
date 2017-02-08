@@ -13,25 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xengar.android.movieguide.data;
+package com.xengar.android.movieguide.model;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.xengar.android.movieguide.service.BaseResults;
-
-import java.util.List;
 
 /**
- * TVResults
+ * Genre
  */
-public class TVResults extends BaseResults {
-    @SerializedName("results")
-    private List<TV> mTVs;
+public class Genre {
+    @SerializedName("id")
+    @Expose
+    private String mId;
 
-    public List<TV> getTVs() {
-        return mTVs;
+    @SerializedName("name")
+    @Expose
+    private String mName;
+
+    public String getId() {
+        return mId;
     }
 
-    public void setTVs(List<TV> TVs) {
-        mTVs = TVs;
+    public void setId(String id) {
+        mId = id;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public void setName(String name) {
+        mName = name;
     }
 }

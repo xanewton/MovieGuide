@@ -13,26 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xengar.android.movieguide.data;
+package com.xengar.android.movieguide.service;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.xengar.android.movieguide.model.Person;
 
-import java.util.List;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
- * VideoResults
+ * PeopleService
  */
-public class VideoResults {
-    @SerializedName("results")
-    @Expose
-    private List<Video> mVideos;
+public interface PeopleService {
 
-    public List<Video> getVideos() {
-        return mVideos;
-    }
-
-    public void setVideos(List<Video> videos) {
-        mVideos = videos;
-    }
+    @GET("person/{person_id}")
+    Call<Person> peopleDetails(
+            @Path("person_id") String person_id,
+            @Query("api_key") String api_key,
+            @Query("language") String lang
+    );
 }
