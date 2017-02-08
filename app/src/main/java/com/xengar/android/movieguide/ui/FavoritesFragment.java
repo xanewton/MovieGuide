@@ -37,6 +37,7 @@ import com.xengar.android.movieguide.data.FavoritesContract;
 import com.xengar.android.movieguide.model.Movie;
 import com.xengar.android.movieguide.model.PersonPopular;
 import com.xengar.android.movieguide.model.TV;
+import com.xengar.android.movieguide.utils.CustomErrorView;
 import com.xengar.android.movieguide.utils.FragmentUtils;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ import java.util.List;
 
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
+import static android.content.ContentValues.TAG;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PERSON_ID;
@@ -59,6 +61,8 @@ import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
  * FavoritesFragment
  */
 public class FavoritesFragment extends Fragment implements View.OnClickListener{
+
+    private CustomErrorView mCustomErrorView;
 
     private LinearLayout moreMovies;
     private RecyclerView mRecyclerViewMovies;
@@ -90,6 +94,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_summary, container, false);
+        mCustomErrorView = (CustomErrorView) view.findViewById(R.id.error);
 
         moreMovies = (LinearLayout) view.findViewById(R.id.home_in_theaters);
         moreMovies.setOnClickListener(this);
@@ -99,7 +104,6 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         moviesTitle.setText(getText(R.string.menu_title_movies));
         mMovies = new ArrayList<>();
         mAdapterMovies = new HomeMovieAdapter(mMovies);
-        fillMoviesSection();
 
         moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
         moreTV.setOnClickListener(this);
@@ -109,7 +113,6 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         tvTitle.setText(getText(R.string.menu_title_tv_shows));
         mTVList = new ArrayList<>();
         mAdapterTV = new HomeTVAdapter(mTVList);
-        fillTVSection();
 
         morePeople = (LinearLayout) view.findViewById(R.id.home_people);
         morePeople.setOnClickListener(this);
@@ -117,9 +120,34 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         progressBarPeople = (CircularProgressBar) view.findViewById(R.id.progress_bar_people);
         mPeople = new ArrayList<>();
         mAdapterPeople = new HomePersonAdapter(mPeople);
-        fillPeopleSection();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!FragmentUtils.checkInternetConnection(getActivity())) {
+            Log.e(TAG, "Network is not available");
+            onLoadFailed(new Throwable(getString(R.string.network_not_available_message)));
+            return;
+        }
+
+        mMovies.clear();
+        mTVList.clear();
+        mPeople.clear();
+        fillMoviesSection();
+        fillTVSection();
+        fillPeopleSection();
+    }
+
+    private void onLoadFailed(Throwable t) {
+        mCustomErrorView.setError(t);
+        mCustomErrorView.setVisibility(View.VISIBLE);
+        FragmentUtils.updateProgressBar(progressBarMovies, false);
+        FragmentUtils.updateProgressBar(progressBarTV, false);
+        FragmentUtils.updateProgressBar(progressBarPeople, false);
     }
 
     /**

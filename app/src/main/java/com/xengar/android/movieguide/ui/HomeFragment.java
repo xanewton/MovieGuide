@@ -135,6 +135,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
             return;
         }
 
+        mMovies.clear();
+        mTVList.clear();
+        mPeople.clear();
         fillMoviesSection();
         fillTVSection();
         fillPeopleSection();
