@@ -28,9 +28,9 @@ import android.view.ViewGroup;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.PosterAdapter;
 import com.xengar.android.movieguide.data.ImageItem;
-import com.xengar.android.movieguide.model.Movie;
-import com.xengar.android.movieguide.model.MovieResults;
-import com.xengar.android.movieguide.service.DiscoverService;
+import com.xengar.android.movieguide.model.PersonPopular;
+import com.xengar.android.movieguide.model.PersonResults;
+import com.xengar.android.movieguide.service.PersonService;
 import com.xengar.android.movieguide.service.ServiceGenerator;
 import com.xengar.android.movieguide.sync.FetchItemListener;
 import com.xengar.android.movieguide.utils.CustomErrorView;
@@ -59,9 +59,6 @@ public class PeopleFragment extends Fragment {
     private CircularProgressBar progressBar;
     private CustomErrorView mCustomErrorView;
 
-    private String mGenres;
-    private String mSortBy;
-    private String mMinRating;
     private String mLang;
 
     private RecyclerView recycler;
@@ -96,9 +93,6 @@ public class PeopleFragment extends Fragment {
         recycler.setLayoutManager(layoutManager);
 
         mLang = FragmentUtils.getFormatLocale(getActivity());
-        mGenres = "";
-        mSortBy = null;
-        mMinRating = null;
         adapter = new PosterAdapter(getContext(), MOVIES);
         recycler.setAdapter(adapter);
         FragmentUtils.updateProgressBar(progressBar, true);
@@ -128,24 +122,23 @@ public class PeopleFragment extends Fragment {
     }
 
     /**
-     * Query the Movies page.
+     * Query the Person popular page.
      * @param listener
      */
-    private void discoverMovies(final FetchItemListener listener){
-        DiscoverService service = ServiceGenerator.createService(DiscoverService.class);
-        Call<MovieResults> call =
-                service.discoverMovie(
-                        getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage, mSortBy, mMinRating, mGenres);
-        call.enqueue(new Callback<MovieResults>() {
+    private void loadPeople(final FetchItemListener listener){
+        PersonService service = ServiceGenerator.createService(PersonService.class);
+        Call<PersonResults> call =
+                service.popular(getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage);
+        call.enqueue(new Callback<PersonResults>() {
             @Override
-            public void onResponse(Call<MovieResults> call, Response<MovieResults> response) {
+            public void onResponse(Call<PersonResults> call, Response<PersonResults> response) {
                 if (response.isSuccessful()) {
-                    List<Movie> movies = response.body().getMovies();
+                    List<PersonPopular> people = response.body().getPeople();
                     int adds = 0;
-                    for (Movie movie : movies) {
+                    for (PersonPopular person : people) {
                         adds += adapter.add(
-                                new ImageItem(TMDB_IMAGE_URL + POSTER_SIZE_W342 + movie.getPosterPath(),
-                                        Integer.parseInt(movie.getId()), movie.getTitle(), null));
+                                new ImageItem(TMDB_IMAGE_URL + POSTER_SIZE_W342 + person.getProfilePath(),
+                                        Integer.parseInt(person.getId()), person.getName(), null));
                     }
                     if (adds != 0) {
                         adapter.notifyDataSetChanged();
@@ -164,7 +157,7 @@ public class PeopleFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<MovieResults> call, Throwable t) {
+            public void onFailure(Call<PersonResults> call, Throwable t) {
                 onLoadFailed(t);
             }
         });
@@ -215,7 +208,7 @@ public class PeopleFragment extends Fragment {
          */
         public void loadPage() {
             if (!loadingState && !lastPageReached) {
-                discoverMovies(this);
+                loadPeople(this);
                 loadingState = true;
             }
         }
