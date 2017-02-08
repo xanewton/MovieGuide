@@ -31,9 +31,11 @@ import android.widget.TextView;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.HomeMovieAdapter;
+import com.xengar.android.movieguide.adapters.HomePersonAdapter;
 import com.xengar.android.movieguide.adapters.HomeTVAdapter;
 import com.xengar.android.movieguide.data.FavoritesContract;
 import com.xengar.android.movieguide.model.Movie;
+import com.xengar.android.movieguide.model.PersonPopular;
 import com.xengar.android.movieguide.model.TV;
 import com.xengar.android.movieguide.utils.FragmentUtils;
 
@@ -44,10 +46,13 @@ import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PERSON_ID;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_POSTER_PATH;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PROFILE_PATH;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TITLE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TV_SHOW_ID;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 
 /**
@@ -68,6 +73,12 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
     private HomeTVAdapter mAdapterTV;
     private List<TV> mTVList;
     private TextView tvTitle;
+
+    private LinearLayout morePeople;
+    private RecyclerView mRecyclerViewPeople;
+    private CircularProgressBar progressBarPeople;
+    private HomePersonAdapter mAdapterPeople;
+    private List<PersonPopular> mPeople;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -100,6 +111,14 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         mAdapterTV = new HomeTVAdapter(mTVList);
         fillTVSection();
 
+        morePeople = (LinearLayout) view.findViewById(R.id.home_people);
+        morePeople.setOnClickListener(this);
+        mRecyclerViewPeople = (RecyclerView) view.findViewById(R.id.recycler_view_people);
+        progressBarPeople = (CircularProgressBar) view.findViewById(R.id.progress_bar_people);
+        mPeople = new ArrayList<>();
+        mAdapterPeople = new HomePersonAdapter(mPeople);
+        fillPeopleSection();
+
         return view;
     }
 
@@ -131,6 +150,21 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
+     * Fills the People section.
+     */
+    private void fillPeopleSection(){
+        mRecyclerViewPeople.setLayoutManager(
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerViewPeople.setAdapter(mAdapterPeople);
+        FragmentUtils.updateProgressBar(progressBarPeople, true);
+
+        FetchFavoritePeople fetch =
+                new FetchFavoritePeople(mAdapterPeople, getActivity().getContentResolver());
+        fetch.execute();
+    }
+
+
+    /**
      * Changes activity to the correct page.
      * @param view
      */
@@ -148,6 +182,11 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
                 activity.switchPagerAdapter(TV_SHOWS);
                 activity.showPage(TV_SHOWS);
                 activity.assignCheckedItem(TV_SHOWS);
+                break;
+
+            case R.id.home_people:
+                activity.showPage(PEOPLE);
+                activity.assignCheckedItem(PEOPLE);
                 break;
         }
     }
@@ -252,6 +291,57 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
                 adapter.notifyDataSetChanged();
             }
             FragmentUtils.updateProgressBar(progressBarTV, false);
+        }
+    }
+
+    /**
+     * FetchFavoritePeople from the database.
+     */
+    public class FetchFavoritePeople extends AsyncTask<Void, Void, ArrayList<PersonPopular>> {
+
+        private final String TAG = FetchFavoritePeople.class.getSimpleName();
+        private ContentResolver contentResolver;
+        private HomePersonAdapter adapter;
+
+        // Constructor
+        public FetchFavoritePeople(HomePersonAdapter adapter, ContentResolver contentResolver) {
+            this.adapter = adapter;
+            this.contentResolver = contentResolver;
+        }
+
+        @Override
+        protected ArrayList<PersonPopular> doInBackground(Void... voids) {
+            ArrayList<PersonPopular> people = new ArrayList<>();
+            String[] columns = new String[]{ COLUMN_PROFILE_PATH, COLUMN_PERSON_ID, COLUMN_NAME};
+
+            final Cursor cursor = contentResolver.query(FavoritesContract.FavoriteColumns.uriPerson,
+                    columns, null, null, null);
+
+            if (cursor != null && cursor.getCount() != 0) {
+                PersonPopular person;
+                while (cursor.moveToNext()) {
+                    person = new PersonPopular();
+                    person.setProfilePath(cursor.getString(0));
+                    person.setId(String.format("%s", cursor.getInt(1)));
+                    person.setName(cursor.getString(2));
+                    people.add(person);
+                }
+            } else {
+                Log.d(TAG, "Cursor is empty");
+            }
+            if (cursor != null)
+                cursor.close();
+            return people;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<PersonPopular> people) {
+            super.onPostExecute(people);
+            if (people != null) {
+                mPeople.addAll(people);
+                adapter.notifyDataSetChanged();
+            }
+            FragmentUtils.updateProgressBar(progressBarPeople, false);
         }
     }
 

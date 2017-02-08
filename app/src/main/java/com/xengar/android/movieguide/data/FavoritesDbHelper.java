@@ -22,7 +22,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns;
 
 /**
- * Database helper for Favorite Movies and TV Shows. Manages database creation and version management.
+ * Database helper for Favorite Movies, TV Shows and Persons.
+ * Manages database creation and update.
  */
 public class FavoritesDbHelper extends SQLiteOpenHelper {
 
@@ -30,7 +31,7 @@ public class FavoritesDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Favorites.db";
 
     // Database version. If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Constructor
     public FavoritesDbHelper(Context context) {
@@ -78,6 +79,14 @@ public class FavoritesDbHelper extends SQLiteOpenHelper {
                 + FavoriteColumns.COLUMN_NUM_SEASONS + " INTEGER, "
                 + FavoriteColumns.COLUMN_NUM_EPISODES + " INTEGER )";
         db.execSQL(SQL_CREATE_TABLE);
+
+        SQL_CREATE_TABLE = "CREATE TABLE " + FavoriteColumns.FAVORITE_PERSON_TBL + " ("
+                + "_id INTEGER PRIMARY KEY, "
+                + FavoriteColumns.COLUMN_PERSON_ID + " INTEGER, "
+                + FavoriteColumns.COLUMN_NAME + " TEXT, "
+                + FavoriteColumns.COLUMN_PROFILE_PATH + " TEXT, "
+                + FavoriteColumns.COLUMN_KNOWNFOR_POSTER_PATH + " TEXT) ";
+        db.execSQL(SQL_CREATE_TABLE);
     }
 
     @Override
@@ -85,6 +94,8 @@ public class FavoritesDbHelper extends SQLiteOpenHelper {
         String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + FavoriteColumns.FAVORITE_MOVIES_TBL;
         db.execSQL(SQL_DROP_TABLE);
         SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
+        db.execSQL(SQL_DROP_TABLE);
+        SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + FavoriteColumns.FAVORITE_PERSON_TBL;
         db.execSQL(SQL_DROP_TABLE);
         onCreate(db);
     }

@@ -60,8 +60,14 @@ public class TestProvider {
         appContext.getContentResolver().delete(FavoritesContract.FavoriteColumns.uriTVShow, null, null);
         Cursor cursor2 = appContext.getContentResolver().query(
                 FavoritesContract.FavoriteColumns.uriTVShow, null, null, null, null);
-        assertEquals("Error: Records not deleted from Favorite Movies table during delete", 0, cursor.getCount());
+        assertEquals("Error: Records not deleted from Favorite TV Shows table during delete", 0, cursor.getCount());
         cursor2.close();
+
+        appContext.getContentResolver().delete(FavoritesContract.FavoriteColumns.uriPerson, null, null);
+        Cursor cursor3 = appContext.getContentResolver().query(
+                FavoritesContract.FavoriteColumns.uriPerson, null, null, null, null);
+        assertEquals("Error: Records not deleted from Favorite Person table during delete", 0, cursor.getCount());
+        cursor3.close();
     }
 
     /*
@@ -74,6 +80,7 @@ public class TestProvider {
 
         db.delete(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL, null, null);
         db.delete(FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL, null, null);
+        db.delete(FavoritesContract.FavoriteColumns.FAVORITE_PERSON_TBL, null, null);
         db.close();
     }
 
@@ -168,6 +175,35 @@ public class TestProvider {
         if ( Build.VERSION.SDK_INT >= 19 ) {
             assertEquals("Error: Quote Query did not properly set NotificationUri",
                     quoteCursor.getNotificationUri(), FavoritesContract.FavoriteColumns.uriTVShow);
+        }
+    }
+
+    /*
+     * Uses the database directly to insert and then uses the ContentProvider to read out the data.
+     */
+    @Test
+    public void testBasicFavoritePersonQueries() {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        // insert our test records into the database
+        FavoritesDbHelper dbHelper = new FavoritesDbHelper(appContext);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues testValues = TestUtilities.createMargotRobbieValues();
+        long rowId = TestUtilities.insertMargotRobbieValues(appContext);
+
+        // Test the basic content provider query
+        Cursor quoteCursor = appContext.getContentResolver().query(
+                FavoritesContract.FavoriteColumns.uriPerson, null, null, null, null);
+
+        // Make sure we get the correct cursor out of the database
+        TestUtilities.validateCursor("testBasicFavoritePersonQueries, quote query", quoteCursor,
+                testValues);
+
+        // Has the NotificationUri been set correctly? --- we can only test this easily against API
+        // level 19 or greater because getNotificationUri was added in API level 19.
+        if ( Build.VERSION.SDK_INT >= 19 ) {
+            assertEquals("Error: Quote Query did not properly set NotificationUri",
+                    quoteCursor.getNotificationUri(), FavoritesContract.FavoriteColumns.uriPerson);
         }
     }
 
@@ -283,6 +319,63 @@ public class TestProvider {
         cursor.close();
     }
 
+    /*
+     * This test uses the provider to insert and then update the data.
+     */
+    @Test
+    public void testUpdateFavoritePerson() {
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        // Create a new map of values, where column names are the keys
+        ContentValues values = TestUtilities.createMargotRobbieValues();
+
+        Uri quoteUri = appContext.getContentResolver().
+                insert(FavoritesContract.FavoriteColumns.uriPerson, values);
+        long rowId = ContentUris.parseId(quoteUri);
+
+        // Verify we got a row back.
+        assertTrue(rowId != -1);
+        Log.d(LOG_TAG, "New row id: " + rowId);
+
+        ContentValues updatedValues = new ContentValues(values);
+        updatedValues.put(FavoritesContract.FavoriteColumns._ID, rowId);
+        updatedValues.put(FavoritesContract.FavoriteColumns.COLUMN_KNOWNFOR_POSTER_PATH,
+                "/rP36Rx5RQh0rmH2ynEIaG8DxbV2.jpg");
+
+        // Create a cursor with observer to make sure that the content provider is notifying
+        // the observers as expected
+        Cursor locationCursor = appContext.getContentResolver().query(
+                FavoritesContract.FavoriteColumns.uriPerson, null, null, null, null);
+
+        TestUtilities.TestContentObserver tco = TestUtilities.getTestContentObserver();
+        locationCursor.registerContentObserver(tco);
+
+        int count = appContext.getContentResolver().update(
+                FavoritesContract.FavoriteColumns.uriPerson, updatedValues,
+                FavoritesContract.FavoriteColumns._ID + "= ?", new String[] { Long.toString(rowId)});
+        assertEquals(count, 1);
+
+        // Test to make sure our observer is called.  If not, we throw an assertion.
+        // If your code is failing here, it means that your content provider
+        // isn't calling getContext().getContentResolver().notifyChange(uri, null);
+        tco.waitForNotificationOrFail();
+
+        locationCursor.unregisterContentObserver(tco);
+        locationCursor.close();
+
+        // A cursor is your primary interface to the query results.
+        Cursor cursor = appContext.getContentResolver().query(
+                FavoritesContract.FavoriteColumns.uriPerson,
+                null,   // projection
+                FavoritesContract.FavoriteColumns._ID + " = " + rowId,
+                null,   // Values for the "where" clause
+                null    // sort order
+        );
+
+        TestUtilities.validateCursor("testUpdateFavoritePerson.  Error validating quote entry update.",
+                cursor, updatedValues);
+        cursor.close();
+    }
+
     // Make sure we can still delete after adding/updating stuff
     @Test
     public void testInsertReadFavoriteMoviesProvider() {
@@ -297,6 +390,14 @@ public class TestProvider {
         ContentValues testValues = TestUtilities.createTheSimpsonsValues();
         testInsertReadProvider(FavoritesContract.FavoriteColumns.uriTVShow, testValues,
                 "testInsertReadProvider - FavoriteTVShows");
+    }
+
+    // Make sure we can still delete after adding/updating stuff
+    @Test
+    public void testInsertReadFavoritePersonProvider() {
+        ContentValues testValues = TestUtilities.createMargotRobbieValues();
+        testInsertReadProvider(FavoritesContract.FavoriteColumns.uriPerson, testValues,
+                "testInsertReadProvider - FavoritePerson");
     }
 
     private void testInsertReadProvider(Uri uri, ContentValues testValues, String action) {
@@ -343,6 +444,10 @@ public class TestProvider {
         testInsertReadProvider(FavoritesContract.FavoriteColumns.uriTVShow, testValues,
                 "testInsertReadProvider - FavoriteTVShows");
 
+        testValues = TestUtilities.createMargotRobbieValues();
+        testInsertReadProvider(FavoritesContract.FavoriteColumns.uriPerson, testValues,
+                "testInsertReadProvider - FavoritePerson");
+
         Context appContext = InstrumentationRegistry.getTargetContext();
         // Register a content observer for our quote delete.
         TestUtilities.TestContentObserver quoteObserver = TestUtilities.getTestContentObserver();
@@ -351,6 +456,9 @@ public class TestProvider {
 
         appContext.getContentResolver().registerContentObserver(
                 FavoritesContract.FavoriteColumns.uriTVShow, true, quoteObserver);
+
+        appContext.getContentResolver().registerContentObserver(
+                FavoritesContract.FavoriteColumns.uriPerson, true, quoteObserver);
 
         deleteAllRecordsFromProvider();
 

@@ -91,6 +91,8 @@
     <string name="favorite_movie_del_message">Remove Movie from Favorites</string>
     <string name="favorite_tvshow_add_message">Add TV Show to Favorites</string>
     <string name="favorite_tvshow_del_message">Remove TV Show from Favorites</string>
+    <string name="favorite_person_add_message">Add Person to Favorites</string>
+    <string name="favorite_person_del_message">Remove Person from Favorites</string>
     <string name="title_activity_settings">Settings</string>
 
     <string name="date">date</string>

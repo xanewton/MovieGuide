@@ -29,6 +29,8 @@ public final class FavoritesContract {
     public static final String PATH_MOVIE_ID = "movie/*";
     public static final String PATH_TV_SHOW = "tvshow";
     public static final String PATH_TV_SHOW_ID = "tvshow/*";
+    public static final String PATH_PERSON = "person";
+    public static final String PATH_PERSON_ID = "person/*";
 
 
     private FavoritesContract() {
@@ -38,6 +40,7 @@ public final class FavoritesContract {
     public static final class FavoriteColumns implements BaseColumns {
         public static final Uri uriMovie = BASE_URI.buildUpon().appendPath(PATH_MOVIE).build();
         public static final Uri uriTVShow = BASE_URI.buildUpon().appendPath(PATH_TV_SHOW).build();
+        public static final Uri uriPerson = BASE_URI.buildUpon().appendPath(PATH_PERSON).build();
 
         public static final String FAVORITE_MOVIES_TBL = "FAVORITE_MOVIES_TBL";
         public static final String COLUMN_MOVIE_ID = "movieid";
@@ -68,6 +71,10 @@ public final class FavoritesContract {
         public static final String COLUMN_NUM_EPISODES = "num_episodes";
         public static final String COLUMN_NUM_SEASONS = "num_seasons";
 
+        public static final String FAVORITE_PERSON_TBL = "FAVORITE_PERSON_TBL";
+        public static final String COLUMN_PERSON_ID = "personid";
+        public static final String COLUMN_PROFILE_PATH = "profile_path";
+        public static final String COLUMN_KNOWNFOR_POSTER_PATH = "knownfor_poster_path";
 
         public static Uri makeUriForMovie(String symbol) {
             return uriMovie.buildUpon().appendPath(symbol).build();
@@ -75,6 +82,10 @@ public final class FavoritesContract {
 
         public static Uri makeUriForTVShow(String symbol) {
             return uriTVShow.buildUpon().appendPath(symbol).build();
+        }
+
+        public static Uri makeUriForPerson(String symbol) {
+            return uriPerson.buildUpon().appendPath(symbol).build();
         }
 
         public static String getIdFromUri(Uri uri) {

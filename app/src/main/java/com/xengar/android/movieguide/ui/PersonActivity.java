@@ -15,12 +15,18 @@
  */
 package com.xengar.android.movieguide.ui;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
@@ -36,11 +42,13 @@ import android.widget.TextView;
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
+import com.xengar.android.movieguide.data.FavoritesContract;
 import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.data.MovieCreditCast;
 import com.xengar.android.movieguide.data.MovieCreditCrew;
 import com.xengar.android.movieguide.data.PersonData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
+import com.xengar.android.movieguide.utils.Constants;
 import com.xengar.android.movieguide.utils.JSONLoader;
 import com.xengar.android.movieguide.utils.JSONUtils;
 
@@ -51,14 +59,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_KNOWNFOR_POSTER_PATH;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PERSON_ID;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PROFILE_PATH;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
-import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
-import static com.xengar.android.movieguide.utils.Constants.POSTER_PERSON_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 
 /**
@@ -67,6 +78,7 @@ import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 public class PersonActivity extends AppCompatActivity {
 
     private static final String TAG = PersonActivity.class.getSimpleName();
+    private static final Uri URI = FavoritesContract.FavoriteColumns.uriPerson;
     private int personId;
     private CollapsingToolbarLayout collapsingToolbar;
     private PersonData personData;
@@ -87,6 +99,8 @@ public class PersonActivity extends AppCompatActivity {
     private final String[] personTitle = {" "};
     private LinearLayout creditCastList;
     private LinearLayout creditCrewList;
+
+    private FloatingActionButton fabAdd, fabDel;
 
 
     @Override
@@ -127,6 +141,7 @@ public class PersonActivity extends AppCompatActivity {
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), personTitle);
+        showFavoriteButtons();
     }
 
     @Override
@@ -147,6 +162,62 @@ public class PersonActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Defines if add or remove from Favorites should be initially visible for this movieId.
+     */
+    private void showFavoriteButtons() {
+        fabAdd = (FloatingActionButton) findViewById(R.id.fab_add);
+        fabDel = (FloatingActionButton) findViewById(R.id.fab_minus);
+
+        Cursor cursor = getContentResolver().query(ContentUris.withAppendedId(URI, personId),
+                new String[]{COLUMN_PERSON_ID}, null, null, null);
+        if (cursor != null && cursor.getCount() != 0) {
+            fabDel.setVisibility(View.VISIBLE);
+        } else {
+            fabAdd.setVisibility(View.VISIBLE);
+        }
+        if (cursor != null)
+            cursor.close();
+    }
+
+    /**
+     * Defines what to do when click on add/remove from Favorites buttons.
+     * @param personData
+     */
+    private void defineClickFavoriteButtons(final PersonData personData) {
+        final int DURATION = 1000;
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, getString(R.string.favorite_person_add_message), DURATION)
+                        .setAction("Action", null).show();
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_PERSON_ID, personId);
+                values.put(COLUMN_NAME, personData.getActorName());
+                values.put(COLUMN_PROFILE_PATH, personData.getProfileImagePath());
+                values.put(COLUMN_KNOWNFOR_POSTER_PATH, "");
+                getContentResolver().insert(URI, values);
+
+                fabAdd.setVisibility(View.INVISIBLE);
+                fabDel.setVisibility(View.VISIBLE);
+            }
+        });
+
+        fabDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, getString(R.string.favorite_movie_del_message), DURATION)
+                        .setAction("Action", null).show();
+                getContentResolver().delete(URI, COLUMN_PERSON_ID + " = ?",
+                        new String[]{Integer.toString(personId)} );
+
+                fabAdd.setVisibility(View.VISIBLE);
+                fabDel.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     private void fetchPersonData() {
@@ -199,6 +270,7 @@ public class PersonActivity extends AppCompatActivity {
         PopulateCreditCast(personData.getMovieCreditCastList());
         PopulateCreditCrew(personData.getMovieCreditCrewList());
         PopulateMovieList(personData);
+        defineClickFavoriteButtons(personData);
     }
 
     /**
@@ -211,7 +283,8 @@ public class PersonActivity extends AppCompatActivity {
                                           final String backgroundPosterPath,
                                           Callback callback) {
 
-        ActivityUtils.loadImage(this, profilePosterPath, true, R.drawable.disk_reel,
+        ActivityUtils.loadImage(this, Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W342
+                        + profilePosterPath, true, R.drawable.disk_reel,
                 personalProfImage, null);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -350,7 +423,7 @@ public class PersonActivity extends AppCompatActivity {
                 try {
                     Log.v(TAG, "jObj = " + jObj);
                     personData = new PersonData(JSONUtils.getStringValue(jObj, "name"),
-                            POSTER_PERSON_BASE_URI + JSONUtils.getStringValue(jObj, "profile_path"),
+                            JSONUtils.getStringValue(jObj, "profile_path"),
                             JSONUtils.getStringValue(jObj, "place_of_birth"),
                             JSONUtils.getStringValue(jObj, "birthday"),
                             JSONUtils.getStringValue(jObj, "deathday"),

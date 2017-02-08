@@ -52,6 +52,7 @@ import com.xengar.android.movieguide.data.TVShowData;
 import com.xengar.android.movieguide.data.TVShowDetails;
 import com.xengar.android.movieguide.data.TrailerData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
+import com.xengar.android.movieguide.utils.Constants;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
 import org.apache.commons.lang3.StringUtils;
@@ -84,7 +85,6 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
-import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ID;
@@ -354,7 +354,8 @@ public class TVShowActivity extends AppCompatActivity
      */
     private void PopulateDetailsPoster(final TVShowData container, Callback callback) {
 
-        ActivityUtils.loadImage(this, POSTER_BASE_URI + container.getPosterPath(), true,
+        ActivityUtils.loadImage(this, Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W342
+                        + container.getPosterPath(), true,
                 R.drawable.disk_reel, tvShowPoster, null);
 
         String backgroundPosterPath = container.getBackgroundPath();

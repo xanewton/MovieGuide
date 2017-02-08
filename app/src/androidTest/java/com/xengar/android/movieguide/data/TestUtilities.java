@@ -51,6 +51,8 @@ public class TestUtilities {
     static final int TEST_MOVIE_ID = 311324;
     // Sample id for The Simpsons tv show
     static final int TEXT_TV_SHOW_ID = 456;
+    // Sample id for Margot Robbie
+    static final int TEXT_PERSON_ID = 234352;
 
 
     @Test
@@ -116,6 +118,20 @@ public class TestUtilities {
         return testValues;
     }
 
+    // Sample ContentValues
+    static ContentValues createMargotRobbieValues() {
+        // Create a new map of values, where column names are the keys
+        ContentValues testValues = new ContentValues();
+        testValues.put(FavoritesContract.FavoriteColumns.COLUMN_PERSON_ID, TEXT_PERSON_ID);
+        testValues.put(FavoritesContract.FavoriteColumns.COLUMN_NAME, "Margot Robbie");
+        testValues.put(FavoritesContract.FavoriteColumns.COLUMN_PROFILE_PATH,
+                "/wHMKWqIkvJYFntCPHgQlcWYKav9.jpg");
+        testValues.put(FavoritesContract.FavoriteColumns.COLUMN_KNOWNFOR_POSTER_PATH,
+                "/e1mjopzAS2KNsvpbpahQ1a6SkSn.jpg");
+
+        return testValues;
+    }
+
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
         validateCurrentRecord(error, valueCursor, expectedValues);
@@ -159,6 +175,19 @@ public class TestUtilities {
                 testValues);
         // Verify we got a row back.
         assertTrue("Error: Failure to insert The Simpsons values", locationRowId != -1);
+        return locationRowId;
+    }
+
+    static long insertMargotRobbieValues(Context context) {
+        // insert our test records into the database
+        FavoritesDbHelper dbHelper = new FavoritesDbHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues testValues = TestUtilities.createMargotRobbieValues();
+
+        long locationRowId = db.insert(FavoritesContract.FavoriteColumns.FAVORITE_PERSON_TBL, null,
+                testValues);
+        // Verify we got a row back.
+        assertTrue("Error: Failure to insert Margot Robbie values", locationRowId != -1);
         return locationRowId;
     }
 
