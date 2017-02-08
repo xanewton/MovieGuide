@@ -148,6 +148,60 @@
                     android:visibility="gone"
                     tools:visibility="visible"/>
             </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/home_people"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/touch_effect"
+                android:clickable="true"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/activity_vertical_padding"
+                android:paddingBottom="@dimen/activity_vertical_padding"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:id="@+id/people_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorAccent"
+                    android:text="@string/menu_option_people"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:text="@string/more"/>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="210dp" >
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_people"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                </android.support.v7.widget.RecyclerView>
+
+                <fr.castorflex.android.circularprogressbar.CircularProgressBar
+                    android:id="@+id/progress_bar_people"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:indeterminate="true"
+                    android:layout_centerInParent="true"
+                    style="@style/InMovieCircularProgressBar"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+            </RelativeLayout>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
