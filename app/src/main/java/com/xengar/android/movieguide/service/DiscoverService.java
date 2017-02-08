@@ -15,8 +15,8 @@
  */
 package com.xengar.android.movieguide.service;
 
-import com.xengar.android.movieguide.data.MovieResults;
-import com.xengar.android.movieguide.data.TVResults;
+import com.xengar.android.movieguide.model.MovieResults;
+import com.xengar.android.movieguide.model.TVResults;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

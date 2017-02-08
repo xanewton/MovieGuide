@@ -33,8 +33,8 @@ import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.HomeMovieAdapter;
 import com.xengar.android.movieguide.adapters.HomeTVAdapter;
 import com.xengar.android.movieguide.data.FavoritesContract;
-import com.xengar.android.movieguide.data.Movie;
-import com.xengar.android.movieguide.data.TV;
+import com.xengar.android.movieguide.model.Movie;
+import com.xengar.android.movieguide.model.TV;
 import com.xengar.android.movieguide.utils.FragmentUtils;
 
 import java.util.ArrayList;

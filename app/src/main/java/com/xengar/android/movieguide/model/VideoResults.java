@@ -13,46 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.xengar.android.movieguide.data;
+package com.xengar.android.movieguide.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 /**
- * Video
+ * VideoResults
  */
-public class Video {
-    @SerializedName("key")
+public class VideoResults {
+    @SerializedName("results")
     @Expose
-    private String mKey;
-    @SerializedName("name")
-    @Expose
-    private String mName;
-    @SerializedName("site")
-    @Expose
-    private String mSite;
+    private List<Video> mVideos;
 
-    public String getKey() {
-        return mKey;
+    public List<Video> getVideos() {
+        return mVideos;
     }
 
-    public void setKey(String key) {
-        mKey = key;
-    }
-
-    public String getName() {
-        return mName;
-    }
-
-    public void setName(String name) {
-        mName = name;
-    }
-
-    public String getSite() {
-        return mSite;
-    }
-
-    public void setSite(String site) {
-        mSite = site;
+    public void setVideos(List<Video> videos) {
+        mVideos = videos;
     }
 }

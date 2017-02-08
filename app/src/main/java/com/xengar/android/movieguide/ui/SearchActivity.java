@@ -38,7 +38,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
-import com.xengar.android.movieguide.data.MultiSearch;
+import com.xengar.android.movieguide.model.MultiSearch;
 import com.xengar.android.movieguide.service.SearchService;
 import com.xengar.android.movieguide.service.ServiceGenerator;
 import com.xengar.android.movieguide.utils.ActivityUtils;
