@@ -34,6 +34,7 @@ public class TestUriMatcher {
 
     private static final String TEST_MOVIE_ID = "311324";
     private static final String TEST_TV_SHOW_ID = "456";
+    private static final String TEST_PERSON_ID = "234352";
 
     // content://com.xengar.android.movieguide/movie"
     private static final Uri TEST_MOVIES_DIR = FavoritesContract.FavoriteColumns.uriMovie;
@@ -41,6 +42,9 @@ public class TestUriMatcher {
     // content://com.xengar.android.movieguide/tvshow"
     private static final Uri TEST_TV_SHOW_DIR = FavoritesContract.FavoriteColumns.uriTVShow;
     private static final Uri TEST_TV_SHOW_ID_DIR = FavoritesContract.FavoriteColumns.makeUriForTVShow(TEST_TV_SHOW_ID);
+    // content://com.xengar.android.movieguide/person"
+    private static final Uri TEST_PERSON_DIR = FavoritesContract.FavoriteColumns.uriPerson;
+    private static final Uri TEST_PERSON_ID_DIR = FavoritesContract.FavoriteColumns.makeUriForPerson(TEST_PERSON_ID);
 
 
     /**
@@ -59,6 +63,10 @@ public class TestUriMatcher {
                 testMatcher.match(TEST_TV_SHOW_DIR), FavoritesProvider.TV_SHOWS);
         assertEquals("Error: The TV Show was matched incorrectly.",
                 testMatcher.match(TEST_TV_SHOW_ID_DIR), FavoritesProvider.TV_SHOW_ID);
+        assertEquals("Error: The Person was matched incorrectly.",
+                testMatcher.match(TEST_PERSON_DIR), FavoritesProvider.PERSONS);
+        assertEquals("Error: The Person was matched incorrectly.",
+                testMatcher.match(TEST_PERSON_ID_DIR), FavoritesProvider.PERSON_ID);
     }
 
     /**
@@ -71,6 +79,9 @@ public class TestUriMatcher {
 
         String tvshow = FavoritesContract.FavoriteColumns.getIdFromUri(TEST_TV_SHOW_ID_DIR);
         assertEquals("Error: The TV Show was matched incorrectly.", tvshow, TEST_TV_SHOW_ID);
+
+        String person = FavoritesContract.FavoriteColumns.getIdFromUri(TEST_PERSON_ID_DIR);
+        assertEquals("Error: The Person was matched incorrectly.", person, TEST_PERSON_ID);
     }
 
 }

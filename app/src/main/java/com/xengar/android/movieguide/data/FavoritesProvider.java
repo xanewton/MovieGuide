@@ -42,6 +42,10 @@ public class FavoritesProvider extends ContentProvider {
     public static final int TV_SHOWS = 200;
     // URI matcher code for the content URI for a single movie in the FAVORITE_TV_SHOWS_TBL table
     public static final int TV_SHOW_ID = 201;
+    // URI matcher code for the content URI for the FAVORITE_PERSON_TBL table
+    public static final int PERSONS = 300;
+    // URI matcher code for the content URI for a single movie in the FAVORITE_PERSON_TBL table
+    public static final int PERSON_ID = 301;
 
     private FavoritesDbHelper helper;
 
@@ -77,6 +81,9 @@ public class FavoritesProvider extends ContentProvider {
         matcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_TV_SHOW, TV_SHOWS);
         matcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_TV_SHOW_ID, TV_SHOW_ID);
 
+        matcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_PERSON, PERSONS);
+        matcher.addURI(FavoritesContract.AUTHORITY, FavoritesContract.PATH_PERSON_ID, PERSON_ID);
+
         return matcher;
     }
 
@@ -96,6 +103,10 @@ public class FavoritesProvider extends ContentProvider {
             case TV_SHOWS:
             case TV_SHOW_ID:
                 table = FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
+                break;
+            case PERSONS:
+            case PERSON_ID:
+                table = FavoritesContract.FavoriteColumns.FAVORITE_PERSON_TBL;
                 break;
             default:
                 throw new UnsupportedOperationException(
@@ -119,6 +130,11 @@ public class FavoritesProvider extends ContentProvider {
                 return "vnd.android.cursor.dir/tvshow";
             case TV_SHOW_ID:
                 return "vnd.android.cursor.item/tvshow";
+            case PERSONS:
+                return "vnd.android.cursor.dir/person";
+            case PERSON_ID:
+                return "vnd.android.cursor.item/person";
+
             default:
                 return null;
         }
@@ -136,6 +152,10 @@ public class FavoritesProvider extends ContentProvider {
             case TV_SHOWS:
             case TV_SHOW_ID:
                 table = FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
+                break;
+            case PERSONS:
+            case PERSON_ID:
+                table = FavoritesContract.FavoriteColumns.FAVORITE_PERSON_TBL;
                 break;
             default:
                 throw new UnsupportedOperationException(
@@ -184,6 +204,14 @@ public class FavoritesProvider extends ContentProvider {
                 builder.appendWhere(FavoritesContract.FavoriteColumns.COLUMN_TV_SHOW_ID
                         + " = " + uri.getLastPathSegment());
                 break;
+            case PERSONS:
+                builder.setTables(FavoritesContract.FavoriteColumns.FAVORITE_PERSON_TBL);
+                break;
+            case PERSON_ID:
+                builder.setTables(FavoritesContract.FavoriteColumns.FAVORITE_PERSON_TBL);
+                builder.appendWhere(FavoritesContract.FavoriteColumns.COLUMN_PERSON_ID
+                        + " = " + uri.getLastPathSegment());
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported URI: " + uri);
         }
@@ -206,6 +234,10 @@ public class FavoritesProvider extends ContentProvider {
             case TV_SHOWS:
             case TV_SHOW_ID:
                 table = FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL;
+                break;
+            case PERSONS:
+            case PERSON_ID:
+                table = FavoritesContract.FavoriteColumns.FAVORITE_PERSON_TBL;
                 break;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
