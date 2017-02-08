@@ -53,6 +53,7 @@ import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
+import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity
     private FavoritesFragment favoritesFragment;
     private DiscoverFragment discoverFragment;
     private DiscoverResultFragment discoverResultFragment;
+    private PeopleFragment peopleFragment;
 
 
     @Override
@@ -115,6 +117,7 @@ public class MainActivity extends AppCompatActivity
         favoritesFragment = new FavoritesFragment();
         discoverFragment = new DiscoverFragment();
         discoverResultFragment = new DiscoverResultFragment();
+        peopleFragment = new PeopleFragment();
         showPage(page);
         assignCheckedItem(page);
     }
@@ -133,6 +136,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case TV_SHOWS:
                 navigationView.setCheckedItem(R.id.nav_tv_shows);
+                break;
+            case PEOPLE:
+                navigationView.setCheckedItem(R.id.nav_people);
                 break;
             case FAVORITES:
                 navigationView.setCheckedItem(R.id.nav_favorites);
@@ -198,6 +204,10 @@ public class MainActivity extends AppCompatActivity
                 showPage(TV_SHOWS);
                 break;
 
+            case R.id.nav_people:
+                showPage(PEOPLE);
+                break;
+
             case R.id.nav_favorites:
                 showPage(FAVORITES);
                 break;
@@ -252,6 +262,8 @@ public class MainActivity extends AppCompatActivity
         if (itemType.equals(TV_SHOWS) || itemType.equals(POPULAR_TV_SHOWS)
                 || itemType.equals(TOP_RATED_TV_SHOWS) || itemType.equals(ON_THE_AIR_TV_SHOWS)) {
             ActivityUtils.launchTVShowActivity(getApplicationContext(), itemId);
+        } else if (itemType.equals(PEOPLE)) {
+            ActivityUtils.launchPersonActivity(getApplicationContext(), itemId);
         } else {
             ActivityUtils.launchMovieActivity(getApplicationContext(), itemId);
         }
@@ -280,6 +292,13 @@ public class MainActivity extends AppCompatActivity
                 showTabs(true);
                 getSupportActionBar().setTitle(R.string.menu_option_tv_shows);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, TV_SHOWS);
+                break;
+
+            case PEOPLE:
+                showTabs(false);
+                getSupportActionBar().setTitle(R.string.menu_option_people);
+                ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, PEOPLE);
+                launchFragment(PEOPLE);
                 break;
 
             case FAVORITES:
@@ -333,6 +352,12 @@ public class MainActivity extends AppCompatActivity
 
             case FAVORITES:
                 fragmentTransaction.replace(R.id.fragment_container, favoritesFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
+
+            case PEOPLE:
+                fragmentTransaction.replace(R.id.fragment_container, peopleFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 break;
