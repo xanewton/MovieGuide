@@ -53,6 +53,7 @@
     <string name="menu_option_now_playing">Now playing</string>
     <string name="menu_option_popular">Popular</string>
     <string name="menu_option_favorites">Favorites</string>
+    <string name="menu_option_people">People</string>
     <string name="menu_option_top_rated_movies">Top rated movies</string>
     <string name="menu_option_upcomming_movies">Upcoming movies</string>
     <string name="menu_option_now_playing_movies">Now playing movies</string>
@@ -362,5 +363,8 @@
     <string name="pref_title_version" translatable="false">Version</string>
     <string name="about_credits" translatable="false">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
     <string name="copyright" translatable="false">\@2017 Angel Garcia</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

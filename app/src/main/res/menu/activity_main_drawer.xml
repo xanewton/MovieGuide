@@ -31,6 +31,10 @@
             android:icon="@drawable/ic_tv_black_24dp"
             android:title="@string/menu_option_tv_shows" />
         <item
+            android:id="@+id/nav_people"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/menu_option_people" />
+        <item
             android:id="@+id/nav_favorites"
             android:icon="@drawable/ic_favorite_black_24dp"
             android:title="@string/menu_option_favorites" />
