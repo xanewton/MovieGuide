@@ -44,7 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
-import static com.xengar.android.movieguide.utils.Constants.MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.POSTER_SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 
@@ -59,10 +59,9 @@ public class PeopleFragment extends Fragment {
     private CircularProgressBar progressBar;
     private CustomErrorView mCustomErrorView;
 
-    private String mLang;
-
     private RecyclerView recycler;
     private PosterAdapter adapter;
+    private String mLang;
     private int mPage = 1;
     private int mTotalPages = 1;
 
@@ -93,7 +92,7 @@ public class PeopleFragment extends Fragment {
         recycler.setLayoutManager(layoutManager);
 
         mLang = FragmentUtils.getFormatLocale(getActivity());
-        adapter = new PosterAdapter(getContext(), MOVIES);
+        adapter = new PosterAdapter(getContext(), PEOPLE);
         recycler.setAdapter(adapter);
         FragmentUtils.updateProgressBar(progressBar, true);
         return view;
