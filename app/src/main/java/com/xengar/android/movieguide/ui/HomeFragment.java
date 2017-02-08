@@ -28,12 +28,16 @@ import android.widget.LinearLayout;
 
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.HomeMovieAdapter;
+import com.xengar.android.movieguide.adapters.HomePersonAdapter;
 import com.xengar.android.movieguide.adapters.HomeTVAdapter;
 import com.xengar.android.movieguide.model.Movie;
 import com.xengar.android.movieguide.model.MovieResults;
+import com.xengar.android.movieguide.model.PersonPopular;
+import com.xengar.android.movieguide.model.PersonResults;
 import com.xengar.android.movieguide.model.TV;
 import com.xengar.android.movieguide.model.TVResults;
 import com.xengar.android.movieguide.service.DiscoverService;
+import com.xengar.android.movieguide.service.PersonService;
 import com.xengar.android.movieguide.service.ServiceGenerator;
 import com.xengar.android.movieguide.utils.CustomErrorView;
 import com.xengar.android.movieguide.utils.FragmentUtils;
@@ -49,6 +53,7 @@ import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 
 /**
@@ -58,20 +63,29 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private static final int MAX_ITEMS = 25;
 
+    private int mPage = 1;
+    private String mLang;
+    private CustomErrorView mCustomErrorView;
+
     private LinearLayout moreMovies;
     private RecyclerView mRecyclerViewMovies;
     private CircularProgressBar progressBarMovies;
     private HomeMovieAdapter mAdapterMovies;
     private List<Movie> mMovies;
-    private int mPage = 1;
-    private String mLang;
 
     private LinearLayout moreTV;
     private RecyclerView mRecyclerViewTV;
     private CircularProgressBar progressBarTV;
     private HomeTVAdapter mAdapterTV;
     private List<TV> mTVList;
-    private CustomErrorView mCustomErrorView;
+
+    private LinearLayout morePeople;
+    private RecyclerView mRecyclerViewPeople;
+    private CircularProgressBar progressBarPeople;
+    private HomePersonAdapter mAdapterPeople;
+    private List<PersonPopular> mPeople;
+
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -101,6 +115,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mTVList = new ArrayList<>();
         mAdapterTV = new HomeTVAdapter(mTVList);
 
+        morePeople = (LinearLayout) view.findViewById(R.id.home_people);
+        morePeople.setOnClickListener(this);
+        mRecyclerViewPeople = (RecyclerView) view.findViewById(R.id.recycler_view_people);
+        progressBarPeople = (CircularProgressBar) view.findViewById(R.id.progress_bar_people);
+        mPeople = new ArrayList<>();
+        mAdapterPeople = new HomePersonAdapter(mPeople);
+
         return view;
     }
 
@@ -116,6 +137,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
         fillMoviesSection();
         fillTVSection();
+        fillPeopleSection();
     }
 
     private void onLoadFailed(Throwable t) {
@@ -123,6 +145,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mCustomErrorView.setVisibility(View.VISIBLE);
         FragmentUtils.updateProgressBar(progressBarMovies, false);
         FragmentUtils.updateProgressBar(progressBarTV, false);
+        FragmentUtils.updateProgressBar(progressBarPeople, false);
     }
 
 
@@ -210,6 +233,49 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
+     * Fills the People section.
+     */
+    private void fillPeopleSection(){
+        mRecyclerViewPeople.setLayoutManager(
+                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        mRecyclerViewPeople.setAdapter(mAdapterPeople);
+        FragmentUtils.updateProgressBar(progressBarPeople, true);
+
+        PersonService service = ServiceGenerator.createService(PersonService.class);
+        Call<PersonResults> call =
+                service.popular(getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang, mPage);
+        call.enqueue(new Callback<PersonResults>() {
+            @Override
+            public void onResponse(Call<PersonResults> call, Response<PersonResults> response) {
+                if (response.isSuccessful()) {
+                    List<PersonPopular> people = response.body().getPeople();
+                    mPeople.clear();
+                    if (people != null) {
+                        if (people.size() < MAX_ITEMS) {
+                            mPeople.addAll(people);
+                        } else {
+                            for (int i = 0; i < MAX_ITEMS && i < people.size(); i++) {
+                                PersonPopular movie = people.get(i);
+                                mPeople.add(movie);
+                            }
+                        }
+                        mAdapterPeople.notifyDataSetChanged();
+                    }
+                    FragmentUtils.updateProgressBar(progressBarPeople, false);
+                } else {
+                    Log.i("TAG", "Res: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PersonResults> call, Throwable t) {
+                Log.i("TAG", "Error: " + t.getMessage());
+                FragmentUtils.updateProgressBar(progressBarPeople, false);
+            }
+        });
+    }
+
+    /**
      * Changes activity to the correct page.
      * @param view
      */
@@ -227,6 +293,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 activity.switchPagerAdapter(TV_SHOWS);
                 activity.showPage(TV_SHOWS);
                 activity.assignCheckedItem(TV_SHOWS);
+                break;
+
+            case R.id.home_people:
+                activity.showPage(PEOPLE);
+                activity.assignCheckedItem(PEOPLE);
                 break;
         }
     }
