@@ -33,6 +33,7 @@ import java.util.HashSet;
 
 import static android.content.ContentValues.TAG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 
 /**
@@ -105,12 +106,16 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
         @Override
         public void onClick(View view) {
             switch (type){
-                case  MOVIES:
+                case MOVIES:
                     ActivityUtils.launchMovieActivity(context, imageId);
                     break;
 
                 case TV_SHOWS:
                     ActivityUtils.launchTVShowActivity(context, imageId);
+                    break;
+
+                case PEOPLE:
+                    ActivityUtils.launchPersonActivity(context, imageId);
                     break;
             }
         }
