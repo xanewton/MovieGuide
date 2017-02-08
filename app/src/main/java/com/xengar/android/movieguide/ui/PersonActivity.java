@@ -69,7 +69,6 @@ import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POS
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
-import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 
 /**
@@ -310,8 +309,7 @@ public class PersonActivity extends AppCompatActivity {
             if ( index == maxMovies)
                 break;
             index++;
-            ImageItem imageItem = new ImageItem(
-                    POSTER_BASE_URI + creditCast.getPosterPath(), creditCast.getId(),
+            ImageItem imageItem = new ImageItem(creditCast.getPosterPath(), creditCast.getId(),
                     creditCast.getMovieTitle(), null);
             data.add(imageItem);
         }
