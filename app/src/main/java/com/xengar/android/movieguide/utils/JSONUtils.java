@@ -64,10 +64,10 @@ public final class JSONUtils {
 
     /**
      * Return a list of strings with data from the field.
-     * @param jobj
-     * @param name
-     * @param field
-     * @return
+     * @param jobj object
+     * @param name name
+     * @param field field
+     * @return list of strings
      * @throws JSONException
      */
     public static List<String> getListValue(JSONObject jobj, String name, String field)
@@ -78,10 +78,10 @@ public final class JSONUtils {
         } else {
             JSONArray jArray = jobj.getJSONArray(name);
             List<String> results = new ArrayList<>(jArray.length());
-            JSONObject Jobject;
+            JSONObject object;
             for (int i = 0; i < jArray.length(); i++) {
-                Jobject = jArray.getJSONObject(i);
-                results.add(Jobject.getString(field));
+                object = jArray.getJSONObject(i);
+                results.add(object.getString(field));
             }
             return results;
         }
@@ -114,9 +114,10 @@ public final class JSONUtils {
 
     /**
      * Gets a List of credit cast.
-     * @param jobj
-     * @param
-     * @return
+     * @param jobj object
+     * @param object name of the sub object
+     * @param name name
+     * @return list of movie credit cast
      * @throws JSONException
      */
     public static List<MovieCreditCast> getMovieCreditCastList(JSONObject jobj, String object,
@@ -125,12 +126,12 @@ public final class JSONUtils {
         if (jobj.isNull(object)) {
             return Collections.emptyList();
         } else {
-            JSONObject Jobject = jobj.getJSONObject(object);
-            if (Jobject.isNull(name)){
+            JSONObject jobject = jobj.getJSONObject(object);
+            if (jobject.isNull(name)){
                 return Collections.emptyList();
             } else {
                 List<MovieCreditCast> list = new ArrayList<>();
-                JSONArray jArray = Jobject.getJSONArray(name);
+                JSONArray jArray = jobject.getJSONArray(name);
                 JSONObject jsonObject;
                 for (int i = 0; i < jArray.length(); i++) {
                     jsonObject = jArray.getJSONObject(i);
@@ -155,9 +156,10 @@ public final class JSONUtils {
 
     /**
      * Gets a List of crew cast.
-     * @param jobj
-     * @param
-     * @return
+     * @param jobj object
+     * @param object name of sub object
+     * @param name name
+     * @return list of movie credit crew
      * @throws JSONException
      */
     public static List<MovieCreditCrew> getMovieCreditCrewList(JSONObject jobj, String object,
@@ -166,12 +168,12 @@ public final class JSONUtils {
         if (jobj.isNull(object)) {
             return Collections.emptyList();
         } else {
-            JSONObject Jobject = jobj.getJSONObject(object);
-            if (Jobject.isNull(name)){
+            JSONObject object1 = jobj.getJSONObject(object);
+            if (object1.isNull(name)){
                 return Collections.emptyList();
             } else {
                 List<MovieCreditCrew> list = new ArrayList<>();
-                JSONArray jArray = Jobject.getJSONArray(name);
+                JSONArray jArray = object1.getJSONArray(name);
                 JSONObject jsonObject;
                 for (int i = 0; i < jArray.length(); i++) {
                     jsonObject = jArray.getJSONObject(i);

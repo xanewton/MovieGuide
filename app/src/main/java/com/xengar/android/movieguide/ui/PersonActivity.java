@@ -65,7 +65,6 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -112,7 +111,6 @@ public class PersonActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         personId = prefs.getInt(PERSON_ID, -1);
-        int movieID = prefs.getInt(MOVIE_ID, -1);
 
         // Save name of activity, in case of calling SettingsActivity
         ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
@@ -183,7 +181,7 @@ public class PersonActivity extends AppCompatActivity {
 
     /**
      * Defines what to do when click on add/remove from Favorites buttons.
-     * @param personData
+     * @param personData person data
      */
     private void defineClickFavoriteButtons(final PersonData personData) {
         final int DURATION = 1000;
@@ -226,7 +224,7 @@ public class PersonActivity extends AppCompatActivity {
 
     /**
      * Populates the Person data in screen.
-     * @param personData
+     * @param personData PersonData
      */
     private void populateProfile(PersonData personData) {
 
@@ -274,9 +272,9 @@ public class PersonActivity extends AppCompatActivity {
 
     /**
      * Populates poster in screen.
-     * @param profilePosterPath
-     * @param backgroundPosterPath
-     * @param callback
+     * @param profilePosterPath image path
+     * @param backgroundPosterPath image path
+     * @param callback callback
      */
     private void PopulateBackgroundPoster(final String profilePosterPath,
                                           final String backgroundPosterPath,
@@ -296,7 +294,7 @@ public class PersonActivity extends AppCompatActivity {
 
     /**
      * Populates the Movie list in screen.
-     * @param personData
+     * @param personData PersonData
      */
     private void PopulateMovieList(PersonData personData) {
 
@@ -329,7 +327,7 @@ public class PersonActivity extends AppCompatActivity {
 
     /**
      * Populates the movie credit cast list on screen.
-     * @param movieCreditCast
+     * @param movieCreditCast list of movie credit cast
      */
     private void PopulateCreditCast(List<MovieCreditCast> movieCreditCast) {
         if (movieCreditCast == null || movieCreditCast.isEmpty()) {
@@ -353,7 +351,7 @@ public class PersonActivity extends AppCompatActivity {
 
     /**
      * Populates the movie credit crew list on screen.
-     * @param movieCreditCrew
+     * @param movieCreditCrew list of movie credit crew
      */
     private void PopulateCreditCrew(List<MovieCreditCrew> movieCreditCrew) {
         if (movieCreditCrew == null || movieCreditCrew.isEmpty()) {
@@ -413,7 +411,7 @@ public class PersonActivity extends AppCompatActivity {
 
         /**
          * Process the Person Details data.
-         * @param jObj
+         * @param jObj object
          */
         private void processPersonData(JSONObject jObj) {
             if (jObj != null) {

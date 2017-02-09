@@ -148,7 +148,7 @@ public class DiscoverResultFragment extends Fragment {
 
     /**
      * Query the Movies page.
-     * @param listener
+     * @param listener listener
      */
     private void discoverMovies(final FetchItemListener listener){
         DiscoverService service = ServiceGenerator.createService(DiscoverService.class);
@@ -191,7 +191,7 @@ public class DiscoverResultFragment extends Fragment {
 
     /**
      * Query the TV Show page.
-     * @param listener
+     * @param listener listener
      */
     private void discoverTV(final FetchItemListener listener) {
         DiscoverService service = ServiceGenerator.createService(DiscoverService.class);
@@ -203,7 +203,7 @@ public class DiscoverResultFragment extends Fragment {
                 if (response.isSuccessful()) {
                     List<TV> tvs = response.body().getTVs();
                     int adds = 0;
-                    for (TV tv:tvs) {
+                    for (TV tv: tvs) {
                         adds += adapter.add(
                                 new ImageItem(TMDB_IMAGE_URL + SIZE_W185 + tv.getPosterPath(),
                                         Integer.parseInt(tv.getId()), tv.getName(), null));
@@ -264,7 +264,7 @@ public class DiscoverResultFragment extends Fragment {
 
                 /**
                  * Here you should load more items because user is seeing the last item of the list.
-                 * Advice: you should add a bollean value to the class
+                 * Advice: you should add a boolean value to the class
                  * so that the method {@link #loadPage()} will be triggered only once
                  * and not every time the user touch the screen ;)
                  **/

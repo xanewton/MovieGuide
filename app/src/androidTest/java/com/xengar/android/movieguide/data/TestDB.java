@@ -59,7 +59,7 @@ public class TestDB {
         // build a HashSet of all of the table names we wish to look for
         // Note that there will be another table in the DB that stores the
         // Android metadata (db version information)
-        final HashSet<String> tableNameHashSet = new HashSet<String>();
+        final HashSet<String> tableNameHashSet = new HashSet<>();
         tableNameHashSet.add(FavoritesContract.FavoriteColumns.FAVORITE_MOVIES_TBL);
         tableNameHashSet.add(FavoritesContract.FavoriteColumns.FAVORITE_TV_SHOWS_TBL);
         tableNameHashSet.add(FavoritesContract.FavoriteColumns.FAVORITE_PERSON_TBL);
@@ -89,7 +89,7 @@ public class TestDB {
                 c.moveToFirst());
 
         // Build a HashSet of all of the column names we want to look for
-        final HashSet<String> locationColumnHashSet = new HashSet<String>();
+        final HashSet<String> locationColumnHashSet = new HashSet<>();
         locationColumnHashSet.add(FavoritesContract.FavoriteColumns._ID);
         locationColumnHashSet.add(FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID);
         locationColumnHashSet.add(FavoritesContract.FavoriteColumns.COLUMN_TITLE);

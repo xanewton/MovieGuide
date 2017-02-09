@@ -237,7 +237,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Defines what to do when click on add/remove from Favorites buttons.
-     * @param container
+     * @param container TVShowData
      */
     private void defineClickFavoriteButtons(final TVShowData container) {
         final int DURATION = 1000;
@@ -310,7 +310,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Fills the TV Show Details in screen.
-     * @param container
+     * @param container TVShowData
      */
     private void populateDetails(final TVShowData container) {
         if (container == null) {
@@ -334,7 +334,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates Title in screen.
-     * @param container
+     * @param container TVShowData
      */
     private void PopulateDetailsTitle(final TVShowData container) {
         tvShowTitle[0] = container.getName();
@@ -350,8 +350,8 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates poster in screen.
-     * @param container
-     * @param callback
+     * @param container TVShowData
+     * @param callback callback
      */
     private void PopulateDetailsPoster(final TVShowData container, Callback callback) {
 
@@ -374,7 +374,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates genres and countries in screen.
-     * @param container
+     * @param container TVShowData
      */
     private void PopulateDetailsGenresCountries(final TVShowData container) {
         if(!container.getGenres().isEmpty()) {
@@ -399,7 +399,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates Production Companies in screen.
-     * @param container
+     * @param container TVShowData
      */
     private void PopulateDetailsProdCompanies(final TVShowData container) {
         if(!container.getProductionCompanies().isEmpty()) {
@@ -419,7 +419,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates status, homepage, overview and languages in screen.
-     * @param container
+     * @param container TVShowData
      */
     private void PopulateDetailsStatus(final TVShowData container) {
         if (container.getStatus() != null) {
@@ -450,7 +450,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates first air date, last air date, episodes and seasons in screen.
-     * @param container
+     * @param container TVShowData
      */
     private void PopulateDetailsDates(final TVShowData container) {
         if (container.getFirstAirDate() != null) {
@@ -479,7 +479,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates the trailers list in screen.
-     * @param data
+     * @param data list of trailer data
      */
     private void populateTrailerList(List<TrailerData> data) {
         Log.v(TAG, "populateTrailerList - data = " + data);
@@ -538,7 +538,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates the Cast list in screen.
-     * @param data
+     * @param data list of cast data
      */
     private void populateCastList(final List<CastData> data) {
         if (data == null || data.isEmpty()) {
@@ -623,7 +623,7 @@ public class TVShowActivity extends AppCompatActivity
 
         /**
          * Process the Movie Details data.
-         * @param jObj
+         * @param jObj object
          */
         private void processTVShowDetails(JSONObject jObj) {
             if (jObj != null) {
@@ -675,11 +675,11 @@ public class TVShowActivity extends AppCompatActivity
 
         /**
          * Process the TVShow Trailers data.
-         * @param jObj
+         * @param jObj object
          */
         private void processTVShowTrailers(JSONObject jObj) {
             if (jObj != null) {
-                trailerData = new ArrayList<TrailerData>();
+                trailerData = new ArrayList<>();
                 try {
                     JSONArray array = jObj.getJSONArray("results");
                     for (int i = 0; i < array.length(); i++) {
@@ -697,11 +697,11 @@ public class TVShowActivity extends AppCompatActivity
 
         /**
          * Process the TVShow cast data.
-         * @param jObj
+         * @param jObj object
          */
         private void processTVShowCast(JSONObject jObj) {
             if (jObj != null) {
-                castData = new ArrayList<CastData>();
+                castData = new ArrayList<>();
                 try {
                     JSONArray array = jObj.getJSONArray("cast");
                     for (int i = 0; i < array.length(); i++) {

@@ -31,7 +31,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,9 +44,9 @@ import java.util.List;
 
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_DEFAULT_MIN_RATING;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_DEFAULT_SORT_TYPE;
-import static com.xengar.android.movieguide.utils.Constants.DISCOVER_RESULT;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_GENRES;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_MIN_RATING;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_RESULT;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_SORT_TYPE;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_TYPE;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
@@ -86,7 +85,6 @@ public class DiscoverFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discover, container, false);
 
-        RadioGroup toggleRadioGroup = (RadioGroup) view.findViewById(R.id.discover_toggle);
         moviesRadioButton = (RadioButton) view.findViewById(R.id.radio_movies);
         moviesRadioButton.setOnCheckedChangeListener(this);
         tvRadioButton = (RadioButton) view.findViewById(R.id.radio_tv);

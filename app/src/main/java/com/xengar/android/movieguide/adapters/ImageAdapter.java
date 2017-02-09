@@ -53,7 +53,6 @@ public class ImageAdapter extends BaseAdapter {
     public ImageAdapter(Context c, String type) {
         mContext = c;
         this.type = type;
-        float density = mContext.getResources().getDisplayMetrics().density;
     }
 
     @Override
@@ -99,7 +98,7 @@ public class ImageAdapter extends BaseAdapter {
 
     /**
      * Defines OnClick action.
-     * @param view
+     * @param view view
      */
     private void defineOnclickAction(View view) {
         view.setOnClickListener(new View.OnClickListener() {
@@ -117,8 +116,8 @@ public class ImageAdapter extends BaseAdapter {
 
     /**
      * Fills a cast image view.
-     * @param view
-     * @param image
+     * @param view view
+     * @param image image item
      */
     private void fillCastView(View view, ImageItem image){
         view.setTag(image);
@@ -147,8 +146,8 @@ public class ImageAdapter extends BaseAdapter {
 
     /**
      * Fills a movie image view.
-     * @param view
-     * @param image
+     * @param view view
+     * @param image image item
      */
     private void fillMovieView(View view, ImageItem image) {
         view.setTag(image);
@@ -169,7 +168,7 @@ public class ImageAdapter extends BaseAdapter {
 
     /**
      * Adds an image item.
-     * @param item
+     * @param item image item
      */
     public int add(ImageItem item) {
         if (idSet.contains(item.getImageId())) {

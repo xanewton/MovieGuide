@@ -54,18 +54,21 @@ public class TestProvider {
         appContext.getContentResolver().delete(FavoritesContract.FavoriteColumns.uriMovie, null, null);
         Cursor cursor = appContext.getContentResolver().query(
                 FavoritesContract.FavoriteColumns.uriMovie, null, null, null, null);
+        assert cursor != null;
         assertEquals("Error: Records not deleted from Favorite Movies table during delete", 0, cursor.getCount());
         cursor.close();
 
         appContext.getContentResolver().delete(FavoritesContract.FavoriteColumns.uriTVShow, null, null);
         Cursor cursor2 = appContext.getContentResolver().query(
                 FavoritesContract.FavoriteColumns.uriTVShow, null, null, null, null);
+        assert cursor2 != null;
         assertEquals("Error: Records not deleted from Favorite TV Shows table during delete", 0, cursor.getCount());
         cursor2.close();
 
         appContext.getContentResolver().delete(FavoritesContract.FavoriteColumns.uriPerson, null, null);
         Cursor cursor3 = appContext.getContentResolver().query(
                 FavoritesContract.FavoriteColumns.uriPerson, null, null, null, null);
+        assert cursor3 != null;
         assertEquals("Error: Records not deleted from Favorite Person table during delete", 0, cursor.getCount());
         cursor3.close();
     }
@@ -145,7 +148,8 @@ public class TestProvider {
         // level 19 or greater because getNotificationUri was added in API level 19.
         if ( Build.VERSION.SDK_INT >= 19 ) {
             assertEquals("Error: Quote Query did not properly set NotificationUri",
-                    quoteCursor.getNotificationUri(), FavoritesContract.FavoriteColumns.uriMovie);
+                    quoteCursor != null ? quoteCursor.getNotificationUri() : null,
+                    FavoritesContract.FavoriteColumns.uriMovie);
         }
     }
 
