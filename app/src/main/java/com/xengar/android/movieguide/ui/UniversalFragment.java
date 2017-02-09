@@ -113,8 +113,10 @@ public class UniversalFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), columns);
         recycler.setLayoutManager(layoutManager);
 
-        String posterType = (itemType == POPULAR_MOVIES || itemType == UPCOMING_MOVIES
-                || itemType == NOW_PLAYING_MOVIES || itemType == TOP_RATED_MOVIES)? MOVIES : TV_SHOWS;
+        String posterType = (itemType.contentEquals(POPULAR_MOVIES)
+                || itemType.contentEquals(UPCOMING_MOVIES)
+                || itemType.contentEquals(NOW_PLAYING_MOVIES)
+                || itemType.contentEquals(TOP_RATED_MOVIES))? MOVIES : TV_SHOWS;
         adapter = new PosterAdapter(getContext(), posterType);
         recycler.setAdapter(adapter);
         FragmentUtils.updateProgressBar(progressBar, true);
@@ -130,10 +132,10 @@ public class UniversalFragment extends Fragment {
             return;
         }
 
-        if (itemType != POPULAR_TV_SHOWS && itemType != TOP_RATED_TV_SHOWS
-                && itemType != ON_THE_AIR_TV_SHOWS && itemType != NOW_PLAYING_MOVIES
-                && itemType != TOP_RATED_MOVIES && itemType != UPCOMING_MOVIES
-                && itemType != POPULAR_MOVIES)
+        if (!itemType.contentEquals(POPULAR_TV_SHOWS) && !itemType.contentEquals(TOP_RATED_TV_SHOWS)
+                && !itemType.contentEquals(ON_THE_AIR_TV_SHOWS) && !itemType.contentEquals(NOW_PLAYING_MOVIES)
+                && !itemType.contentEquals(TOP_RATED_MOVIES) && !itemType.contentEquals(UPCOMING_MOVIES)
+                && !itemType.contentEquals(POPULAR_MOVIES))
             return;
 
         mTotalPages = 1;

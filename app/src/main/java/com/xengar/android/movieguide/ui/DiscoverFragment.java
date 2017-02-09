@@ -43,6 +43,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_DEFAULT_MIN_RATING;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_DEFAULT_SORT_TYPE;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_RESULT;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_GENRES;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_MIN_RATING;
@@ -65,9 +67,9 @@ public class DiscoverFragment extends Fragment
     private TextView ratingView;
 
     private String mType = MOVIES;
-    private String mSortValue;
-    private String mGenresValues;
-    private String mMinRating;
+    private String mSortValue = DISCOVER_DEFAULT_SORT_TYPE;
+    private String mGenresValues = null;
+    private String mMinRating = DISCOVER_DEFAULT_MIN_RATING;
 
     private HashSet<String> mGenresList;
     private HashSet<String> mGenresValuesList;
@@ -118,7 +120,7 @@ public class DiscoverFragment extends Fragment
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String[] sortValues;
-        if (mType == MOVIES) {
+        if (mType.contentEquals(MOVIES)) {
             sortValues = getResources().getStringArray(R.array.sortValuesMovie);
         } else {
             sortValues = getResources().getStringArray(R.array.sortValuesTV);
