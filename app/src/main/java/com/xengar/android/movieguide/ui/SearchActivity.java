@@ -259,56 +259,51 @@ public class SearchActivity extends AppCompatActivity {
             mItem = item;
             switch (item.getMediaType()) {
                 case TYPE_MOVIE:
-                    Picasso.with(mContext)
-                            .load(TMDB_IMAGE_URL + SIZE_W154 + item.getPosterPath())
-                            .placeholder(placeholderImage)
-                            .fit().centerCrop()
-                            .noFade()
-                            .error(placeholderImage)
-                            .into(poster);
-                    name.setText(item.getTitle());
-                    originalName.setText(item.getOriginalName());
-                    voteAverage.setText(String.valueOf(item.getVoteAverage()));
-                    voteCount.setText(String.valueOf(item.getVoteCount()));
-                    year.setText(StringUtils.getYear(item.getReleaseDate()));
-                    ActivityUtils.setImage(getApplicationContext(), type,
+                    bindItemValues(TMDB_IMAGE_URL + SIZE_W154 + item.getPosterPath(),
+                            item.getTitle(), item.getOriginalName(),
+                            String.valueOf(item.getVoteAverage()),
+                            String.valueOf(item.getVoteCount()),
+                            StringUtils.getYear(item.getReleaseDate()),
                             R.drawable.ic_local_movies_black_24dp);
                     break;
 
                 case TYPE_TV:
-                    Picasso.with(mContext)
-                            .load(TMDB_IMAGE_URL + SIZE_W154 + item.getPosterPath())
-                            .placeholder(placeholderImage)
-                            .fit().centerCrop()
-                            .noFade()
-                            .error(placeholderImage)
-                            .into(poster);
-                    name.setText(item.getName());
-                    originalName.setText(item.getOriginalName());
-                    voteAverage.setText(String.valueOf(item.getVoteAverage()));
-                    voteCount.setText(String.valueOf(item.getVoteCount()));
-                    year.setText(StringUtils.getYear(item.getFirstAirDate()));
-                    ActivityUtils.setImage(getApplicationContext(), type,
+                    bindItemValues(TMDB_IMAGE_URL + SIZE_W154 + item.getPosterPath(),
+                            item.getName(), item.getOriginalName(),
+                            String.valueOf(item.getVoteAverage()),
+                            String.valueOf(item.getVoteCount()),
+                            StringUtils.getYear(item.getFirstAirDate()),
                             R.drawable.ic_tv_black_24dp);
                     break;
 
                 case TYPE_PERSON:
-                    Picasso.with(mContext)
-                            .load(TMDB_IMAGE_URL + SIZE_W185 + item.getProfilePath())
-                            .placeholder(placeholderImage)
-                            .fit().centerCrop()
-                            .noFade()
-                            .error(placeholderImage)
-                            .into(poster);
-                    name.setText(item.getName());
-                    originalName.setText(item.getKnownForString());
-                    voteAverage.setText(String.valueOf(item.getVoteAverage()));
-                    voteCount.setText(String.valueOf(item.getVoteCount()));
-                    year.setText(item.getReleaseDate());
-                    ActivityUtils.setImage(getApplicationContext(), type,
+                    bindItemValues(TMDB_IMAGE_URL + SIZE_W185 + item.getProfilePath(),
+                            item.getName(), item.getKnownForString(),
+                            String.valueOf(item.getVoteAverage()),
+                            String.valueOf(item.getVoteCount()),
+                            "",
                             R.drawable.ic_person_black_24dp);
                     break;
             }
+        }
+
+        private void bindItemValues(final String imagePath, final String name,
+                                    final String originalName,
+                                    final String voteAverage, final String voteCount,
+                                    final String year, final int imageId) {
+            Picasso.with(mContext)
+                    .load(imagePath)
+                    .placeholder(placeholderImage)
+                    .fit().centerCrop()
+                    .noFade()
+                    .error(placeholderImage)
+                    .into(poster);
+            this.name.setText(name);
+            this.originalName.setText(originalName);
+            this.voteAverage.setText(voteAverage);
+            this.voteCount.setText(voteCount);
+            this.year.setText(year);
+            ActivityUtils.setImage(getApplicationContext(), type, imageId);
         }
 
         void startDetailActivity() {
