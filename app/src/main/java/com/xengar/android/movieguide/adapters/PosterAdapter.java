@@ -41,7 +41,7 @@ import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
  */
 public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder>{
 
-    private final ArrayList<ImageItem> images = new ArrayList<ImageItem>();
+    private final ArrayList<ImageItem> images = new ArrayList<>();
     private final HashSet<Integer> idSet = new HashSet<>();
     private final Context context;
     private final String type;
@@ -77,7 +77,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
 
     /**
      * Adds an image item.
-     * @param item
+     * @param item image item
      */
     public int add(ImageItem item) {
         if (idSet.contains(item.getImageId())) {

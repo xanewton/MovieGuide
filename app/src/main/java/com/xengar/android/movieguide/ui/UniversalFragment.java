@@ -152,8 +152,8 @@ public class UniversalFragment extends Fragment {
 
     /**
      * Query the movies page.
-     * @param listener
-     * @param itemType
+     * @param listener listener
+     * @param itemType type of item
      */
     private void loadMovies(final FetchItemListener listener, String itemType) {
         DiscoverService discoverService = null;
@@ -218,8 +218,8 @@ public class UniversalFragment extends Fragment {
 
     /**
      * Query the TV Show page.
-     * @param listener
-     * @param itemType
+     * @param listener listener
+     * @param itemType type of item
      */
     private void loadTVShows(final FetchItemListener listener, String itemType) {
         DiscoverService discoverService = null;
@@ -280,7 +280,7 @@ public class UniversalFragment extends Fragment {
 
 
     /**
-     * Listener to callback when the last item of the adpater is visible to the user.
+     * Listener to callback when the last item of the adapter is visible to the user.
      * It should then be the time to load more items.
      **/
     private class LastItemListener extends RecyclerView.OnScrollListener implements FetchItemListener {
@@ -311,7 +311,7 @@ public class UniversalFragment extends Fragment {
 
                 /**
                  * Here you should load more items because user is seeing the last item of the list.
-                 * Advice: you should add a bollean value to the class
+                 * Advice: you should add a boolean value to the class
                  * so that the method {@link #loadPage()} will be triggered only once
                  * and not every time the user touch the screen ;)
                  **/

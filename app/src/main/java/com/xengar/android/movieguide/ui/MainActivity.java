@@ -277,7 +277,7 @@ public class MainActivity extends AppCompatActivity
 
     /***
      * Shows the correct page on screen.
-     * @param page
+     * @param page name of page
      */
     public void showPage(String page) {
         switch (page){
@@ -410,8 +410,8 @@ public class MainActivity extends AppCompatActivity
 
         /**
          * Constructor.
-         * @param fm
-         * @param type
+         * @param fm FragmentManager
+         * @param type type of item
          */
         public SectionsPagerAdapter(FragmentManager fm, String type) {
             super(fm);
@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
 
-            fragments = new ArrayList<UniversalFragment>();
+            fragments = new ArrayList<>();
             for (int i = 0; tabs != null && i < tabs.length; i++){
                 UniversalFragment fragment = new UniversalFragment();
                 Bundle bundle = new Bundle();

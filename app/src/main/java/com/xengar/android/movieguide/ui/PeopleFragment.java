@@ -122,7 +122,7 @@ public class PeopleFragment extends Fragment {
 
     /**
      * Query the Person popular page.
-     * @param listener
+     * @param listener listener
      */
     private void loadPeople(final FetchItemListener listener){
         PersonService service = ServiceGenerator.createService(PersonService.class);
@@ -193,7 +193,7 @@ public class PeopleFragment extends Fragment {
 
                 /**
                  * Here you should load more items because user is seeing the last item of the list.
-                 * Advice: you should add a bollean value to the class
+                 * Advice: you should add a boolean value to the class
                  * so that the method {@link #loadPage()} will be triggered only once
                  * and not every time the user touch the screen ;)
                  **/

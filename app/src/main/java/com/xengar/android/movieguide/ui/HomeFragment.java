@@ -277,7 +277,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     /**
      * Changes activity to the correct page.
-     * @param view
+     * @param view view
      */
     @Override
     public void onClick(View view) {

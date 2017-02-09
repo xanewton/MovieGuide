@@ -48,8 +48,8 @@ public class FragmentUtils {
 
     /**
      * Changes to visible or gone the circular progress bar.
-     * @param progressBar
-     * @param visibility
+     * @param progressBar progress Bar
+     * @param visibility boolean
      */
     public static void updateProgressBar(CircularProgressBar progressBar, boolean visibility) {
         if (progressBar != null) {

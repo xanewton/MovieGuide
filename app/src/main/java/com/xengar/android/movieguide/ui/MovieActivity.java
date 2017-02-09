@@ -239,7 +239,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Defines what to do when click on add/remove from Favorites buttons.
-     * @param container
+     * @param container MovieData
      */
     private void defineClickFavoriteButtons(final MovieData container) {
         final int DURATION = 1000;
@@ -315,7 +315,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Fills the Movie Details in screen.
-     * @param container
+     * @param container MovieData
      */
     private void populateDetails(final MovieData container) {
 
@@ -343,7 +343,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates Title in screen.
-     * @param container
+     * @param container MovieData
      */
     private void PopulateDetailsTitle(final MovieData container) {
         movieTitle[0] = container.getTitle();
@@ -353,8 +353,8 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates poster in screen.
-     * @param container
-     * @param callback
+     * @param container MovieData
+     * @param callback callback
      */
     private void PopulateDetailsPoster(final MovieData container, Callback callback) {
 
@@ -377,7 +377,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates date, duration and rating in screen.
-     * @param container
+     * @param container MovieData
      */
     private void PopulateDetailsDateDurationRating(final MovieData container) {
         if (StringUtils.isNotBlank(container.getYear())) {
@@ -403,7 +403,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates language in screen.
-     * @param container
+     * @param container MovieData
      */
     private void PopulateDetailsLanguage(final MovieData container) {
         if (container.getOriginalLanguage() != null) {
@@ -429,7 +429,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates genres in screen.
-     * @param container
+     * @param container MovieData
      */
     private void PopulateDetailsGenres(final MovieData container) {
         if(!container.getGenres().isEmpty()) {
@@ -449,7 +449,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates countries in screen.
-     * @param container
+     * @param container MovieData
      */
     private void PopulateDetailsCountries(final MovieData container) {
         if(!container.getOriginalCountries().isEmpty()) {
@@ -468,7 +468,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates Production Companies in screen.
-     * @param container
+     * @param container MovieData
      */
     private void PopulateDetailsProdCompanies(final MovieData container) {
         if(!container.getProductionCompanies().isEmpty()) {
@@ -488,7 +488,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates status, IMDbId, budget, revenue and homepage in screen.
-     * @param container
+     * @param container MovieData
      */
     private void PopulateDetailsStatus(final MovieData container) {
         if (container.getStatus() != null) {
@@ -525,7 +525,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates Movie plot in screen.
-     * @param container
+     * @param container MovieData
      */
     private void PopulateDetailsPlot(final MovieData container) {
         if (StringUtils.isBlank(container.getPlot())) {
@@ -537,7 +537,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates the trailers list in screen.
-     * @param data
+     * @param data List of Trailer data
      */
     private void populateTrailerList(List<TrailerData> data) {
         Log.v(TAG, "populateTrailerList - data = " + data);
@@ -556,7 +556,6 @@ public class MovieActivity extends AppCompatActivity
             });
             trailerList.addView(view);
         }
-        boolean isTrailerLoaded = true;
 
         if (!data.isEmpty()) {
             youTubePlayerFragment.initialize(getString(R.string.YOUTUBE_DATA_API_V3), this);
@@ -606,8 +605,8 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates the list of reviews in screen.
-     * @param data
-     * @param showReview
+     * @param data list of review data
+     * @param showReview boolean
      */
     private void populateReviewList(final List<ReviewData> data, boolean showReview) {
         if (data == null || data.isEmpty()) {
@@ -666,7 +665,7 @@ public class MovieActivity extends AppCompatActivity
 
     /**
      * Populates the Cast list in screen.
-     * @param data
+     * @param data list of cast data
      */
     private void populateCastList(final List<CastData> data) {
         if (data == null || data.isEmpty()) {
@@ -756,7 +755,7 @@ public class MovieActivity extends AppCompatActivity
 
         /**
          * Process the Movie Details data.
-         * @param jObj
+         * @param jObj object
          */
         private void processMovieDetails(JSONObject jObj) {
             if (jObj != null) {
@@ -813,11 +812,11 @@ public class MovieActivity extends AppCompatActivity
 
         /**
          * Process the Movie Trailers data.
-         * @param jObj
+         * @param jObj object
          */
         private void processMovieTrailers(JSONObject jObj) {
             if (jObj != null) {
-                trailerData = new ArrayList<TrailerData>();
+                trailerData = new ArrayList<>();
                 try {
                     JSONArray array = jObj.getJSONArray("results");
                     for (int i = 0; i < array.length(); i++) {
@@ -835,11 +834,11 @@ public class MovieActivity extends AppCompatActivity
 
         /**
          * Process the Movie Reviews data.
-         * @param jObj
+         * @param jObj object
          */
         private void processMovieReviews(JSONObject jObj) {
             if (jObj != null) {
-                reviewData = new ArrayList<ReviewData>();
+                reviewData = new ArrayList<>();
                 try {
                     JSONArray array = jObj.getJSONArray("results");
                     for (int i = 0; i < array.length(); i++) {
@@ -856,11 +855,11 @@ public class MovieActivity extends AppCompatActivity
 
         /**
          * Process the Movie cast data.
-         * @param jObj
+         * @param jObj object
          */
         private void processMovieCast(JSONObject jObj) {
             if (jObj != null) {
-                castData = new ArrayList<CastData>();
+                castData = new ArrayList<>();
                 try {
                     JSONArray array = jObj.getJSONArray("cast");
                     for (int i = 0; i < array.length(); i++) {

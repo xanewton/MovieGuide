@@ -254,8 +254,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity
 
     /**
      * Called after a preference changes.
-     * @param sharedPreferences
-     * @param key
+     * @param sharedPreferences SharedPreferences
+     * @param key key
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {

@@ -63,9 +63,9 @@ public class ActivityUtils {
 
     /**
      * Saves the variable into Preferences.
-     * @param context
-     * @param name
-     * @param value
+     * @param context context
+     * @param name name of preference
+     * @param value value
      */
     public static void saveIntToPreferences(final Context context, final String name,
                                             final int value) {
@@ -77,9 +77,9 @@ public class ActivityUtils {
 
     /**
      * Saves the variable into Preferences.
-     * @param context
-     * @param name
-     * @param value
+     * @param context context
+     * @param name name of preference
+     * @param value value
      */
     public static void saveStringToPreferences(final Context context, final String name,
                                                 final String value) {
@@ -91,8 +91,8 @@ public class ActivityUtils {
 
     /**
      * Returns the max cast items from preferences.
-     * @param context
-     * @return
+     * @param context context
+     * @return number or default(6)
      */
     public static int getPreferenceMaxCastItems(final Context context) {
         String key = context.getString(R.string.pref_max_cast_list);
@@ -103,8 +103,8 @@ public class ActivityUtils {
 
     /**
      * Returns the max movie items from preferences.
-     * @param context
-     * @return
+     * @param context context
+     * @return number of default(-1)
      */
     public static int getPreferenceMaxMovieItems(final Context context) {
         String key = context.getString(R.string.pref_max_movie_list);
@@ -115,11 +115,11 @@ public class ActivityUtils {
 
     /**
      * Defines a palette listener.
-     * @param title
-     * @param textRating
-     * @param rating
-     * @param starRating
-     * @return
+     * @param title title
+     * @param textRating text rating
+     * @param rating rating
+     * @param starRating star rating
+     * @return palette
      */
     public static PaletteAsyncListener definePaletteAsyncListener(final Context context,
                                                                   final TextView title,
@@ -168,10 +168,10 @@ public class ActivityUtils {
 
     /**
      * Defines a callback.
-     * @param paletteAsyncListener
-     * @param backgroundPoster
-     * @param moviePoster
-     * @return
+     * @param paletteAsyncListener palette
+     * @param backgroundPoster imageView for poster
+     * @param moviePoster imageView for poster
+     * @return callback
      */
     public static Callback defineCallback(final PaletteAsyncListener paletteAsyncListener,
                                           final ImageView backgroundPoster,
@@ -199,12 +199,12 @@ public class ActivityUtils {
 
     /**
      * Loads an image into a target view.
-     * @param context
-     * @param image
-     * @param centerCrop
-     * @param errorResourceId
-     * @param target
-     * @param callback
+     * @param context context
+     * @param image image
+     * @param centerCrop boolean
+     * @param errorResourceId image of error
+     * @param target imageView
+     * @param callback callback
      */
     public static void loadImage(final Context context, final String image,
                                  final boolean centerCrop, final int errorResourceId,
@@ -233,8 +233,8 @@ public class ActivityUtils {
 
     /**
      * Loads the image.
-     * @param context
-     * @param imageView
+     * @param context context
+     * @param imageView imageView
      */
     public static void loadNoBackgroundPoster(final Context context, final ImageView imageView) {
         Glide.with(context).load(R.drawable.no_background_poster).centerCrop().into(imageView);
@@ -242,9 +242,9 @@ public class ActivityUtils {
 
     /**
      * Change the height of a gridview according to the elements contained.
-     * @param gridview
-     * @param items
-     * @param gridViewResized
+     * @param gridview gridview
+     * @param items number of items
+     * @param gridViewResized boolean array
      */
     public static void changeGridViewHeight(final GridView gridview, final int items,
                                      final boolean gridViewResized[]) {
@@ -279,9 +279,9 @@ public class ActivityUtils {
 
     /**
      * Changes the CollapsingToolbarLayout to hide the title when the image is visible.
-     * @param collapsingToolbar
-     * @param appBarLayout
-     * @param title
+     * @param collapsingToolbar collapsing toolbar
+     * @param appBarLayout bar layout
+     * @param title title
      */
     public static void changeCollapsingToolbarLayoutBehaviour(
             final CollapsingToolbarLayout collapsingToolbar, final AppBarLayout appBarLayout,
@@ -311,7 +311,7 @@ public class ActivityUtils {
 
     /**
      * Launches Settings Activity.
-     * @param context
+     * @param context context
      */
     public static void launchSettingsActivity(final Context context) {
         Intent intent = new Intent(context, SettingsActivity.class);
@@ -325,7 +325,7 @@ public class ActivityUtils {
 
     /**
      * Launches Search Activity.
-     * @param context
+     * @param context context
      */
     public static void launchSearchActivity(final Context context) {
         Intent intent = new Intent(context, SearchActivity.class);
@@ -335,8 +335,8 @@ public class ActivityUtils {
 
     /**
      * Launches Movie Details Activity.
-     * @param context
-     * @param movieId
+     * @param context context
+     * @param movieId movie id
      */
     public static void launchMovieActivity(final Context context, final int movieId) {
         // Save movieId to Preferences
@@ -350,8 +350,8 @@ public class ActivityUtils {
 
     /**
      * Launches PersonProfile Activity.
-     * @param context
-     * @param personId
+     * @param context context
+     * @param personId person id
      */
     public static void launchPersonActivity(final Context context, final int personId) {
         // Set PersonID to preferences
@@ -365,8 +365,8 @@ public class ActivityUtils {
 
     /**
      * Launches TVShow Activity.
-     * @param context
-     * @param tvShowId
+     * @param context context
+     * @param tvShowId tvShow id
      */
     public static void launchTVShowActivity(final Context context, final int tvShowId) {
         // Save tvShowId to Preferences
@@ -381,8 +381,8 @@ public class ActivityUtils {
     /**
      * Helper class to handle deprecated method.
      * Source: http://stackoverflow.com/questions/37904739/html-fromhtml-deprecated-in-android-n
-     * @param html
-     * @return
+     * @param html html string
+     * @return Spanned
      */
     @SuppressWarnings("deprecation")
     public static Spanned fromHtml(String html){
@@ -397,9 +397,9 @@ public class ActivityUtils {
 
     /**
      * Sets the image id into the view.
-     * @param context
-     * @param view
-     * @param id
+     * @param context context
+     * @param view imageView
+     * @param id id
      */
     @SuppressWarnings("deprecation")
     public static void setImage(final Context context, final ImageView view, final int id){
