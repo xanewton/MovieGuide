@@ -39,15 +39,11 @@ public final class  Constants {
     public static final String POPULAR_MOVIES = "PopularMovies";
     public static final String NOW_PLAYING_MOVIES = "NowPlayingMovies";
     public static final String TOP_RATED_MOVIES = "TopRatedMovies";
-    public static final String FAVORITE_MOVIES = "FavoriteMovies";
     public static final String PERSON_ID = "person_id";
     public static final String TV_SHOW_ID = "movie_id";
     public static final String MOVIE_ID = "movie_id";
     public static final String MOVIE_BACKGROUND_POSTER = "movie_background_poster";
 
-    public static final String POSTER_BASE_URI = "http://image.tmdb.org/t/p/w185";
-    public static final String POSTER_PERSON_BASE_URI = "http://image.tmdb.org/t/p/w92";
-    public static final String BACKGROUND_BASE_URI = "http://image.tmdb.org/t/p/w500";
     public static final String IMDB_URI = "http://www.imdb.com/title";
     public static final String LAST_ACTIVITY = "last_activity";
     public static final String MAIN_ACTIVITY = "main_activity";
@@ -58,13 +54,13 @@ public final class  Constants {
     public static final String POPULAR_TV_SHOWS = "PopularTVShows";
     public static final String TOP_RATED_TV_SHOWS = "TopRatedTVShows";
     public static final String ON_THE_AIR_TV_SHOWS = "OnTheAirTVShows";
-    public static final String FAVORITE_TV_SHOWS = "FavoriteTVShows";
-
 
     public static final String TMDB_IMAGE_URL = "https://image.tmdb.org/t/p/";
-    public static final String POSTER_SIZE_W154 = "w154";
-    public static final String POSTER_SIZE_W342 = "w342";
-    public static final String PROFILE_SIZE_W185 = "w185";
+    public static final String SIZE_W154 = "w154";
+    public static final String SIZE_W342 = "w342";
+    public static final String SIZE_W185 = "w185";
+    public static final String SIZE_W500 = "w500";
+    public static final String BACKGROUND_BASE_URI = TMDB_IMAGE_URL + SIZE_W500;
 
     public static final String PREF_QUERY_LANGUAGE = "pref_query_language";
 }

@@ -42,7 +42,6 @@ import com.xengar.android.movieguide.model.MultiSearch;
 import com.xengar.android.movieguide.service.SearchService;
 import com.xengar.android.movieguide.service.ServiceGenerator;
 import com.xengar.android.movieguide.utils.ActivityUtils;
-import com.xengar.android.movieguide.utils.Constants;
 import com.xengar.android.movieguide.utils.FragmentUtils;
 import com.xengar.android.movieguide.utils.StringUtils;
 
@@ -53,6 +52,10 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W154;
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W185;
+import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 
 /**
  * SearchActivity
@@ -258,8 +261,7 @@ public class SearchActivity extends AppCompatActivity {
             switch (item.getMediaType()) {
                 case TYPE_MOVIE:
                     Picasso.with(mContext)
-                            .load(Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W154
-                                    + item.getPosterPath())
+                            .load(TMDB_IMAGE_URL + SIZE_W154 + item.getPosterPath())
                             .placeholder(placeholderImage)
                             .fit().centerCrop()
                             .noFade()
@@ -276,8 +278,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 case TYPE_TV:
                     Picasso.with(mContext)
-                            .load(Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W154
-                                    + item.getPosterPath())
+                            .load(TMDB_IMAGE_URL + SIZE_W154 + item.getPosterPath())
                             .placeholder(placeholderImage)
                             .fit().centerCrop()
                             .noFade()
@@ -294,8 +295,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 case TYPE_PERSON:
                     Picasso.with(mContext)
-                            .load(Constants.TMDB_IMAGE_URL + Constants.PROFILE_SIZE_W185
-                                    + item.getProfilePath())
+                            .load(TMDB_IMAGE_URL + SIZE_W185 + item.getProfilePath())
                             .placeholder(placeholderImage)
                             .fit().centerCrop()
                             .noFade()

@@ -51,9 +51,9 @@ import static com.xengar.android.movieguide.utils.Constants.DISCOVER_MIN_RATING;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_SORT_TYPE;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_TYPE;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
-import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
-import static com.xengar.android.movieguide.utils.Constants.POSTER_SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W185;
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 
@@ -161,7 +161,7 @@ public class DiscoverResultFragment extends Fragment {
                     int adds = 0;
                     for (Movie movie : movies) {
                         adds += adapter.add(
-                                new ImageItem(TMDB_IMAGE_URL + POSTER_SIZE_W342 + movie.getPosterPath(),
+                                new ImageItem(TMDB_IMAGE_URL + SIZE_W342 + movie.getPosterPath(),
                                         Integer.parseInt(movie.getId()), movie.getTitle(), null));
                     }
                     if (adds != 0) {
@@ -203,7 +203,7 @@ public class DiscoverResultFragment extends Fragment {
                     int adds = 0;
                     for (TV tv:tvs) {
                         adds += adapter.add(
-                                new ImageItem(POSTER_BASE_URI + tv.getPosterPath(),
+                                new ImageItem(TMDB_IMAGE_URL + SIZE_W185 + tv.getPosterPath(),
                                         Integer.parseInt(tv.getId()), tv.getName(), null));
                     }
                     if (adds != 0) {
