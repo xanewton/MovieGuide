@@ -113,6 +113,7 @@ public class TestDB {
             locationColumnHashSet.remove(columnName);
         } while(c.moveToNext());
 
+        c.close();
         // if this fails, it means that your database doesn't contain all of the required columns
         assertTrue("Error: The database doesn't contain all of the required columns",
                 locationColumnHashSet.isEmpty());

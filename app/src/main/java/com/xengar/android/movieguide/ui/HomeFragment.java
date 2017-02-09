@@ -63,23 +63,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     private static final int MAX_ITEMS = 25;
 
-    private int mPage = 1;
+    private final int mPage = 1;
     private String mLang;
     private CustomErrorView mCustomErrorView;
 
-    private LinearLayout moreMovies;
     private RecyclerView mRecyclerViewMovies;
     private CircularProgressBar progressBarMovies;
     private HomeMovieAdapter mAdapterMovies;
     private List<Movie> mMovies;
 
-    private LinearLayout moreTV;
     private RecyclerView mRecyclerViewTV;
     private CircularProgressBar progressBarTV;
     private HomeTVAdapter mAdapterTV;
     private List<TV> mTVList;
 
-    private LinearLayout morePeople;
     private RecyclerView mRecyclerViewPeople;
     private CircularProgressBar progressBarPeople;
     private HomePersonAdapter mAdapterPeople;
@@ -101,21 +98,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_summary, container, false);
         mCustomErrorView = (CustomErrorView) view.findViewById(R.id.error);
 
-        moreMovies = (LinearLayout) view.findViewById(R.id.home_in_theaters);
+        LinearLayout moreMovies = (LinearLayout) view.findViewById(R.id.home_in_theaters);
         moreMovies.setOnClickListener(this);
         mRecyclerViewMovies = (RecyclerView) view.findViewById(R.id.recycler_view_movies);
         progressBarMovies = (CircularProgressBar) view.findViewById(R.id.progress_bar_movies);
         mMovies = new ArrayList<>();
         mAdapterMovies = new HomeMovieAdapter(mMovies);
 
-        moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
+        LinearLayout moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
         moreTV.setOnClickListener(this);
         mRecyclerViewTV = (RecyclerView) view.findViewById(R.id.recycler_view_tv);
         progressBarTV = (CircularProgressBar) view.findViewById(R.id.progress_bar_tv);
         mTVList = new ArrayList<>();
         mAdapterTV = new HomeTVAdapter(mTVList);
 
-        morePeople = (LinearLayout) view.findViewById(R.id.home_people);
+        LinearLayout morePeople = (LinearLayout) view.findViewById(R.id.home_people);
         morePeople.setOnClickListener(this);
         mRecyclerViewPeople = (RecyclerView) view.findViewById(R.id.recycler_view_people);
         progressBarPeople = (CircularProgressBar) view.findViewById(R.id.progress_bar_people);

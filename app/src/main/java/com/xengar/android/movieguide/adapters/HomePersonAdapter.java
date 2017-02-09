@@ -40,7 +40,7 @@ import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
  */
 public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.PersonHolder> {
 
-    private List<PersonPopular> people;
+    private final List<PersonPopular> people;
 
     public HomePersonAdapter(List<PersonPopular> people) {
         this.people = people;
@@ -70,10 +70,10 @@ public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.Pe
      */
     public class PersonHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private Context mContext;
+        private final Context mContext;
         private PersonPopular person;
-        ImageView personPoster;
-        TextView name;
+        final ImageView personPoster;
+        final TextView name;
 
         public PersonHolder(View itemView) {
             super(itemView);

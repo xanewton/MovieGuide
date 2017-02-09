@@ -81,7 +81,6 @@ public class PersonActivity extends AppCompatActivity {
     private static final Uri URI = FavoritesContract.FavoriteColumns.uriPerson;
     private int personId;
     private CollapsingToolbarLayout collapsingToolbar;
-    private PersonData personData;
     private TextView biography;
     private ImageView personalProfImage;
     private LinearLayout rating;
@@ -420,7 +419,7 @@ public class PersonActivity extends AppCompatActivity {
             if (jObj != null) {
                 try {
                     Log.v(TAG, "jObj = " + jObj);
-                    personData = new PersonData(JSONUtils.getStringValue(jObj, "name"),
+                    PersonData personData = new PersonData(JSONUtils.getStringValue(jObj, "name"),
                             JSONUtils.getStringValue(jObj, "profile_path"),
                             JSONUtils.getStringValue(jObj, "place_of_birth"),
                             JSONUtils.getStringValue(jObj, "birthday"),

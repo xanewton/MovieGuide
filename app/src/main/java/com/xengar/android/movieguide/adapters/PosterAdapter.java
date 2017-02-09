@@ -41,10 +41,10 @@ import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
  */
 public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder>{
 
-    private ArrayList<ImageItem> images = new ArrayList<ImageItem>();
+    private final ArrayList<ImageItem> images = new ArrayList<ImageItem>();
     private final HashSet<Integer> idSet = new HashSet<>();
-    private Context context;
-    private String type;
+    private final Context context;
+    private final String type;
 
 
     public PosterAdapter(final Context context, String type) {
@@ -94,7 +94,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
      * ViewHolder
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private ImageView imageView;
+        private final ImageView imageView;
         private int imageId;
 
         public ViewHolder(View view) {

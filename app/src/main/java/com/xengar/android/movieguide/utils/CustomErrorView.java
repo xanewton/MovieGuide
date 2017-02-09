@@ -29,8 +29,8 @@ import com.xengar.android.movieguide.R;
  */
 public class CustomErrorView extends FrameLayout {
 
-    private TextView errorTextView;
-    private TextView errorMessageTextView;
+    private final TextView errorTextView;
+    private final TextView errorMessageTextView;
 
     public CustomErrorView(Context context) {
         this(context, null);

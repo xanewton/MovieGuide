@@ -64,21 +64,16 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
 
     private CustomErrorView mCustomErrorView;
 
-    private LinearLayout moreMovies;
     private RecyclerView mRecyclerViewMovies;
     private CircularProgressBar progressBarMovies;
     private HomeMovieAdapter mAdapterMovies;
     private List<Movie> mMovies;
-    private TextView moviesTitle;
 
-    private LinearLayout moreTV;
     private RecyclerView mRecyclerViewTV;
     private CircularProgressBar progressBarTV;
     private HomeTVAdapter mAdapterTV;
     private List<TV> mTVList;
-    private TextView tvTitle;
 
-    private LinearLayout morePeople;
     private RecyclerView mRecyclerViewPeople;
     private CircularProgressBar progressBarPeople;
     private HomePersonAdapter mAdapterPeople;
@@ -96,25 +91,25 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         View view = inflater.inflate(R.layout.fragment_summary, container, false);
         mCustomErrorView = (CustomErrorView) view.findViewById(R.id.error);
 
-        moreMovies = (LinearLayout) view.findViewById(R.id.home_in_theaters);
+        LinearLayout moreMovies = (LinearLayout) view.findViewById(R.id.home_in_theaters);
         moreMovies.setOnClickListener(this);
         mRecyclerViewMovies = (RecyclerView) view.findViewById(R.id.recycler_view_movies);
         progressBarMovies = (CircularProgressBar) view.findViewById(R.id.progress_bar_movies);
-        moviesTitle = (TextView) view.findViewById(R.id.movies_title);
+        TextView moviesTitle = (TextView) view.findViewById(R.id.movies_title);
         moviesTitle.setText(getText(R.string.menu_title_movies));
         mMovies = new ArrayList<>();
         mAdapterMovies = new HomeMovieAdapter(mMovies);
 
-        moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
+        LinearLayout moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
         moreTV.setOnClickListener(this);
         mRecyclerViewTV = (RecyclerView) view.findViewById(R.id.recycler_view_tv);
         progressBarTV = (CircularProgressBar) view.findViewById(R.id.progress_bar_tv);
-        tvTitle = (TextView) view.findViewById(R.id.tv_title);
+        TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
         tvTitle.setText(getText(R.string.menu_title_tv_shows));
         mTVList = new ArrayList<>();
         mAdapterTV = new HomeTVAdapter(mTVList);
 
-        morePeople = (LinearLayout) view.findViewById(R.id.home_people);
+        LinearLayout morePeople = (LinearLayout) view.findViewById(R.id.home_people);
         morePeople.setOnClickListener(this);
         mRecyclerViewPeople = (RecyclerView) view.findViewById(R.id.recycler_view_people);
         progressBarPeople = (CircularProgressBar) view.findViewById(R.id.progress_bar_people);
@@ -226,8 +221,8 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
     public class FetchFavoriteMovies extends AsyncTask<Void, Void, ArrayList<Movie>> {
 
         private final String TAG = FetchFavoriteMovies.class.getSimpleName();
-        private ContentResolver contentResolver;
-        private HomeMovieAdapter adapter;
+        private final ContentResolver contentResolver;
+        private final HomeMovieAdapter adapter;
 
         // Constructor
         public FetchFavoriteMovies(HomeMovieAdapter adapter, ContentResolver contentResolver) {
@@ -277,8 +272,8 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
     public class FetchFavoriteTV extends AsyncTask<Void, Void, ArrayList<TV>> {
 
         private final String TAG = FetchFavoriteTV.class.getSimpleName();
-        private ContentResolver contentResolver;
-        private HomeTVAdapter adapter;
+        private final ContentResolver contentResolver;
+        private final HomeTVAdapter adapter;
 
         // Constructor
         public FetchFavoriteTV(HomeTVAdapter adapter, ContentResolver contentResolver) {
@@ -328,8 +323,8 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
     public class FetchFavoritePeople extends AsyncTask<Void, Void, ArrayList<PersonPopular>> {
 
         private final String TAG = FetchFavoritePeople.class.getSimpleName();
-        private ContentResolver contentResolver;
-        private HomePersonAdapter adapter;
+        private final ContentResolver contentResolver;
+        private final HomePersonAdapter adapter;
 
         // Constructor
         public FetchFavoritePeople(HomePersonAdapter adapter, ContentResolver contentResolver) {

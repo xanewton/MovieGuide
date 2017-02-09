@@ -397,10 +397,10 @@ public class MainActivity extends AppCompatActivity
                 = { getString(R.string.title_popular), getString(R.string.title_top_rated),
                     getString(R.string.title_on_the_air)};
 
-        private ArrayList<UniversalFragment> fragments;
+        private final ArrayList<UniversalFragment> fragments;
         private String tabs[] = null;
         private String titleTabs[] = null;
-        private String type;
+        private final String type;
 
         /**
          * Constructor.
@@ -438,8 +438,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
-            UniversalFragment fragment = fragments.get(position);
-            return fragment;
+            return fragments.get(position);
         }
 
         @Override
@@ -449,8 +448,7 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public CharSequence getPageTitle(int position) {
-            String title = (position < titleTabs.length)? titleTabs[position]: null;
-            return title;
+            return (position < titleTabs.length)? titleTabs[position]: null;
         }
     }
 

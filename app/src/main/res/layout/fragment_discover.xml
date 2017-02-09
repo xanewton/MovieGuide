@@ -29,7 +29,6 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/discover_filters"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -126,7 +125,6 @@
                 android:padding="@dimen/activity_horizontal_margin">
 
                 <TextView
-                    android:id="@+id/discover_rating_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"

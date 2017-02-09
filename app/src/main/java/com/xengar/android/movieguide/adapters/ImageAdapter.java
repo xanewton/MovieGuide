@@ -46,7 +46,6 @@ public class ImageAdapter extends BaseAdapter {
     private static final String TAG = ImageAdapter.class.getSimpleName();
     private final ArrayList<ImageItem> images = new ArrayList<>();
     private final HashSet<Integer> idSet = new HashSet<>();
-    private final float density;
     private final Context mContext;
     private final String type;
 
@@ -54,7 +53,7 @@ public class ImageAdapter extends BaseAdapter {
     public ImageAdapter(Context c, String type) {
         mContext = c;
         this.type = type;
-        density = mContext.getResources().getDisplayMetrics().density;
+        float density = mContext.getResources().getDisplayMetrics().density;
     }
 
     @Override
