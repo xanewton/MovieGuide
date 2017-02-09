@@ -46,6 +46,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_DEFAULT_MIN_RATING;
+import static com.xengar.android.movieguide.utils.Constants.DISCOVER_DEFAULT_SORT_TYPE;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_GENRES;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_MIN_RATING;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_SORT_TYPE;
@@ -67,11 +69,11 @@ public class DiscoverResultFragment extends Fragment {
     private CircularProgressBar progressBar;
     private CustomErrorView mCustomErrorView;
 
-    private String itemType;
-    private String mGenres;
-    private String mSortBy;
-    private String mMinRating;
-    private String mLang;
+    private String itemType = MOVIES;
+    private String mGenres = null;
+    private String mSortBy = DISCOVER_DEFAULT_SORT_TYPE;
+    private String mMinRating = DISCOVER_DEFAULT_MIN_RATING;
+    private String mLang = "";
 
     private RecyclerView recycler;
     private PosterAdapter adapter;
@@ -102,8 +104,8 @@ public class DiscoverResultFragment extends Fragment {
         mLang = FragmentUtils.getFormatLocale(getActivity());
         mGenres = prefs.getString(DISCOVER_GENRES, null);
         mGenres = (mGenres == null) ? "" : mGenres;
-        mSortBy = prefs.getString(DISCOVER_SORT_TYPE, null);
-        mMinRating = prefs.getString(DISCOVER_MIN_RATING, null);
+        mSortBy = prefs.getString(DISCOVER_SORT_TYPE, DISCOVER_DEFAULT_SORT_TYPE);
+        mMinRating = prefs.getString(DISCOVER_MIN_RATING, DISCOVER_DEFAULT_MIN_RATING);
 
         recycler = (RecyclerView) view.findViewById(R.id.recycler);
         recycler.setHasFixedSize(true);
@@ -129,7 +131,7 @@ public class DiscoverResultFragment extends Fragment {
             return;
         }
 
-        if (itemType != MOVIES && itemType != TV_SHOWS)
+        if (!itemType.contentEquals(MOVIES) && !itemType.contentEquals(TV_SHOWS))
             return;
 
         mTotalPages = 1;

@@ -188,7 +188,7 @@ public class MultiSearch extends BaseResults {
                 title = knowFor.getTitle();
                 line = (name != null)? name: "";
                 line = (title != null)? line.concat(" " + title) : line;
-                if (line != ""){
+                if (!line.contentEquals("")){
                     known = (known == null)? line : known.concat(", " + line);
                 }
             }

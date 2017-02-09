@@ -24,6 +24,8 @@ public final class  Constants {
     public static final String DISCOVER_GENRES = "discover_genres";
     public static final String DISCOVER_SORT_TYPE = "discover_sort_type";
     public static final String DISCOVER_MIN_RATING = "discover_min_rating";
+    public static final String DISCOVER_DEFAULT_MIN_RATING = "0";
+    public static final String DISCOVER_DEFAULT_SORT_TYPE = "popularity.desc";
 
     public static final String SHARED_PREF_NAME = "com.xengar.android.movieguide";
     public static final String ITEM_CATEGORY = "item_category";
