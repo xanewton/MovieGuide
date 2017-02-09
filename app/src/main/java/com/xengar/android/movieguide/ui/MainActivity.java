@@ -259,13 +259,19 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemSelectionClick(String itemType, int itemId) {
         Log.v(TAG, "onItemSelectionClick itemId = " + itemId + " itemType = " + itemType);
-        if (itemType.equals(TV_SHOWS) || itemType.equals(POPULAR_TV_SHOWS)
-                || itemType.equals(TOP_RATED_TV_SHOWS) || itemType.equals(ON_THE_AIR_TV_SHOWS)) {
-            ActivityUtils.launchTVShowActivity(getApplicationContext(), itemId);
-        } else if (itemType.equals(PEOPLE)) {
-            ActivityUtils.launchPersonActivity(getApplicationContext(), itemId);
-        } else {
-            ActivityUtils.launchMovieActivity(getApplicationContext(), itemId);
+        switch (itemType) {
+            case TV_SHOWS:
+            case POPULAR_TV_SHOWS:
+            case TOP_RATED_TV_SHOWS:
+            case ON_THE_AIR_TV_SHOWS:
+                ActivityUtils.launchTVShowActivity(getApplicationContext(), itemId);
+                break;
+            case PEOPLE:
+                ActivityUtils.launchPersonActivity(getApplicationContext(), itemId);
+                break;
+            default:
+                ActivityUtils.launchMovieActivity(getApplicationContext(), itemId);
+                break;
         }
     }
 
