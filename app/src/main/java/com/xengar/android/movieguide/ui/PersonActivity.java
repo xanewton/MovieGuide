@@ -48,7 +48,6 @@ import com.xengar.android.movieguide.data.MovieCreditCast;
 import com.xengar.android.movieguide.data.MovieCreditCrew;
 import com.xengar.android.movieguide.data.PersonData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
-import com.xengar.android.movieguide.utils.Constants;
 import com.xengar.android.movieguide.utils.JSONLoader;
 import com.xengar.android.movieguide.utils.JSONUtils;
 
@@ -70,6 +69,8 @@ import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
+import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 
 /**
  * Represents the Person Profile page.
@@ -282,9 +283,8 @@ public class PersonActivity extends AppCompatActivity {
                                           final String backgroundPosterPath,
                                           Callback callback) {
 
-        ActivityUtils.loadImage(this, Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W342
-                        + profilePosterPath, true, R.drawable.disk_reel,
-                personalProfImage, null);
+        ActivityUtils.loadImage(this, TMDB_IMAGE_URL + SIZE_W342 + profilePosterPath, true,
+                R.drawable.disk_reel, personalProfImage, null);
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             ActivityUtils.loadImage(this, BACKGROUND_BASE_URI + backgroundPosterPath, true,

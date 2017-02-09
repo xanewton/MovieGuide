@@ -29,9 +29,11 @@ import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.model.TV;
 import com.xengar.android.movieguide.utils.ActivityUtils;
-import com.xengar.android.movieguide.utils.Constants;
 
 import java.util.List;
+
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
+import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 
 /**
  * HomeTVAdapter
@@ -86,7 +88,7 @@ public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> 
             Drawable placeholder = ResourcesCompat.getDrawable(
                     mContext.getResources(), R.drawable.disk_reel, null);
             Picasso.with(mContext)
-                    .load(Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W342 + tv.getPosterPath())
+                    .load(TMDB_IMAGE_URL + SIZE_W342 + tv.getPosterPath())
                     .placeholder(placeholder)
                     .fit().centerCrop()
                     .noFade()

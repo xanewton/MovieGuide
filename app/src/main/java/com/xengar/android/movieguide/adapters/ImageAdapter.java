@@ -27,11 +27,13 @@ import android.widget.TextView;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.ImageItem;
 import com.xengar.android.movieguide.utils.ActivityUtils;
-import com.xengar.android.movieguide.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
+import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 
 /**
  * Image adapter used to fill the list of Movie/TVShow images.
@@ -139,8 +141,7 @@ public class ImageAdapter extends BaseAdapter {
         if (image.getImagePath() == null) {
             castImage.setVisibility(View.GONE);
         } else {
-            ActivityUtils.loadImage(mContext, Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W342
-                    + image.getImagePath(),
+            ActivityUtils.loadImage(mContext, TMDB_IMAGE_URL + SIZE_W342 + image.getImagePath(),
                     true, R.drawable.disk_reel, castImage, null);
         }
     }
@@ -162,9 +163,8 @@ public class ImageAdapter extends BaseAdapter {
         if (image.getImagePath() == null) {
             poster.setVisibility(View.GONE);
         } else {
-            ActivityUtils.loadImage(mContext, Constants.TMDB_IMAGE_URL + Constants.POSTER_SIZE_W342
-                            + image.getImagePath(), true,
-                    R.drawable.disk_reel, poster, null);
+            ActivityUtils.loadImage(mContext, TMDB_IMAGE_URL + SIZE_W342 + image.getImagePath(),
+                    true, R.drawable.disk_reel, poster, null);
         }
     }
 

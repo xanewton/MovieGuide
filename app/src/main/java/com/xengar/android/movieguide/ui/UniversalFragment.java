@@ -55,8 +55,8 @@ import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
-import static com.xengar.android.movieguide.utils.Constants.POSTER_BASE_URI;
-import static com.xengar.android.movieguide.utils.Constants.POSTER_SIZE_W342;
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W185;
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_TV_SHOWS;
@@ -188,7 +188,7 @@ public class UniversalFragment extends Fragment {
                     int adds = 0;
                     for (Movie movie : movies) {
                         adds += adapter.add(
-                                new ImageItem(TMDB_IMAGE_URL + POSTER_SIZE_W342 + movie.getPosterPath(),
+                                new ImageItem(TMDB_IMAGE_URL + SIZE_W342 + movie.getPosterPath(),
                                         Integer.parseInt(movie.getId()), movie.getTitle(), null));
                     }
                     if (adds != 0) {
@@ -248,8 +248,9 @@ public class UniversalFragment extends Fragment {
                     List<TV> tvs = response.body().getTVs();
                     int adds = 0;
                     for (TV tv : tvs) {
-                        adds += adapter.add( new ImageItem(POSTER_BASE_URI + tv.getPosterPath(),
-                                        Integer.parseInt(tv.getId()), tv.getName(), null));
+                        adds += adapter.add(
+                                    new ImageItem(TMDB_IMAGE_URL + SIZE_W185 + tv.getPosterPath(),
+                                            Integer.parseInt(tv.getId()), tv.getName(), null));
                     }
                     if (adds != 0) {
                         adapter.notifyDataSetChanged();

@@ -45,7 +45,7 @@ import retrofit2.Response;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
-import static com.xengar.android.movieguide.utils.Constants.POSTER_SIZE_W342;
+import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 
 
@@ -136,7 +136,7 @@ public class PeopleFragment extends Fragment {
                     int adds = 0;
                     for (PersonPopular person : people) {
                         adds += adapter.add(
-                                new ImageItem(TMDB_IMAGE_URL + POSTER_SIZE_W342 + person.getProfilePath(),
+                                new ImageItem(TMDB_IMAGE_URL + SIZE_W342 + person.getProfilePath(),
                                         Integer.parseInt(person.getId()), person.getName(), null));
                     }
                     if (adds != 0) {
