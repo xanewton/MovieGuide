@@ -66,7 +66,6 @@ public class SearchActivity extends AppCompatActivity {
 
     private Drawable placeholderImage;
     private Toolbar mToolbar;
-    private RecyclerView mRecyclerView;
     private SearchView mSearchView;
     private SearchAdapter mAdapter;
 
@@ -78,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         placeholderImage = ContextCompat.getDrawable(getApplicationContext(), R.drawable.disk_reel);
-        mRecyclerView = (RecyclerView) findViewById(R.id.search_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.search_recycler_view);
         mSearchView = (SearchView) findViewById(R.id.search_view);
 
         setupActionBar();
@@ -145,7 +144,7 @@ public class SearchActivity extends AppCompatActivity {
      */
     class SearchAdapter extends RecyclerView.Adapter<SearchHolder> implements Filterable {
 
-        private List<MultiSearch.MultiSearchItem> mMultiSearchItems;
+        private final List<MultiSearch.MultiSearchItem> mMultiSearchItems;
 
         public SearchAdapter(List<MultiSearch.MultiSearchItem> multiMultiSearchItems) {
             mMultiSearchItems = multiMultiSearchItems;
@@ -230,17 +229,17 @@ public class SearchActivity extends AppCompatActivity {
         private final String TYPE_TV = "tv";
         private final String TYPE_PERSON = "person";
 
-        private Context mContext;
+        private final Context mContext;
         private MultiSearch.MultiSearchItem mItem;
 
-        private ImageView poster;
-        private ImageView type;
-        private TextView name;
-        private TextView originalName;
-        private TextView voteAverage;
-        private TextView voteCount;
-        private TextView year;
-        private LinearLayout layout;
+        private final ImageView poster;
+        private final ImageView type;
+        private final TextView name;
+        private final TextView originalName;
+        private final TextView voteAverage;
+        private final TextView voteCount;
+        private final TextView year;
+        private final LinearLayout layout;
 
         public SearchHolder(View itemView) {
             super(itemView);

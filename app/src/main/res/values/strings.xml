@@ -48,23 +48,9 @@
     <string name="menu_option_discover">Discover</string>
     <string name="menu_option_home">Home</string>
     <string name="menu_option_tv_shows">TV Shows</string>
-    <string name="menu_option_top_rated">Top rated</string>
-    <string name="menu_option_upcomming">Upcoming</string>
-    <string name="menu_option_now_playing">Now playing</string>
-    <string name="menu_option_popular">Popular</string>
     <string name="menu_option_favorites">Favorites</string>
     <string name="menu_option_people">People</string>
-    <string name="menu_option_top_rated_movies">Top rated movies</string>
-    <string name="menu_option_upcomming_movies">Upcoming movies</string>
-    <string name="menu_option_now_playing_movies">Now playing movies</string>
-    <string name="menu_option_popular_movies">Popular movies</string>
-    <string name="menu_option_favorite_movies">Favorite movies</string>
     <string name="menu_title_tv_shows">TV Shows</string>
-    <string name="menu_option_on_the_air">On the air</string>
-    <string name="menu_option_popular_tv_shows">Popular TV shows</string>
-    <string name="menu_option_top_rated_tv_shows">Top rated TV shows</string>
-    <string name="menu_option_on_the_air_tv_shows">On the air TV shows</string>
-    <string name="menu_option_favorite_tv_shows">Favorite TV shows</string>
 
     <string name="title_top_rated">Top rated</string>
     <string name="title_upcomming">Upcoming</string>
@@ -92,7 +78,6 @@
     <string name="favorite_tvshow_add_message">Add TV Show to Favorites</string>
     <string name="favorite_tvshow_del_message">Remove TV Show from Favorites</string>
     <string name="favorite_person_add_message">Add Person to Favorites</string>
-    <string name="favorite_person_del_message">Remove Person from Favorites</string>
     <string name="title_activity_settings">Settings</string>
 
     <string name="date">date</string>
@@ -171,9 +156,6 @@
         <item name="sort_first_air_date_asc">first_air_date.asc</item>
     </string-array>
 
-    <string name="restart_dialog_message">Please restart application to apply new settings</string>
-    <string name="clear_cache_message_ok">Cache cleared</string>
-    <string name="clear_cache_message_fail">The cache is not cleared</string>
     <string name="genres_dialog_title">Genres</string>
 
     <!-- Genres list -->

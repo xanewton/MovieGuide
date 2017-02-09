@@ -46,13 +46,6 @@
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="DetailViewText">
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textColor">@color/textcolor</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textSize">17sp</item>
-    </style>
-
     <style name="DetailViewTextSmall">
         <item name="android:fontFamily">Roboto</item>
         <item name="android:textColor">@color/textcolor</item>

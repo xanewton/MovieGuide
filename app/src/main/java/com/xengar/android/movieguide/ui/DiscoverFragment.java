@@ -59,15 +59,10 @@ public class DiscoverFragment extends Fragment
                     View.OnClickListener, CheckBox.OnCheckedChangeListener {
 
     private static final String TAG = DiscoverFragment.class.getSimpleName();
-    private RadioGroup toggleRadioGroup;
     private RadioButton moviesRadioButton;
     private RadioButton tvRadioButton;
-    private TextView discoverButton;
     private TextView genresView;
-    private LinearLayout genres;
-    private Spinner sortSpinner;
     private TextView ratingView;
-    private AppCompatSeekBar ratingSeekBar;
 
     private String mType = MOVIES;
     private String mSortValue;
@@ -89,18 +84,18 @@ public class DiscoverFragment extends Fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_discover, container, false);
 
-        toggleRadioGroup = (RadioGroup) view.findViewById(R.id.discover_toggle);
+        RadioGroup toggleRadioGroup = (RadioGroup) view.findViewById(R.id.discover_toggle);
         moviesRadioButton = (RadioButton) view.findViewById(R.id.radio_movies);
         moviesRadioButton.setOnCheckedChangeListener(this);
         tvRadioButton = (RadioButton) view.findViewById(R.id.radio_tv);
-        discoverButton = (TextView) view.findViewById(R.id.discover_discover);
+        TextView discoverButton = (TextView) view.findViewById(R.id.discover_discover);
         discoverButton.setOnClickListener(this);
-        genres = (LinearLayout) view.findViewById(R.id.genres_root);
+        LinearLayout genres = (LinearLayout) view.findViewById(R.id.genres_root);
         genres.setOnClickListener(this);
         genresView = (TextView) view.findViewById(R.id.discover_genres);
-        sortSpinner = (Spinner) view.findViewById(R.id.discover_sort);
+        Spinner sortSpinner = (Spinner) view.findViewById(R.id.discover_sort);
         ratingView = (TextView) view.findViewById(R.id.discover_rating);
-        ratingSeekBar = (AppCompatSeekBar) view.findViewById(R.id.discover_rating_bar);
+        AppCompatSeekBar ratingSeekBar = (AppCompatSeekBar) view.findViewById(R.id.discover_rating_bar);
 
         mGenresList = new HashSet<>();
         mGenresValuesList = new HashSet<>();

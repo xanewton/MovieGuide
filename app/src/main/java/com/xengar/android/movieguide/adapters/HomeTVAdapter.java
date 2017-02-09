@@ -40,7 +40,7 @@ import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
  */
 public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> {
 
-    private List<TV> mTVs;
+    private final List<TV> mTVs;
 
     public HomeTVAdapter(List<TV> tvs) {
         mTVs = tvs;
@@ -69,10 +69,10 @@ public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> 
      */
     public class TVHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private Context mContext;
+        private final Context mContext;
         private TV mTV;
-        ImageView tvPoster;
-        TextView tvTitle;
+        final ImageView tvPoster;
+        final TextView tvTitle;
 
         public TVHolder(View itemView) {
             super(itemView);

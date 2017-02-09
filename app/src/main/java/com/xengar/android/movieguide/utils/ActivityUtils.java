@@ -401,6 +401,7 @@ public class ActivityUtils {
      * @param view
      * @param id
      */
+    @SuppressWarnings("deprecation")
     public static void setImage(final Context context, final ImageView view, final int id){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             view.setImageDrawable(context.getResources().getDrawable(id, context.getTheme()));

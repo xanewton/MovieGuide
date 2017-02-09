@@ -20,7 +20,6 @@
     android:layout_height="@dimen/nav_header_height"
     android:background="@drawable/movies"
     android:gravity="bottom"
-    android:orientation="vertical"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:orientation="vertical">
 
 </LinearLayout>

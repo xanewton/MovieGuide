@@ -60,7 +60,6 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -94,7 +93,6 @@
                     android:gravity="center_vertical" />
 
                 <TextView
-                    android:id="@+id/imdb_text_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
@@ -143,7 +141,7 @@
                             android:id="@+id/tvshow_poster"
                             android:layout_width="@dimen/movie_details_image_layout_width"
                             android:layout_height="@dimen/movie_details_image_layout_height"
-                            android:src="@drawable/disk_reel"
+                            app:srcCompat="@drawable/disk_reel"
                             android:layout_marginBottom="1dp" />
 
                         <LinearLayout
@@ -238,7 +236,7 @@
                                 style="@style/DetailViewTextSmall"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
-                                android:layout_height="wrap_content"
+                                android:layout_height="0dp"
                                 android:gravity="left" />
 
                             <TextView
