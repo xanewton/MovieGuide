@@ -191,7 +191,7 @@ public class UniversalFragment extends Fragment {
                     for (Movie movie : movies) {
                         adds += adapter.add(
                                 new ImageItem(TMDB_IMAGE_URL + SIZE_W342 + movie.getPosterPath(),
-                                        Integer.parseInt(movie.getId()), movie.getTitle(), null));
+                                        Integer.parseInt(movie.getId()), movie.getTitle(), null, null));
                     }
                     if (adds != 0) {
                         adapter.notifyDataSetChanged();
@@ -252,7 +252,7 @@ public class UniversalFragment extends Fragment {
                     for (TV tv : tvs) {
                         adds += adapter.add(
                                     new ImageItem(TMDB_IMAGE_URL + SIZE_W185 + tv.getPosterPath(),
-                                            Integer.parseInt(tv.getId()), tv.getName(), null));
+                                            Integer.parseInt(tv.getId()), tv.getName(), null, null));
                     }
                     if (adds != 0) {
                         adapter.notifyDataSetChanged();

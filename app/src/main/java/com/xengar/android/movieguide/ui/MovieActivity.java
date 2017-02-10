@@ -83,9 +83,9 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_YEAR;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.IMDB_URI;
+import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ACTIVITY;
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
@@ -371,7 +371,7 @@ public class MovieActivity extends AppCompatActivity
         }
 
         // Save background movie image poster to use in PersonProfile page.
-        ActivityUtils.saveStringToPreferences(this, MOVIE_BACKGROUND_POSTER,
+        ActivityUtils.saveStringToPreferences(this, KNOWN_FOR_BACKGROUND_POSTER,
                 container.getBackgroundPath());
     }
 
@@ -684,7 +684,7 @@ public class MovieActivity extends AppCompatActivity
             }
             index++;
             adds += adapter.add(new ImageItem(cast.getCastImagePath(), cast.getPersonId(),
-                                        cast.getCastName(), cast.getCharacter()));
+                                        cast.getCastName(), cast.getCharacter(), null));
         }
         if (adds != 0)
             adapter.notifyDataSetChanged();

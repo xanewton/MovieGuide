@@ -43,6 +43,7 @@ public class PersonPopular {
     @SerializedName("known_for")
     @Expose
     private List<KnownFor> mKnownFor;
+    private String mFirstKnownFor;
 
     public boolean isAdult() {
         return mAdult;
@@ -92,11 +93,29 @@ public class PersonPopular {
         mKnownFor = knownFor;
     }
 
+    public String getFirstKnownFor() {
+        String backgroundPath = null;
+        if (mKnownFor!= null && mKnownFor.size() > 0){
+            KnownFor knownFor = mKnownFor.get(0);
+            backgroundPath = knownFor.getBackgroundPath();
+        } else if (mFirstKnownFor != null) {
+            backgroundPath = mFirstKnownFor;
+        }
+        return backgroundPath;
+    }
+
+    public void setFirstKnownFor(String firstKnownForPath) {
+        this.mFirstKnownFor = firstKnownForPath;
+    }
+
+
     public class KnownFor {
         @SerializedName("title")
         private String mTitle;
         @SerializedName("poster_path")
         private String mPosterPath;
+        @SerializedName("backdrop_path")
+        private String mBackgroundPath;
         @SerializedName("id")
         private String mId;
 
@@ -122,6 +141,14 @@ public class PersonPopular {
 
         public void setPosterPath(String posterPath) {
             mPosterPath = posterPath;
+        }
+
+        public String getBackgroundPath(){
+            return mBackgroundPath;
+        }
+
+        public void setBackgroundPath(String posterPath) {
+            mBackgroundPath = posterPath;
         }
     }
 }

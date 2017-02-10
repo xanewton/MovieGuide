@@ -103,7 +103,8 @@ public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.Pe
             int position = getAdapterPosition(); // gets item position
             // Check if an item was deleted, but the user clicked it before the UI removed it
             if (position != RecyclerView.NO_POSITION) {
-                ActivityUtils.launchPersonActivity(mContext, Integer.valueOf(person.getId()));
+                ActivityUtils.launchPersonActivity(mContext, Integer.valueOf(person.getId()),
+                        person.getFirstKnownFor());
             }
         }
 

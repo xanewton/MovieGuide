@@ -45,6 +45,7 @@ public final class  Constants {
     public static final String TV_SHOW_ID = "movie_id";
     public static final String MOVIE_ID = "movie_id";
     public static final String MOVIE_BACKGROUND_POSTER = "movie_background_poster";
+    public static final String KNOWN_FOR_BACKGROUND_POSTER = "known_for_background_poster";
 
     public static final String IMDB_URI = "http://www.imdb.com/title";
     public static final String LAST_ACTIVITY = "last_activity";

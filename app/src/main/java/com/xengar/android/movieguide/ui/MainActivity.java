@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity
                 ActivityUtils.launchTVShowActivity(getApplicationContext(), itemId);
                 break;
             case PEOPLE:
-                ActivityUtils.launchPersonActivity(getApplicationContext(), itemId);
+                ActivityUtils.launchPersonActivity(getApplicationContext(), itemId, null);
                 break;
             default:
                 ActivityUtils.launchMovieActivity(getApplicationContext(), itemId);

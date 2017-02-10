@@ -126,7 +126,7 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
             for (int i = 0; i < itemsArray.length(); i++) {
                 item = itemsArray.optJSONObject(i);
                 posters.add(new ImageItem(posterBaseUri + item.getString("poster_path"),
-                        item.getInt("id"), item.getString(itemTitle), null));
+                        item.getInt("id"), item.getString(itemTitle), null, null));
             }
         } catch (JSONException e) {
             Log.e(TAG, "Error ", e);
