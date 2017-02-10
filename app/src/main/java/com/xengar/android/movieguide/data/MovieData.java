@@ -37,16 +37,16 @@ public class MovieData {
     private final String status;
     private final String imdbUri;
     private final List<String> productionCompanies;
-    private final String budget;
-    private final String revenue;
+    private final Long budget;
+    private final Long revenue;
     private final String homepage;
 
     // Constructor
     public MovieData(String moviePoster, int movieId, String title, String plot, String year,
                      Integer duration, Double voteAverage, Integer voteCount, String backgroundPath,
                      String originalLanguage, List<String> originalCountries, List<String> genres,
-                     String status, String imdbUri, List<String> productionCompanies, String budget,
-                     String revenue, String homepage) {
+                     String status, String imdbUri, List<String> productionCompanies, Long budget,
+                     Long revenue, String homepage) {
 
         this.movieId = movieId;
         this.posterPath = moviePoster;
@@ -129,11 +129,11 @@ public class MovieData {
         return productionCompanies;
     }
 
-    public String getBudget() {
+    public Long getBudget() {
         return budget;
     }
 
-    public String getRevenue() {
+    public Long getRevenue() {
         return revenue;
     }
 

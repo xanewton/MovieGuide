@@ -93,6 +93,7 @@ import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 import static com.xengar.android.movieguide.utils.JSONUtils.getDoubleValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getIntValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getListValue;
+import static com.xengar.android.movieguide.utils.JSONUtils.getLongValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getStringValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getUriValue;
 
@@ -499,12 +500,12 @@ public class MovieActivity extends AppCompatActivity
         }
 
         if (container.getBudget() != null) {
-            budget.setText(container.getBudget());
+            budget.setText(getString(R.string.details_budget_revenue, container.getBudget()));
         } else {
             budget.setVisibility(View.GONE);
         }
         if (container.getRevenue() != null) {
-            revenue.setText(container.getRevenue());
+            revenue.setText(getString(R.string.details_budget_revenue, container.getRevenue()));
         } else {
             revenue.setVisibility(View.GONE);
         }
@@ -774,8 +775,8 @@ public class MovieActivity extends AppCompatActivity
                             getStringValue(jObj, "status"),
                             getUriValue(jObj, "imdb_uri" + IMDB_URI),
                             getListValue(jObj, "production_companies", "name"),
-                            getStringValue(jObj, "budget"),
-                            getStringValue(jObj, "revenue"),
+                            getLongValue(jObj, "budget", 0L),
+                            getLongValue(jObj, "revenue", 0L),
                             getStringValue(jObj, "homepage"));
                     populateDetails(detailsData);
                 } catch (JSONException e) {
@@ -802,8 +803,8 @@ public class MovieActivity extends AppCompatActivity
                             cursor.getInt(4), cursor.getDouble(5), cursor.getInt(6),
                             cursor.getString(7), cursor.getString(8), Collections.<String>emptyList(),
                             Collections.<String>emptyList(), cursor.getString(9),
-                            cursor.getString(10), Collections.<String>emptyList(), cursor.getString(11),
-                            cursor.getString(12), cursor.getString(13));
+                            cursor.getString(10), Collections.<String>emptyList(),
+                            (long)cursor.getInt(11), (long)cursor.getInt(12), cursor.getString(13));
                     populateDetails(detailsData);
                 }
                 cursor.close();

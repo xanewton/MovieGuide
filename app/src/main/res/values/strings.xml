@@ -112,6 +112,7 @@
     <string name="languages">languages</string>
     <string name="episodes">episodes</string>
     <string name="seasons">seasons</string>
+    <string name="details_budget_revenue" translatable="false">$%,d</string>
 
     <!-- Discover strings -->
     <string name="discover_type">Type</string>

@@ -31,7 +31,7 @@ public class FavoritesDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "Favorites.db";
 
     // Database version. If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // Constructor
     public FavoritesDbHelper(Context context) {
@@ -54,8 +54,8 @@ public class FavoritesDbHelper extends SQLiteOpenHelper {
             + FavoriteColumns.COLUMN_ORIGINAL_LANGUAGE + " TEXT, "
             + FavoriteColumns.COLUMN_STATUS + " TEXT, "
             + FavoriteColumns.COLUMN_IMDB_ID + " TEXT, "
-            + FavoriteColumns.COLUMN_BUDGET + " TEXT, "
-            + FavoriteColumns.COLUMN_REVENUE + " TEXT, "
+            + FavoriteColumns.COLUMN_BUDGET + " INTEGER, "
+            + FavoriteColumns.COLUMN_REVENUE + " INTEGER, "
             + FavoriteColumns.COLUMN_HOMEPAGE + " TEXT )";
         db.execSQL(SQL_CREATE_TABLE);
 
