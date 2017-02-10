@@ -62,6 +62,15 @@ public final class JSONUtils {
         }
     }
 
+    public static Long getLongValue(JSONObject jobj, String name, long defaultValue)
+            throws JSONException {
+        if (jobj.isNull(name)) {
+            return defaultValue;
+        } else {
+            return jobj.getLong(name);
+        }
+    }
+
     /**
      * Return a list of strings with data from the field.
      * @param jobj object
