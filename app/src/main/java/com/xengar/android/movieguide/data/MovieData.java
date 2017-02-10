@@ -40,13 +40,14 @@ public class MovieData {
     private final Long budget;
     private final Long revenue;
     private final String homepage;
+    private final String tagline;
 
     // Constructor
     public MovieData(String moviePoster, int movieId, String title, String plot, String year,
                      Integer duration, Double voteAverage, Integer voteCount, String backgroundPath,
                      String originalLanguage, List<String> originalCountries, List<String> genres,
                      String status, String imdbUri, List<String> productionCompanies, Long budget,
-                     Long revenue, String homepage) {
+                     Long revenue, String homepage, String tagline) {
 
         this.movieId = movieId;
         this.posterPath = moviePoster;
@@ -66,6 +67,7 @@ public class MovieData {
         this.budget = budget;
         this.revenue = revenue;
         this.homepage = homepage;
+        this.tagline = tagline;
     }
 
     // Getter methods
@@ -141,4 +143,7 @@ public class MovieData {
         return homepage;
     }
 
+    public String getTagline() {
+        return tagline;
+    }
 }

@@ -115,6 +115,7 @@
     <string name="details_budget_revenue" translatable="false">$%,d</string>
     <string name="details_episodes">%d episodes</string>
     <string name="details_seasons">%d seasons</string>
+    <string name="details_tagline" translatable="false">\"%s\"</string>
 
     <!-- Discover strings -->
     <string name="discover_type">Type</string>
