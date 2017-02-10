@@ -26,6 +26,7 @@ public class PersonData {
     private final int popularity;
     private final String actorName;
     private final String profilePath;
+    private String backgroundPath;
     private final String placeOfBirth;
     private final String birthday;
     private final String deathday;
@@ -40,7 +41,7 @@ public class PersonData {
                       String birthday, String deathday,
                       String biography, int personId, int popularity, String imdbId,
                       String homepage, List<MovieCreditCast> movieCreditCastList,
-                      List<MovieCreditCrew> movieCreditCrewList) {
+                      List<MovieCreditCrew> movieCreditCrewList, String backgroundPath) {
         this.personId = personId;
         this.popularity = popularity;
         this.actorName = actorName;
@@ -53,6 +54,7 @@ public class PersonData {
         this.homepage = homepage;
         this.movieCreditCastList = movieCreditCastList;
         this.movieCreditCrewList = movieCreditCrewList;
+        this.backgroundPath = backgroundPath;
     }
 
     // Getters
@@ -62,6 +64,14 @@ public class PersonData {
 
     public String getProfileImagePath() {
         return profilePath;
+    }
+
+    public String getBackgroundPath() {
+        return backgroundPath;
+    }
+
+    public void setBackgroundPath(final String backgroundPath) {
+        this.backgroundPath = backgroundPath;
     }
 
     public String getBiography() {

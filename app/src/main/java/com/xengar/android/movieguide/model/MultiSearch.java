@@ -195,6 +195,19 @@ public class MultiSearch extends BaseResults {
             return known;
         }
 
+        /**
+         * Returns the background poster
+         * @return
+         */
+        public String getFirstKnownFor() {
+            String backgroundPath = null;
+            if (mKnownFor!= null && mKnownFor.size() > 0){
+                KnownFor knownFor = mKnownFor.get(0);
+                backgroundPath = knownFor.getBackgroundPath();
+            }
+            return backgroundPath;
+        }
+
         public void setKnownFor(List<KnownFor> knownFor) {
             mKnownFor = knownFor;
         }
@@ -204,6 +217,8 @@ public class MultiSearch extends BaseResults {
             private String mTitle;
             @SerializedName("name")
             private String mName;
+            @SerializedName("backdrop_path")
+            private String mBackgroundPath;
 
             public String getName() {
                 return mName;
@@ -219,6 +234,14 @@ public class MultiSearch extends BaseResults {
 
             public void setTitle(String title) {
                 mTitle = title;
+            }
+
+            public String getBackgroundPath() {
+                return mBackgroundPath;
+            }
+
+            public void setBackgroundPath(String backgroundPath) {
+                mBackgroundPath = backgroundPath;
             }
         }
     }

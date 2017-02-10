@@ -108,7 +108,8 @@ public class ImageAdapter extends BaseAdapter {
                 if (type.contentEquals(MOVIE_IMAGE)) {
                     ActivityUtils.launchMovieActivity(mContext, item.getImageId());
                 } else if (type.contentEquals(CAST_IMAGE)) {
-                    ActivityUtils.launchPersonActivity(mContext, item.getImageId());
+                    ActivityUtils.launchPersonActivity(mContext, item.getImageId(),
+                            item.getBackgroundImagePath());
                 }
             }
         });

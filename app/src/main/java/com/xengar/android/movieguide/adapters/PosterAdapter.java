@@ -63,6 +63,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
 
         viewHolder.imageId = images.get(i).getImageId();
+        viewHolder.backgroundPoster = images.get(i).getBackgroundImagePath();
         Picasso.with(context)
                 .load(images.get(i).getImagePath())
                 .error(R.drawable.disk_reel)
@@ -96,6 +97,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final ImageView imageView;
         private int imageId;
+        private String backgroundPoster;
 
         public ViewHolder(View view) {
             super(view);
@@ -115,7 +117,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
                     break;
 
                 case PEOPLE:
-                    ActivityUtils.launchPersonActivity(context, imageId);
+                    ActivityUtils.launchPersonActivity(context, imageId, backgroundPoster);
                     break;
             }
         }

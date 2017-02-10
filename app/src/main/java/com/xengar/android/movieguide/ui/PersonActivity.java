@@ -63,8 +63,8 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PERSON_ID;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PROFILE_PATH;
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
+import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
-import static com.xengar.android.movieguide.utils.Constants.MOVIE_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -195,7 +195,7 @@ public class PersonActivity extends AppCompatActivity {
                 values.put(COLUMN_PERSON_ID, personId);
                 values.put(COLUMN_NAME, personData.getActorName());
                 values.put(COLUMN_PROFILE_PATH, personData.getProfileImagePath());
-                values.put(COLUMN_KNOWNFOR_POSTER_PATH, "");
+                values.put(COLUMN_KNOWNFOR_POSTER_PATH, personData.getBackgroundPath());
                 getContentResolver().insert(URI, values);
 
                 fabAdd.setVisibility(View.INVISIBLE);
@@ -262,7 +262,8 @@ public class PersonActivity extends AppCompatActivity {
          * TODO: Use last movie poster.
          */
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-        String backgroundPoster = prefs.getString(MOVIE_BACKGROUND_POSTER, "null");
+        String backgroundPoster = prefs.getString(KNOWN_FOR_BACKGROUND_POSTER, "null");
+        personData.setBackgroundPath(backgroundPoster);
         PopulateBackgroundPoster(personData.getProfileImagePath(), backgroundPoster, callback);
         PopulateCreditCast(personData.getMovieCreditCastList());
         PopulateCreditCrew(personData.getMovieCreditCrewList());
@@ -307,7 +308,7 @@ public class PersonActivity extends AppCompatActivity {
                 break;
             index++;
             ImageItem imageItem = new ImageItem(creditCast.getPosterPath(), creditCast.getId(),
-                    creditCast.getMovieTitle(), null);
+                    creditCast.getMovieTitle(), null, null);
             data.add(imageItem);
         }
 
@@ -427,7 +428,7 @@ public class PersonActivity extends AppCompatActivity {
                             JSONUtils.getStringValue(jObj, "imdb_id"),
                             JSONUtils.getStringValue(jObj, "homepage"),
                             JSONUtils.getMovieCreditCastList(jObj, "movie_credits", "cast"),
-                            JSONUtils.getMovieCreditCrewList(jObj, "movie_credits", "crew"));
+                            JSONUtils.getMovieCreditCrewList(jObj, "movie_credits", "crew"), null);
                     populateProfile(personData);
 
                 } catch (JSONException e) {

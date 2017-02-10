@@ -46,6 +46,7 @@ import java.util.List;
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
 import static android.content.ContentValues.TAG;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_KNOWNFOR_POSTER_PATH;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_MOVIE_ID;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_NAME;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PERSON_ID;
@@ -335,7 +336,8 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         @Override
         protected ArrayList<PersonPopular> doInBackground(Void... voids) {
             ArrayList<PersonPopular> people = new ArrayList<>();
-            String[] columns = new String[]{ COLUMN_PROFILE_PATH, COLUMN_PERSON_ID, COLUMN_NAME};
+            String[] columns = new String[]{ COLUMN_PROFILE_PATH, COLUMN_PERSON_ID,
+                    COLUMN_NAME, COLUMN_KNOWNFOR_POSTER_PATH};
 
             final Cursor cursor = contentResolver.query(FavoritesContract.FavoriteColumns.uriPerson,
                     columns, null, null, null);
@@ -347,6 +349,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
                     person.setProfilePath(cursor.getString(0));
                     person.setId(String.format("%s", cursor.getInt(1)));
                     person.setName(cursor.getString(2));
+                    person.setFirstKnownFor(cursor.getString(3));
                     people.add(person);
                 }
             } else {

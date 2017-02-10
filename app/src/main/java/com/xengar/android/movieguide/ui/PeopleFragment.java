@@ -137,7 +137,8 @@ public class PeopleFragment extends Fragment {
                     for (PersonPopular person : people) {
                         adds += adapter.add(
                                 new ImageItem(TMDB_IMAGE_URL + SIZE_W342 + person.getProfilePath(),
-                                        Integer.parseInt(person.getId()), person.getName(), null));
+                                        Integer.parseInt(person.getId()), person.getName(), null,
+                                        person.getFirstKnownFor()));
                     }
                     if (adds != 0) {
                         adapter.notifyDataSetChanged();

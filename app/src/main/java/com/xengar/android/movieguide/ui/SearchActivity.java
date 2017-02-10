@@ -320,7 +320,7 @@ public class SearchActivity extends AppCompatActivity {
 
                 case TYPE_PERSON:
                     ActivityUtils.launchPersonActivity(getApplicationContext(),
-                            Integer.parseInt(mItem.getId()));
+                            Integer.parseInt(mItem.getId()), mItem.getFirstKnownFor());
                     break;
             }
         }

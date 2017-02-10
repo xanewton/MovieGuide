@@ -49,6 +49,7 @@ import com.xengar.android.movieguide.ui.SearchActivity;
 import com.xengar.android.movieguide.ui.SettingsActivity;
 import com.xengar.android.movieguide.ui.TVShowActivity;
 
+import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -353,10 +354,13 @@ public class ActivityUtils {
      * @param context context
      * @param personId person id
      */
-    public static void launchPersonActivity(final Context context, final int personId) {
+    public static void launchPersonActivity(final Context context, final int personId,
+                                            final String backgroundPoster) {
         // Set PersonID to preferences
         saveIntToPreferences(context, PERSON_ID, personId);
-
+        if (backgroundPoster != null) {
+            saveStringToPreferences(context, KNOWN_FOR_BACKGROUND_POSTER, backgroundPoster);
+        }
         // Launch activity
         Intent intent = new Intent(context, PersonActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

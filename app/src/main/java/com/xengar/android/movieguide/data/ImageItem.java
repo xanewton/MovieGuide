@@ -23,15 +23,18 @@ public class ImageItem {
 
     private final int id;
     private final String imagePath;
+    private final String backgroundImagePath;
     private final String title;
     private final String subtitle;
 
     // Constructor
-    public ImageItem(String imagePath, int id, String title, String subtitle) {
+    public ImageItem(String imagePath, int id, String title, String subtitle,
+                     String backgroundImagePath) {
         this.title = title;
         this.subtitle = subtitle;
         this.id = id;
         this.imagePath = imagePath;
+        this.backgroundImagePath = backgroundImagePath;
     }
 
     // Getters
@@ -49,5 +52,9 @@ public class ImageItem {
 
     public String getImagePath() {
         return imagePath;
+    }
+
+    public String getBackgroundImagePath() {
+        return backgroundImagePath;
     }
 }
