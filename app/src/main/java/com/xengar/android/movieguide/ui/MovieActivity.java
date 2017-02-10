@@ -77,6 +77,7 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_POSTER_PATH;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_REVENUE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_STATUS;
+import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TAGLINE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TITLE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_VOTE_AVERAGE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_VOTE_COUNT;
@@ -135,6 +136,7 @@ public class MovieActivity extends AppCompatActivity
     private TextView budget;
     private TextView revenue;
     private TextView homepage;
+    private TextView tagline;
 
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer youTubePlayer;
@@ -186,6 +188,7 @@ public class MovieActivity extends AppCompatActivity
         budget = (TextView) findViewById(R.id.budget);
         revenue = (TextView) findViewById(R.id.revenue);
         homepage = (TextView) findViewById(R.id.homepage);
+        tagline = (TextView) findViewById(R.id.tagline);
         trailerList = (LinearLayout) findViewById(R.id.movie_trailers);
 
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
@@ -514,6 +517,12 @@ public class MovieActivity extends AppCompatActivity
         } else {
             homepage.setVisibility(View.GONE);
         }
+        String tagLine = container.getTagline();
+        if (tagLine != null && !tagLine.contentEquals("")){
+            tagline.setText(getString(R.string.details_tagline, tagLine));
+        } else {
+            tagline.setVisibility(View.GONE);
+        }
 
         if(container.getImdbUri() != null  && container.getImdbUri().isEmpty()) {
             String builder = IMDB_URI + "/" +  container.getImdbUri();
@@ -777,7 +786,7 @@ public class MovieActivity extends AppCompatActivity
                             getListValue(jObj, "production_companies", "name"),
                             getLongValue(jObj, "budget", 0L),
                             getLongValue(jObj, "revenue", 0L),
-                            getStringValue(jObj, "homepage"));
+                            getStringValue(jObj, "homepage"), getStringValue(jObj, "tagline"));
                     populateDetails(detailsData);
                 } catch (JSONException e) {
                     Log.e(TAG, "", e);
@@ -791,7 +800,7 @@ public class MovieActivity extends AppCompatActivity
                                 COLUMN_BACKGROUND_PATH, COLUMN_ORIGINAL_LANGUAGE,
                                 /*COLUMN_ORIGINAL_COUNTRIES, COLUMN_GENRES,*/ COLUMN_STATUS,
                                 COLUMN_IMDB_ID/*, COLUMN_PROD_COMPANIES */, COLUMN_BUDGET,
-                                COLUMN_REVENUE, COLUMN_HOMEPAGE},
+                                COLUMN_REVENUE, COLUMN_HOMEPAGE, COLUMN_TAGLINE},
                         null, null, null);
 
                 if (cursor.getCount() != 0) {
@@ -804,7 +813,8 @@ public class MovieActivity extends AppCompatActivity
                             cursor.getString(7), cursor.getString(8), Collections.<String>emptyList(),
                             Collections.<String>emptyList(), cursor.getString(9),
                             cursor.getString(10), Collections.<String>emptyList(),
-                            (long)cursor.getInt(11), (long)cursor.getInt(12), cursor.getString(13));
+                            (long)cursor.getInt(11), (long)cursor.getInt(12), cursor.getString(13),
+                            cursor.getString(14));
                     populateDetails(detailsData);
                 }
                 cursor.close();

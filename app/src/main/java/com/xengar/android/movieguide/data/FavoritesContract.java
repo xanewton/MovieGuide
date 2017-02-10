@@ -61,6 +61,7 @@ public final class FavoritesContract {
         public static final String COLUMN_BUDGET = "budget";
         public static final String COLUMN_REVENUE = "revenue";
         public static final String COLUMN_HOMEPAGE = "homepage";
+        public static final String COLUMN_TAGLINE = "tagline";
 
         public static final String FAVORITE_TV_SHOWS_TBL = "FAVORITE_TV_SHOWS_TBL";
         public static final String COLUMN_TV_SHOW_ID = "tvshowid";

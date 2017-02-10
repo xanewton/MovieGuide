@@ -251,6 +251,16 @@
                                 android:text="@string/production_companies" />
 
                             <TextView
+                                android:id="@+id/tagline"
+                                style="@style/DetailViewTextSmallGray"
+                                android:textStyle="italic"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center_vertical"
+                                android:text="@string/production_companies" />
+
+                            <TextView
                                 android:id="@+id/imdb_id"
                                 style="@style/DetailViewTextSmall"
                                 android:layout_width="wrap_content"

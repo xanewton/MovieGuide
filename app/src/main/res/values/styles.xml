@@ -53,6 +53,13 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="DetailViewTextSmallGray">
+        <item name="android:fontFamily">Roboto</item>
+        <item name="android:textColor">@color/colorGray</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="DetailViewTextMedium">
         <item name="android:fontFamily">Roboto</item>
         <item name="android:textColor">@color/textcolor</item>
