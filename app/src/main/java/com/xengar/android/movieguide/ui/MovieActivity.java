@@ -199,8 +199,6 @@ public class MovieActivity extends AppCompatActivity
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), movieTitle);
-        ActivityUtils.loadNoBackgroundPoster(getApplicationContext(),
-                (ImageView) findViewById(R.id.background_poster));
         showFavoriteButtons();
     }
 

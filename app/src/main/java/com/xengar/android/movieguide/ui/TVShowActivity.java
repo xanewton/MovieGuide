@@ -179,9 +179,7 @@ public class TVShowActivity extends AppCompatActivity
 
         // Get TV Show Details data
         fetchTVShowData();
-
-        ActivityUtils.loadNoBackgroundPoster(getApplicationContext(),
-                (ImageView) findViewById(R.id.background_poster));
+        
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), tvShowTitle);

@@ -133,8 +133,6 @@ public class PersonActivity extends AppCompatActivity {
         creditCrewList = (LinearLayout) findViewById(R.id.credit_crew_data);
 
         fetchPersonData();
-        ActivityUtils.loadNoBackgroundPoster(getApplicationContext(),
-                (ImageView) findViewById(R.id.background_poster));
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), personTitle);
