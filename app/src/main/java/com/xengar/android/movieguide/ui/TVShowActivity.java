@@ -62,7 +62,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_BACKGROUND_PATH;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_FIRST_AIR_DATE;
@@ -466,12 +465,12 @@ public class TVShowActivity extends AppCompatActivity
         }
 
         if (container.getNumEpisodes() != 0) {
-            textNumEpisodes.setText(String.format(Locale.ENGLISH, "%d", container.getNumEpisodes()));
+            textNumEpisodes.setText(getString(R.string.details_episodes, container.getNumEpisodes()));
         } else {
             textNumEpisodes.setVisibility(View.GONE);
         }
         if (container.getNumSeasons() != 0) {
-            textNumSeasons.setText(String.format(Locale.ENGLISH, "%d", container.getNumSeasons()));
+            textNumSeasons.setText(getString(R.string.details_seasons, container.getNumSeasons()));
         } else {
             textNumSeasons.setVisibility(View.GONE);
         }
