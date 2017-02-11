@@ -86,7 +86,7 @@
     <string name="settings">Settings</string>
     <string name="feedback">Feedback</string>
     <string name="popularity">popularity</string>
-    <string name="imdb_raiting">imdb_raiting</string>
+    <string name="raiting">raiting</string>
     <string name="person">person</string>
     <string name="movie_title">movie title</string>
     <string name="info">Info</string>
