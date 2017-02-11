@@ -97,7 +97,7 @@
                     android:layout_marginStart="15dp"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"
-                    android:text="@string/imdb_raiting" />
+                    android:text="@string/raiting" />
 
             </LinearLayout>
 
@@ -383,6 +383,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"
+        app:fabSize="mini"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         app:layout_anchor="@id/appbar"
@@ -394,6 +395,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_minus"
+        app:fabSize="mini"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         app:layout_anchor="@id/appbar"
