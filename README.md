@@ -6,7 +6,7 @@
 
 MovieGuide is an android application designed to show reviews for Movies and TV Shows.
 Discover a collection of movies, TV Shows, production details and audience reviews.
-The app uses TMDb API for posters and information.
+This product uses the TMDb API but is not endorsed or certified by TMDb.
 
 
 ## Requirements
@@ -22,7 +22,7 @@ The app uses TMDb API for posters and information.
 - okhttp3 librabry https://github.com/square/okhttp
 
 ## Getting Started
-The app uses The Movie Database API and YouTubeAndroidPlayerApi.
+The app uses The Movie Database API (posters and information) and YouTubeAndroidPlayerApi (play videos).
 Download YouTubeAndroidPlayerApi from https://developers.google.com/youtube/android/player/downloads/ and place it under MovieGuide\app\libs
 Get your API keys in order to run the app.
 Create a new resources file (using this path:/app/src/main/res/values/api_keys.xml) and put "THE_MOVIE_DB_API_TOKEN" and "YOUTUBE_DATA_API_V3" keys values in it as strings.
