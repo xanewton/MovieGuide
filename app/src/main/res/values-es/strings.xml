@@ -93,8 +93,6 @@
     <string name="title_release_date_desc">Fecha de estreno descendente</string>
     <string name="title_release_date_asc">Fecha de estreno ascendente</string>
 
-    <string name="genres_dialog_title">Generos</string>
-
     <!-- Genres list -->
     <string name="genre_action">Acción</string>
     <string name="genre_adventure">Aventura</string>
@@ -111,7 +109,7 @@
     <string name="genre_mystery">Misterio</string>
     <string name="genre_romance">Romance</string>
     <string name="genre_science_fiction">Ciencia ficción</string>
-    <string name="genre_tv_movie">película de la televisión</string>
+    <string name="genre_tv_movie">Película de la televisión</string>
     <string name="genre_thriller">Suspenso</string>
     <string name="genre_war">Guerra</string>
     <string name="genre_western">Western</string>

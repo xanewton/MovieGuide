@@ -183,7 +183,7 @@ public class DiscoverFragment extends Fragment
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setCancelable(false);
-        builder.setTitle(R.string.genres_dialog_title);
+        builder.setTitle(R.string.discover_genres);
         builder.setMultiChoiceItems(genres, checkedGenres, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i, boolean isChecked) {
