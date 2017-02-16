@@ -30,7 +30,7 @@ public class PersonData {
     private final String placeOfBirth;
     private final String birthday;
     private final String deathday;
-    private final String biography;
+    private String biography;
     private final String imdbId;
     private final String homepage;
     private final List<MovieCreditCast> movieCreditCastList;
@@ -76,6 +76,10 @@ public class PersonData {
 
     public String getBiography() {
         return biography;
+    }
+
+    public void setBiography(final String biography){
+        this.biography = biography;
     }
 
     public int getPersonId()

@@ -48,6 +48,7 @@ import com.xengar.android.movieguide.data.MovieCreditCast;
 import com.xengar.android.movieguide.data.MovieCreditCrew;
 import com.xengar.android.movieguide.data.PersonData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
+import com.xengar.android.movieguide.utils.FragmentUtils;
 import com.xengar.android.movieguide.utils.JSONLoader;
 import com.xengar.android.movieguide.utils.JSONUtils;
 
@@ -78,6 +79,7 @@ public class PersonActivity extends AppCompatActivity {
 
     private static final String TAG = PersonActivity.class.getSimpleName();
     private static final Uri URI = FavoritesContract.FavoriteColumns.uriPerson;
+    private String mLang;
     private int personId;
     private CollapsingToolbarLayout collapsingToolbar;
     private TextView biography;
@@ -132,6 +134,7 @@ public class PersonActivity extends AppCompatActivity {
         creditCastList = (LinearLayout) findViewById(R.id.credit_cast_data);
         creditCrewList = (LinearLayout) findViewById(R.id.credit_crew_data);
 
+        mLang = FragmentUtils.getFormatLocale(getApplicationContext());
         fetchPersonData();
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
@@ -216,7 +219,7 @@ public class PersonActivity extends AppCompatActivity {
     }
 
     private void fetchPersonData() {
-        FetchPersonTask detailsTask = new FetchPersonTask(FetchPersonTask.PERSON_PROFILE);
+        FetchPersonTask detailsTask = new FetchPersonTask(FetchPersonTask.PERSON_PROFILE, false);
         detailsTask.execute(personId);
     }
 
@@ -257,7 +260,6 @@ public class PersonActivity extends AppCompatActivity {
 
         /**
          * Read movie poster from preferences saved from MovieDetails page.
-         * TODO: Use last movie poster.
          */
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
         String backgroundPoster = prefs.getString(KNOWN_FOR_BACKGROUND_POSTER, "null");
@@ -380,22 +382,31 @@ public class PersonActivity extends AppCompatActivity {
 
         public static final String PERSON_PROFILE = "PersonProfile";
         private String requestType = null;
+        private boolean queryProfileBiography = false;
 
         // Constructor
-        public FetchPersonTask(String requestType){
+        public FetchPersonTask(String requestType, boolean queryProfileBiography){
             this.requestType = requestType;
+            this.queryProfileBiography = queryProfileBiography;
         }
 
         @Override
         protected JSONObject doInBackground(Integer... params) {
             String request = null;
+            String appendToResponse = "movie_credits";
+            String language = mLang;
             switch (requestType) {
                 case PERSON_PROFILE:
                     request = "/person/";
+                    // Query in english and not movie_credits second time
+                    if (queryProfileBiography) {
+                        appendToResponse = null;
+                        language = "en-US";
+                    }
                     break;
             }
             return JSONLoader.load(request + params[0],
-                    getString(R.string.THE_MOVIE_DB_API_TOKEN), "movie_credits");
+                    getString(R.string.THE_MOVIE_DB_API_TOKEN), language, appendToResponse);
         }
 
         @Override
@@ -403,7 +414,11 @@ public class PersonActivity extends AppCompatActivity {
             super.onPostExecute(jObj);
             switch (requestType) {
                 case PERSON_PROFILE:
-                    processPersonData(jObj);
+                    if (queryProfileBiography) {
+                        processPersonDataForBiography(jObj);
+                    } else {
+                        processPersonData(jObj);
+                    }
                     break;
             }
         }
@@ -427,8 +442,38 @@ public class PersonActivity extends AppCompatActivity {
                             JSONUtils.getStringValue(jObj, "homepage"),
                             JSONUtils.getMovieCreditCastList(jObj, "movie_credits", "cast"),
                             JSONUtils.getMovieCreditCrewList(jObj, "movie_credits", "crew"), null);
+
                     populateProfile(personData);
 
+                    /**
+                     * THIS IS A HACK!
+                     * Problem: The request doesn't return biography in english when the query is in
+                     * other language and there is no translation. So, we do will query again using
+                     * english.
+                     */
+                    if (personData.getBiography() == null && !mLang.contentEquals("en")
+                            && requestType.contentEquals(PERSON_PROFILE)){
+                        //Create a new request for the biography only
+                        FetchPersonTask biographyTask =
+                                new FetchPersonTask(FetchPersonTask.PERSON_PROFILE, true);
+                        biographyTask.execute(personId);
+                    }
+
+                } catch (JSONException e) {
+                    Log.e(TAG, "", e);
+                }
+            }
+        }
+
+        /**
+         * Process the Person Details biography data.
+         * @param jObj object
+         */
+        private void processPersonDataForBiography(JSONObject jObj) {
+            if (jObj != null) {
+                try {
+                    Log.v(TAG, "jObj = " + jObj);
+                    biography.setText(JSONUtils.getStringValue(jObj, "biography"));
                 } catch (JSONException e) {
                     Log.e(TAG, "", e);
                 }
