@@ -22,6 +22,7 @@
     <string name="action_search">Search</string>
     <string name="action_settings">Settings</string>
     <string name="feedback_email" translatable="false">support.xengar@gmail.com</string>
+    <string name="feedback_message_language" translatable="false">Please use english, french or spanish for your feedback</string>
     <string name="feedback_message">
         "Hi Support Team,\n\n"
         "I found the following [PROBLEM TITLE HERE] in the Movie Guide application.\n"
