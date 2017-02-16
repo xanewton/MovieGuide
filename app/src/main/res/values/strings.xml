@@ -149,8 +149,6 @@
         <item name="sort_first_air_date_asc">first_air_date.asc</item>
     </string-array>
 
-    <string name="genres_dialog_title">Genres</string>
-
     <!-- Genres list -->
     <string name="genre_action">Action</string>
     <string name="genre_adventure">Adventure</string>
