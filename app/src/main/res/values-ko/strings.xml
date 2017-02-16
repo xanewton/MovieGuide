@@ -1,0 +1,141 @@
+<!--
+     Copyright (C) 2017 Angel Garcia
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<resources>
+    <string name="navigation_drawer_open">탐색 창 열기</string>
+    <string name="navigation_drawer_close">탐색 창 닫기</string>
+
+    <string name="action_search">수색</string>
+    <string name="action_settings">설정</string>
+    <string name="feedback_message">
+        "의견을 남기려면 영어, 프랑스어 또는 스페인어를 사용하십시오.\n"
+        "Hi Support Team,\n\n"
+        "I found the following [PROBLEM TITLE HERE] in the Movie Guide application.\n"
+        "[PROBLEM DESCRIPTION HERE]\n\n"
+        "I was doing the following when it happened:\n"
+        "1. [ACTION 1]\n"
+        "2. [ACTION 2]\n"
+        "3. [ACTION 3]\n\n"
+        "Could you take a look at this?\n\n"
+        "Thanks,\n"
+        "[USER NAME]"
+    </string>
+
+    <string name="network_not_available_message">네트워크를 사용할 수 없습니다!</string>
+    <string name="remote_service_connection_error">원격 서비스에서 데이터를로드 할 수 없습니다!</string>
+    <string name="network_error">인터넷에 연결할 수 없습니다.</string>
+
+    <!-- Slide menu options -->
+    <string name="menu_option_movies">영화 산업</string>
+    <string name="menu_option_discover">발견하다</string>
+    <string name="menu_option_home">홈 화면</string>
+    <string name="menu_option_tv_shows">TV 프로그램</string>
+    <string name="menu_option_favorites">즐겨 찾기</string>
+    <string name="menu_option_people">사람들</string>
+    <string name="menu_option_settings">설정</string>
+    <string name="menu_option_feedback">의견</string>
+
+    <string name="title_top_rated">최고 등급</string>
+    <string name="title_upcomming">다가오는</string>
+    <string name="title_now_playing">지금 노는 중</string>
+    <string name="title_popular">인기</string>
+    <string name="title_on_the_air">방송중에</string>
+
+    <string name="more">더</string>
+    <string name="in_theaters">극장에서</string>
+    <string name="on_tv">TV에</string>
+
+    <string name="details_view_no_release_date">출시일 없음</string>
+    <string name="details_view_no_description">설명 없음</string>
+    <string name="details_view_text_minutes">의사록</string>
+    <string name="favorites_add_message">즐겨 찾기에 추가</string>
+    <string name="favorites_del_message">즐겨 찾기에서 삭제</string>
+
+    <string name="info">정보</string>
+    <string name="popularity">인기</string>
+    <string name="raiting">격렬한</string>
+    <string name="person">사람</string>
+    <string name="genre">유형</string>
+    <string name="cast">배우들</string>
+    <string name="movie_credits">크레딧</string>
+    <string name="crew">크루</string>
+    <string name="trailers">예고편</string>
+    <string name="reviews">리뷰</string>
+    <string name="episodes">에피소드</string>
+    <string name="seasons">계절</string>
+    <string name="details_episodes">%d 편</string>
+    <string name="details_seasons">%d 계절</string>
+
+    <!-- Discover strings -->
+    <string name="discover_type">유형</string>
+    <string name="discover_genres">장르</string>
+    <string name="discover_minimum_rating">최소 등급</string>
+    <string name="discover_sort">주문</string>
+    <string name="discover_any_genres">모든</string>
+    <string name="show">보여 주다</string>
+
+    <!-- Sort list -->
+    <string name="title_popularity_desc">내림차순 인기</string>
+    <string name="title_popularity_asc">인기 오름차순</string>
+    <string name="title_rating_desc">등급 하강</string>
+    <string name="title_rating_asc">오름차순 등급</string>
+    <string name="title_release_date_desc">출시일이 내림차순 임</string>
+    <string name="title_release_date_asc">출시일 오름차순</string>
+
+    <!-- Genres list -->
+    <string name="genre_action">동작</string>
+    <string name="genre_adventure">모험</string>
+    <string name="genre_animation">생기</string>
+    <string name="genre_comedy">코메디</string>
+    <string name="genre_crime">범죄</string>
+    <string name="genre_documentary">기록한 것</string>
+    <string name="genre_drama">드라마</string>
+    <string name="genre_family">가족</string>
+    <string name="genre_fantasy">공상</string>
+    <string name="genre_history">역사</string>
+    <string name="genre_horror">공포</string>
+    <string name="genre_music">음악</string>
+    <string name="genre_mystery">신비</string>
+    <string name="genre_romance">로맨스</string>
+    <string name="genre_science_fiction">공상 과학 소설</string>
+    <string name="genre_tv_movie">TV 영화</string>
+    <string name="genre_thriller">스릴러</string>
+    <string name="genre_war">전쟁</string>
+    <string name="genre_western">서부 사람</string>
+
+
+    <!-- Strings related to Settings -->
+    <!-- Example General settings -->
+    <string name="pref_header_general">일반</string>
+
+    <string name="pref_title_max_cast_elements">최대 캐스트 항목</string>
+    <string-array name="pref_list_max_cast_elements_titles">
+        <item>배우 6 명</item>
+        <item>배우 8 명</item>
+        <item>배우 10 명</item>
+        <item>모든 배우들</item>
+    </string-array>
+
+    <string name="pref_title_max_movie_elements">최대 영화 항목</string>
+    <string-array name="pref_list_max_movie_elements_titles">
+        <item>영화 6 편</item>
+        <item>영화 8 편</item>
+        <item>영화 10 편</item>
+        <item>모든 영화</item>
+    </string-array>
+
+    <string name="pref_title_query_language">검색어 언어</string>
+
+</resources>
