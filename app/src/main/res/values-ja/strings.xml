@@ -1,0 +1,141 @@
+<!--
+     Copyright (C) 2017 Angel Garcia
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<resources>
+    <string name="navigation_drawer_open">ナビゲーション・ドロワーを開く</string>
+    <string name="navigation_drawer_close">クローズナビゲーションドロワー</string>
+
+    <string name="action_search">サーチ</string>
+    <string name="action_settings">設定</string>
+    <string name="feedback_message">
+        "フィードバックには英語、フランス語、スペイン語を使用してください。"
+        "Hi Support Team,\n\n"
+        "I found the following [PROBLEM TITLE HERE] in the Movie Guide application.\n"
+        "[PROBLEM DESCRIPTION HERE]\n\n"
+        "I was doing the following when it happened:\n"
+        "1. [ACTION 1]\n"
+        "2. [ACTION 2]\n"
+        "3. [ACTION 3]\n\n"
+        "Could you take a look at this?\n\n"
+        "Thanks,\n"
+        "[USER NAME]"
+    </string>
+
+    <string name="network_not_available_message">ネットワークは利用できません！</string>
+    <string name="remote_service_connection_error">リモートサービスからデータをロードできません！</string>
+    <string name="network_error">インターネットに接続できません。</string>
+
+    <!-- Slide menu options -->
+    <string name="menu_option_movies">映画</string>
+    <string name="menu_option_discover">発見する</string>
+    <string name="menu_option_home">自宅</string>
+    <string name="menu_option_tv_shows">テレビ番組</string>
+    <string name="menu_option_favorites">お気に入り</string>
+    <string name="menu_option_people">人</string>
+    <string name="menu_option_settings">設定</string>
+    <string name="menu_option_feedback">フィードバック</string>
+
+    <string name="title_top_rated">トップレート</string>
+    <string name="title_upcomming">今後の予定</string>
+    <string name="title_now_playing">再生中</string>
+    <string name="title_popular">人気</string>
+    <string name="title_on_the_air">放送中</string>
+
+    <string name="more">もっと</string>
+    <string name="in_theaters">劇場で</string>
+    <string name="on_tv">テレビで</string>
+
+    <string name="details_view_no_release_date">リリース日なし</string>
+    <string name="details_view_no_description">説明はありません</string>
+    <string name="details_view_text_minutes">分</string>
+    <string name="favorites_add_message">お気に入りに追加</string>
+    <string name="favorites_del_message">お気に入りから削除</string>
+
+    <string name="info">情報</string>
+    <string name="popularity">人気</string>
+    <string name="raiting">激怒</string>
+    <string name="person">人</string>
+    <string name="genre">ジャンル</string>
+    <string name="cast">俳優</string>
+    <string name="movie_credits">クレジット</string>
+    <string name="crew">製造</string>
+    <string name="trailers">予告編</string>
+    <string name="reviews">レビュー</string>
+    <string name="episodes">エピソード</string>
+    <string name="seasons">季節</string>
+    <string name="details_episodes">%d つのエピソード</string>
+    <string name="details_seasons">%d シーズン</string>
+
+    <!-- Discover strings -->
+    <string name="discover_type">タイプ</string>
+    <string name="discover_genres">ジャンル</string>
+    <string name="discover_minimum_rating">最小評価</string>
+    <string name="discover_sort">並び替え</string>
+    <string name="discover_any_genres">すべて</string>
+    <string name="show">ショー</string>
+
+    <!-- Sort list -->
+    <string name="title_popularity_desc">人気の降順</string>
+    <string name="title_popularity_asc">人気上昇</string>
+    <string name="title_rating_desc">格付け降順</string>
+    <string name="title_rating_asc">昇順評価</string>
+    <string name="title_release_date_desc">リリース日の降順</string>
+    <string name="title_release_date_asc">リリース日の昇順</string>
+
+    <!-- Genres list -->
+    <string name="genre_action">アクション</string>
+    <string name="genre_adventure">アドベンチャー</string>
+    <string name="genre_animation">アニメ</string>
+    <string name="genre_comedy">コメディー</string>
+    <string name="genre_crime">犯罪</string>
+    <string name="genre_documentary">ドキュメンタリー</string>
+    <string name="genre_drama">ドラマ</string>
+    <string name="genre_family">ファミリー</string>
+    <string name="genre_fantasy">ファンタジー</string>
+    <string name="genre_history">歴史</string>
+    <string name="genre_horror">ホラー</string>
+    <string name="genre_music">音楽</string>
+    <string name="genre_mystery">ミステリー</string>
+    <string name="genre_romance">ロマンス</string>
+    <string name="genre_science_fiction">SF</string>
+    <string name="genre_tv_movie">TV 映画</string>
+    <string name="genre_thriller">スリラー</string>
+    <string name="genre_war">戦争</string>
+    <string name="genre_western">西部劇</string>
+
+
+    <!-- Strings related to Settings -->
+    <!-- Example General settings -->
+    <string name="pref_header_general">一般</string>
+
+    <string name="pref_title_max_cast_elements">最大アクター数</string>
+    <string-array name="pref_list_max_cast_elements_titles">
+        <item>6 人の俳優</item>
+        <item>8 人の俳優</item>
+        <item>10 人の俳優</item>
+        <item>すべての俳優</item>
+    </string-array>
+
+    <string name="pref_title_max_movie_elements">映画の最大数</string>
+    <string-array name="pref_list_max_movie_elements_titles">
+        <item>6 枚の映画</item>
+        <item>8 枚の映画</item>
+        <item>10 枚の映画</item>
+        <item>すべての映画</item>
+    </string-array>
+
+    <string name="pref_title_query_language">クエリ言語</string>
+
+</resources>
