@@ -234,6 +234,7 @@
                         android:verticalSpacing="@dimen/movie_guide_gridview_vertical_spacing" />
 
                     <TextView
+                        android:id="@+id/credit_cast_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/cast"
@@ -246,6 +247,7 @@
                         android:orientation="vertical" />
 
                     <TextView
+                        android:id="@+id/credit_crew_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/crew"

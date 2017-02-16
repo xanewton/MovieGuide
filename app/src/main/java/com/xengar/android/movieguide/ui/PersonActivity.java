@@ -332,6 +332,8 @@ public class PersonActivity extends AppCompatActivity {
      */
     private void PopulateCreditCast(List<MovieCreditCast> movieCreditCast) {
         if (movieCreditCast == null || movieCreditCast.isEmpty()) {
+            TextView credit = (TextView) findViewById(R.id.credit_cast_title);
+            credit.setVisibility(View.GONE);
             return;
         }
 
@@ -356,6 +358,8 @@ public class PersonActivity extends AppCompatActivity {
      */
     private void PopulateCreditCrew(List<MovieCreditCrew> movieCreditCrew) {
         if (movieCreditCrew == null || movieCreditCrew.isEmpty()) {
+            TextView credit = (TextView) findViewById(R.id.credit_crew_title);
+            credit.setVisibility(View.GONE);
             return;
         }
 
@@ -398,7 +402,7 @@ public class PersonActivity extends AppCompatActivity {
             switch (requestType) {
                 case PERSON_PROFILE:
                     request = "/person/";
-                    // Query in english and not movie_credits second time
+                    // Query in english and not movie_credits the second time
                     if (queryProfileBiography) {
                         appendToResponse = null;
                         language = "en-US";
