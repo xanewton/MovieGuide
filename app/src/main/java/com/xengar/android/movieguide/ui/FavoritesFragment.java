@@ -97,7 +97,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         mRecyclerViewMovies = (RecyclerView) view.findViewById(R.id.recycler_view_movies);
         progressBarMovies = (CircularProgressBar) view.findViewById(R.id.progress_bar_movies);
         TextView moviesTitle = (TextView) view.findViewById(R.id.movies_title);
-        moviesTitle.setText(getText(R.string.menu_title_movies));
+        moviesTitle.setText(getText(R.string.menu_option_movies));
         mMovies = new ArrayList<>();
         mAdapterMovies = new HomeMovieAdapter(mMovies);
 
@@ -106,7 +106,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         mRecyclerViewTV = (RecyclerView) view.findViewById(R.id.recycler_view_tv);
         progressBarTV = (CircularProgressBar) view.findViewById(R.id.progress_bar_tv);
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
-        tvTitle.setText(getText(R.string.menu_title_tv_shows));
+        tvTitle.setText(getText(R.string.menu_option_tv_shows));
         mTVList = new ArrayList<>();
         mAdapterTV = new HomeTVAdapter(mTVList);
 
