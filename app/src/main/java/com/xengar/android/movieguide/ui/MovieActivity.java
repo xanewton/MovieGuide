@@ -54,6 +54,7 @@ import com.xengar.android.movieguide.data.MovieDetails;
 import com.xengar.android.movieguide.data.ReviewData;
 import com.xengar.android.movieguide.data.TrailerData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
+import com.xengar.android.movieguide.utils.FragmentUtils;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
 import org.apache.commons.lang3.StringUtils;
@@ -110,6 +111,7 @@ public class MovieActivity extends AppCompatActivity
     private static final String LONG_TEXT_PREVIEW = " \n<font color=#FF8A80>... show less</font>";
     private static final String END_TEXT_PREVIEW = "\n<font color=#FF8A80> the end!</font>";
 
+    private String mLang;
     private MovieData detailsData;
     private MovieDetails data = null;
     private List<TrailerData> trailerData;
@@ -194,6 +196,7 @@ public class MovieActivity extends AppCompatActivity
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
         getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
 
+        mLang = FragmentUtils.getFormatLocale(getApplicationContext());
         // Get Movie Details data
         fetchMovieData();
         collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -738,7 +741,7 @@ public class MovieActivity extends AppCompatActivity
                     break;
             }
 
-            return JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
+            return JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang);
         }
 
         @Override

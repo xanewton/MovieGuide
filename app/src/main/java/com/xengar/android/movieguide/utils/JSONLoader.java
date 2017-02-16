@@ -36,18 +36,20 @@ public class JSONLoader {
     private static final String MOVIE_BASE_URI = "http://api.themoviedb.org/3";
     private static final String TAG = JSONLoader.class.getSimpleName();
 
-    public static JSONObject load(String relativeUri, String apiKey) {
-        return load(relativeUri,  apiKey, null);
+    public static JSONObject load(String relativeUri, String apiKey, String language) {
+        return load(relativeUri,  apiKey, language, null);
     }
 
-    public static JSONObject load(String relativeUri, String apiKey, String appendToResponse) {
+    public static JSONObject load(String relativeUri, String apiKey, String language,
+                                  String appendToResponse) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String movieJsonStr;
 
         try {
             Uri.Builder uriBuilder = Uri.parse(MOVIE_BASE_URI + relativeUri).buildUpon()
-                    .appendQueryParameter("api_key", apiKey);
+                    .appendQueryParameter("api_key", apiKey)
+                    .appendQueryParameter("language", language);
             if(appendToResponse!=null) {
                 uriBuilder.appendQueryParameter("append_to_response", appendToResponse);
             }

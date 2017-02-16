@@ -52,6 +52,7 @@ import com.xengar.android.movieguide.data.TVShowData;
 import com.xengar.android.movieguide.data.TVShowDetails;
 import com.xengar.android.movieguide.data.TrailerData;
 import com.xengar.android.movieguide.utils.ActivityUtils;
+import com.xengar.android.movieguide.utils.FragmentUtils;
 import com.xengar.android.movieguide.utils.JSONLoader;
 
 import org.apache.commons.lang3.StringUtils;
@@ -103,6 +104,7 @@ public class TVShowActivity extends AppCompatActivity
     private CollapsingToolbarLayout collapsingToolbar;
     private final String[] tvShowTitle = {" "};
 
+    private String mLang;
     private TVShowDetails data = null;
     private TVShowData detailsData;
     private List<TrailerData> trailerData;
@@ -177,6 +179,7 @@ public class TVShowActivity extends AppCompatActivity
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
         getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
 
+        mLang = FragmentUtils.getFormatLocale(getApplicationContext());
         // Get TV Show Details data
         fetchTVShowData();
 
@@ -598,7 +601,7 @@ public class TVShowActivity extends AppCompatActivity
                     break;
             }
 
-            return JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN));
+            return JSONLoader.load(request, getString(R.string.THE_MOVIE_DB_API_TOKEN), mLang);
         }
 
         @Override

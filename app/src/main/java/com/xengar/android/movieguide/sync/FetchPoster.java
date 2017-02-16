@@ -56,16 +56,18 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
     private final String apiKey;
     private final String itemType;
     private String requestType;
+    private String mLang;
 
     // Constructor
     public FetchPoster(String itemType, ImageAdapter adapter,
                        FetchItemListener fetchItemListener, String apiKey,
-                       String posterBaseUri, String sortOrder) {
+                       String posterBaseUri, String sortOrder, String language) {
         this.itemType = itemType;
         this.fetchItemListener = fetchItemListener;
         this.posterBaseUri = posterBaseUri;
         this.adapter = adapter;
         this.apiKey = apiKey;
+        this.mLang =language;
 
         // assign the category to query
         switch (itemType){
@@ -113,7 +115,7 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
     protected ArrayList<ImageItem> doInBackground(Integer... params) {
         ArrayList<ImageItem> posters = new ArrayList<>();
         try {
-            JSONObject jObj = JSONLoader.load(requestType + params[0], apiKey);
+            JSONObject jObj = JSONLoader.load(requestType + params[0], apiKey, mLang);
             if (jObj == null) {
                 Log.w(TAG, "Can not load the data from remote service");
                 return null;
