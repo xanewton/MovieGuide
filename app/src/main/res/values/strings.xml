@@ -22,7 +22,7 @@
     <string name="action_search">Search</string>
     <string name="action_settings">Settings</string>
     <string name="feedback_email" translatable="false">support.xengar@gmail.com</string>
-    <string name="feedback_message" translatable="false">
+    <string name="feedback_message">
         "Hi Support Team,\n\n"
         "I found the following [PROBLEM TITLE HERE] in the Movie Guide application.\n"
         "[PROBLEM DESCRIPTION HERE]\n\n"
@@ -39,18 +39,18 @@
     <string name="remote_service_connection_error">Cannot load data from remote service!</string>
     <string name="network_error">Cannot connect to the Internet.</string>
 
-    <string name="error_unknown_uri">Unknown URI: </string>
-    <string name="error_failed_insert_row">Failed to insert row into URI: </string>
+    <string name="error_unknown_uri" translatable="false">Unknown URI: </string>
+    <string name="error_failed_insert_row" translatable="false">Failed to insert row into URI: </string>
 
     <!-- Slide menu options -->
-    <string name="menu_title_movies">Movies</string>
     <string name="menu_option_movies">Movies</string>
     <string name="menu_option_discover">Discover</string>
     <string name="menu_option_home">Home</string>
     <string name="menu_option_tv_shows">TV Shows</string>
     <string name="menu_option_favorites">Favorites</string>
     <string name="menu_option_people">People</string>
-    <string name="menu_title_tv_shows">TV Shows</string>
+    <string name="menu_option_settings">Settings</string>
+    <string name="menu_option_feedback">Feedback</string>
 
     <string name="title_top_rated">Top rated</string>
     <string name="title_upcomming">Upcoming</string>
@@ -63,59 +63,48 @@
     <string name="on_tv">On TV</string>
 
     <!-- Details Movie -->
-    <string name="cheese_ipsum">Jarlsberg lancashire edam. Dolcelatte hard cheese brie st. agur blue
-    cheese caerphilly bavarian bergkase cheese and biscuits mascarpone. Cheeseburger swiss bavarian
-    bergkase cream cheese fromage frais cheesy feet port-salut airedale. St. agur blue cheese rubber
-    cheese caerphilly cheddar cheesecake cream cheese manchego lancashire. Roquefort squirty cheese
-    the big cheese.</string>
-
     <string name="details_view_no_release_date">No release date</string>
     <string name="details_view_no_description">No description</string>
     <string name="details_view_text_minutes">min</string>
-    <string name="details_view_text_vote_average_divider">/10</string>
-    <string name="favorite_movie_add_message">Add Movie to Favorites</string>
-    <string name="favorite_movie_del_message">Remove Movie from Favorites</string>
-    <string name="favorite_tvshow_add_message">Add TV Show to Favorites</string>
-    <string name="favorite_tvshow_del_message">Remove TV Show from Favorites</string>
-    <string name="favorite_person_add_message">Add Person to Favorites</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="details_view_text_vote_average_divider" translatable="false">/10</string>
+    <string name="favorites_add_message">Add to Favorites</string>
+    <string name="favorites_del_message">Remove from Favorites</string>
+    <string name="place_of_birth" translatable="false">Place of birth</string>
+    <string name="birthday" translatable="false">Birthday</string>
+    <string name="countries" translatable="false">Countries</string>
+    <string name="deathday" translatable="false">Deathday</string>
+    <string name="movie_duration" translatable="false">movie duration</string>
+    <string name="homepage" translatable="false">Homepage</string>
+    <string name="imdb_id" translatable="false">imdb_id</string>
+    <string name="status" translatable="false">Status</string>
+    <string name="budget" translatable="false">Budget</string>
+    <string name="revenue" translatable="false">Revenue</string>
+    <string name="production_companies" translatable="false">Production Companies</string>
+    <string name="date" translatable="false">date</string>
+    <string name="title" translatable="false">Title</string>
+    <string name="character" translatable="false">character</string>
+    <string name="movie_title" translatable="false">movie title</string>
+    <string name="title_activity_tvshow" translatable="false">TVShowActivity</string>
+    <string name="tvshow_title" translatable="false">TV Show title</string>
+    <string name="languages" translatable="false">languages</string>
+    <string name="details_budget_revenue" translatable="false">$%,d</string>
+    <string name="details_tagline" translatable="false">\"%s\"</string>
 
-    <string name="date">date</string>
-    <string name="title">Title</string>
-    <string name="character">character</string>
-    <string name="settings">Settings</string>
-    <string name="feedback">Feedback</string>
+    <string name="info">Info</string>
     <string name="popularity">popularity</string>
     <string name="raiting">raiting</string>
     <string name="person">person</string>
-    <string name="movie_title">movie title</string>
-    <string name="info">Info</string>
-    <string name="place_of_birth">Place of birth</string>
     <string name="genre">Genre</string>
-    <string name="birthday">Birthday</string>
-    <string name="countries">Countries</string>
-    <string name="deathday">Deathday</string>
-    <string name="movie_duration">movie duration</string>
-    <string name="homepage">Homepage</string>
-    <string name="imdb_id">imdb_id</string>
-    <string name="status">Status</string>
-    <string name="budget">Budget</string>
-    <string name="movie_credits">Movie Credits</string>
-    <string name="revenue">Revenue</string>
     <string name="cast">Cast</string>
-    <string name="production_companies">Production Companies</string>
+    <string name="movie_credits">Movie Credits</string>
     <string name="crew">Crew</string>
     <string name="trailers">Trailers</string>
     <string name="reviews">Reviews</string>
-    <string name="title_activity_tvshow">TVShowActivity</string>
-    <string name="tvshow_title">TV Show title</string>
-    <string name="languages">languages</string>
     <string name="episodes">episodes</string>
     <string name="seasons">seasons</string>
-    <string name="details_budget_revenue" translatable="false">$%,d</string>
     <string name="details_episodes">%d episodes</string>
     <string name="details_seasons">%d seasons</string>
-    <string name="details_tagline" translatable="false">\"%s\"</string>
+
 
     <!-- Discover strings -->
     <string name="discover_type">Type</string>
@@ -133,7 +122,7 @@
     <string name="title_release_date_desc">Release Date Descending</string>
     <string name="title_release_date_asc">Release Date Ascending</string>
 
-    <string-array name="sort">
+    <string-array name="sort" translatable="false">
         <item name="title_popularity_desc">@string/title_popularity_desc</item>
         <item name="title_popularity_asc">@string/title_popularity_asc</item>
         <item name="title_rating_desc">@string/title_rating_desc</item>
@@ -183,7 +172,7 @@
     <string name="genre_war">War</string>
     <string name="genre_western">Western</string>
 
-    <string-array name="genres">
+    <string-array name="genres" translatable="false">
         <item name="title_action">@string/genre_action</item>
         <item name="title_adventure">@string/genre_adventure</item>
         <item name="title_animation">@string/genre_animation</item>
@@ -240,7 +229,7 @@
         <item>10 actors</item>
         <item>all actors</item>
     </string-array>
-    <string-array name="pref_list_max_cast_elements_values">
+    <string-array name="pref_list_max_cast_elements_values" translatable="false">
         <item>6</item>
         <item>8</item>
         <item>10</item>
@@ -255,7 +244,7 @@
         <item>10 movies</item>
         <item>all movies</item>
     </string-array>
-    <string-array name="pref_list_max_movie_elements_values">
+    <string-array name="pref_list_max_movie_elements_values" translatable="false">
         <item>6</item>
         <item>8</item>
         <item>10</item>

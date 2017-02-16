@@ -187,7 +187,7 @@ public class PersonActivity extends AppCompatActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, getString(R.string.favorite_person_add_message), DURATION)
+                Snackbar.make(view, getString(R.string.favorites_add_message), DURATION)
                         .setAction("Action", null).show();
                 ContentValues values = new ContentValues();
                 values.put(COLUMN_PERSON_ID, personId);
@@ -204,7 +204,7 @@ public class PersonActivity extends AppCompatActivity {
         fabDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, getString(R.string.favorite_movie_del_message), DURATION)
+                Snackbar.make(view, getString(R.string.favorites_del_message), DURATION)
                         .setAction("Action", null).show();
                 getContentResolver().delete(URI, COLUMN_PERSON_ID + " = ?",
                         new String[]{Integer.toString(personId)} );

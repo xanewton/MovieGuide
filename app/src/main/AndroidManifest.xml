@@ -52,7 +52,7 @@
         </activity>
         <activity
             android:name=".ui.SettingsActivity"
-            android:label="@string/title_activity_settings"
+            android:label="@string/menu_option_settings"
             android:theme="@style/AppTheme.Settings"
             android:parentActivityName=".ui.MainActivity">
             <meta-data

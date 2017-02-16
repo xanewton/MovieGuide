@@ -71,7 +71,7 @@
                         android:background="@drawable/toggle_background"
                         android:button="@null"
                         android:gravity="center"
-                        android:text="@string/menu_title_movies"
+                        android:text="@string/menu_option_movies"
                         android:textColor="@color/colorPrimary" />
 
                     <RadioButton
@@ -86,7 +86,7 @@
                         android:background="@drawable/toggle_background"
                         android:button="@null"
                         android:gravity="center"
-                        android:text="@string/menu_title_tv_shows"
+                        android:text="@string/menu_option_tv_shows"
                         android:textColor="@color/colorGray" />
                 </RadioGroup>
             </LinearLayout>
