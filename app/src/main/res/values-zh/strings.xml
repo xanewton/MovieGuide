@@ -1,0 +1,141 @@
+<!--
+     Copyright (C) 2017 Angel Garcia
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<resources>
+    <string name="navigation_drawer_open">打开导航抽屉</string>
+    <string name="navigation_drawer_close">关闭导航抽屉</string>
+
+    <string name="action_search">搜索</string>
+    <string name="action_settings">设置</string>
+    <string name="feedback_message">
+       "请使用英语，法语或西班牙语为您的反馈。\n"
+       "Hi Support Team,\n\n"
+        "I found the following [PROBLEM TITLE HERE] in the Movie Guide application.\n"
+        "[PROBLEM DESCRIPTION HERE]\n\n"
+        "I was doing the following when it happened:\n"
+        "1. [ACTION 1]\n"
+        "2. [ACTION 2]\n"
+        "3. [ACTION 3]\n\n"
+        "Could you take a look at this?\n\n"
+        "Thanks,\n"
+        "[USER NAME]"
+    </string>
+
+    <string name="network_not_available_message">网络不可用！</string>
+    <string name="remote_service_connection_error">无法从远程服务加载数据！</string>
+    <string name="network_error">无法连接到互联网。</string>
+
+    <!-- Slide menu options -->
+    <string name="menu_option_movies">电影</string>
+    <string name="menu_option_discover">发现</string>
+    <string name="menu_option_home">主页</string>
+    <string name="menu_option_tv_shows">电视节目</string>
+    <string name="menu_option_favorites">收藏</string>
+    <string name="menu_option_people">人</string>
+    <string name="menu_option_settings">设置</string>
+    <string name="menu_option_feedback">反馈</string>
+
+    <string name="title_top_rated">顶级</string>
+    <string name="title_upcomming">即将到来</string>
+    <string name="title_now_playing">现在玩</string>
+    <string name="title_popular">流行</string>
+    <string name="title_on_the_air">在空中</string>
+
+    <string name="more">更多</string>
+    <string name="in_theaters">在剧院</string>
+    <string name="on_tv">在电视上</string>
+
+    <string name="details_view_no_release_date">没有发布日期</string>
+    <string name="details_view_no_description">没有说明</string>
+    <string name="details_view_text_minutes">分钟</string>
+    <string name="favorites_add_message">添加到收藏夹</string>
+    <string name="favorites_del_message">从收藏夹中删除</string>
+
+    <string name="info">描述</string>
+    <string name="popularity">人气</string>
+    <string name="raiting">评级</string>
+    <string name="person">人</string>
+    <string name="genre">类型</string>
+    <string name="cast">演员</string>
+    <string name="movie_credits">学分</string>
+    <string name="crew">船员</string>
+    <string name="trailers">拖车</string>
+    <string name="reviews">评论</string>
+    <string name="episodes">情节</string>
+    <string name="seasons">季节</string>
+    <string name="details_episodes">%d 集</string>
+    <string name="details_seasons">%d 个季节</string>
+
+    <!-- Discover strings -->
+    <string name="discover_type">类型</string>
+    <string name="discover_genres">类型</string>
+    <string name="discover_minimum_rating">最小额定值</string>
+    <string name="discover_sort">订单</string>
+    <string name="discover_any_genres">所有</string>
+    <string name="show">显示</string>
+
+    <!-- Sort list -->
+    <string name="title_popularity_desc">人气降序</string>
+    <string name="title_popularity_asc">人气升序</string>
+    <string name="title_rating_desc">评级降序</string>
+    <string name="title_rating_asc">评级上升</string>
+    <string name="title_release_date_desc">发布日期降序</string>
+    <string name="title_release_date_asc">发布日期升序</string>
+
+    <!-- Genres list -->
+    <string name="genre_action">行动</string>
+    <string name="genre_adventure">冒险</string>
+    <string name="genre_animation">动画</string>
+    <string name="genre_comedy">喜剧</string>
+    <string name="genre_crime">犯罪</string>
+    <string name="genre_documentary">记录</string>
+    <string name="genre_drama">戏剧</string>
+    <string name="genre_family">家庭</string>
+    <string name="genre_fantasy">幻想</string>
+    <string name="genre_history">历史</string>
+    <string name="genre_horror">恐怖</string>
+    <string name="genre_music">音乐</string>
+    <string name="genre_mystery">神秘</string>
+    <string name="genre_romance">浪漫</string>
+    <string name="genre_science_fiction">科幻小说</string>
+    <string name="genre_tv_movie">电视电影</string>
+    <string name="genre_thriller">惊悚片</string>
+    <string name="genre_war">战争</string>
+    <string name="genre_western">西</string>
+
+
+    <!-- Strings related to Settings -->
+    <!-- Example General settings -->
+    <string name="pref_header_general">一般</string>
+
+    <string name="pref_title_max_cast_elements">最大投射项目</string>
+    <string-array name="pref_list_max_cast_elements_titles">
+        <item>6演员</item>
+        <item>8个演员</item>
+        <item>10个演员</item>
+        <item>所有演员</item>
+    </string-array>
+
+    <string name="pref_title_max_movie_elements">最大电影项目</string>
+    <string-array name="pref_list_max_movie_elements_titles">
+        <item>6部电影</item>
+        <item>8部电影</item>
+        <item>10部电影</item>
+        <item>所有电影</item>
+    </string-array>
+
+    <string name="pref_title_query_language">查询语言</string>
+
+</resources>
