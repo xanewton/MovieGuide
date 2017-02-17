@@ -1,0 +1,141 @@
+<!--
+     Copyright (C) 2017 Angel Garcia
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+<resources>
+    <string name="navigation_drawer_open">cassetto navigazione Aperto</string>
+    <string name="navigation_drawer_close">Chiudi cassetto navigazione</string>
+
+    <string name="action_search">Ricerca</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="feedback_message">
+        "Si prega di utilizzare inglese, francese o spagnolo per il suggerimento."
+        "Hi Support Team,\n\n"
+        "I found the following [PROBLEM TITLE HERE] in the Movie Guide application.\n"
+        "[PROBLEM DESCRIPTION HERE]\n\n"
+        "I was doing the following when it happened:\n"
+        "1. [ACTION 1]\n"
+        "2. [ACTION 2]\n"
+        "3. [ACTION 3]\n\n"
+        "Could you take a look at this?\n\n"
+        "Thanks,\n"
+        "[USER NAME]"
+    </string>
+
+    <string name="network_not_available_message">Rete non è disponibile!</string>
+    <string name="remote_service_connection_error">Impossibile caricare i dati dal servizio remoto!</string>
+    <string name="network_error">Non è possibile connettersi a Internet.</string>
+
+    <!-- Slide menu options -->
+    <string name="menu_option_movies">Film</string>
+    <string name="menu_option_discover">Scoprire</string>
+    <string name="menu_option_home">Principale</string>
+    <string name="menu_option_tv_shows">Spettacoli televisivi</string>
+    <string name="menu_option_favorites">Preferiti</string>
+    <string name="menu_option_people">Persone</string>
+    <string name="menu_option_settings">Impostazioni</string>
+    <string name="menu_option_feedback">Commenti</string>
+
+    <string name="title_top_rated">Più votati</string>
+    <string name="title_upcomming">Prossime</string>
+    <string name="title_now_playing">Ora sta giocando</string>
+    <string name="title_popular">Popolare</string>
+    <string name="title_on_the_air">In onda</string>
+
+    <string name="more">Di Più</string>
+    <string name="in_theaters">Nei teatri</string>
+    <string name="on_tv">In tv</string>
+
+    <string name="details_view_no_release_date">Nessuna data di rilascio</string>
+    <string name="details_view_no_description">Nessuna descrizione</string>
+    <string name="details_view_text_minutes">minutos</string>
+    <string name="favorites_add_message">Aggiungi ai preferiti</string>
+    <string name="favorites_del_message">Rimuovi da preferiti</string>
+
+    <string name="info">Informazione</string>
+    <string name="popularity">popolarità</string>
+    <string name="raiting">raiting</string>
+    <string name="person">persona</string>
+    <string name="genre">Genere</string>
+    <string name="cast">Attori</string>
+    <string name="movie_credits">Credits film</string>
+    <string name="crew">Equipaggio</string>
+    <string name="trailers">Trailers</string>
+    <string name="reviews">Recensioni</string>
+    <string name="episodes">episodi</string>
+    <string name="seasons">stagioni</string>
+    <string name="details_episodes">%d episodi</string>
+    <string name="details_seasons">%d stagioni</string>
+
+    <!-- Discover strings -->
+    <string name="discover_type">Tipo</string>
+    <string name="discover_genres">Generi</string>
+    <string name="discover_minimum_rating">minimo Valutazione</string>
+    <string name="discover_sort">Ordina per</string>
+    <string name="discover_any_genres">tutti</string>
+    <string name="show">Mostrare</string>
+
+    <!-- Sort list -->
+    <string name="title_popularity_desc">Popolarità Discendente</string>
+    <string name="title_popularity_asc">Popolarità Crescente</string>
+    <string name="title_rating_desc">Valutazione Discendente</string>
+    <string name="title_rating_asc">Valutazione Crescente</string>
+    <string name="title_release_date_desc">Data di rilascio Discendente</string>
+    <string name="title_release_date_asc">Data di rilascio Crescente</string>
+
+    <!-- Genres list -->
+    <string name="genre_action">Azione</string>
+    <string name="genre_adventure">Avventura</string>
+    <string name="genre_animation">Animazione</string>
+    <string name="genre_comedy">Commedia</string>
+    <string name="genre_crime">Crimine</string>
+    <string name="genre_documentary">Documentario</string>
+    <string name="genre_drama">Dramma</string>
+    <string name="genre_family">Familiare</string>
+    <string name="genre_fantasy">Fantasia</string>
+    <string name="genre_history">Storia</string>
+    <string name="genre_horror">Orrore</string>
+    <string name="genre_music">Musicale</string>
+    <string name="genre_mystery">Mistero</string>
+    <string name="genre_romance">Romanza</string>
+    <string name="genre_science_fiction">Fantascienza</string>
+    <string name="genre_tv_movie">TV Movie</string>
+    <string name="genre_thriller">Thriller</string>
+    <string name="genre_war">Guerra</string>
+    <string name="genre_western">Western</string>
+
+
+    <!-- Strings related to Settings -->
+    <!-- Example General settings -->
+    <string name="pref_header_general">Generale</string>
+
+    <string name="pref_title_max_cast_elements">elementi del cast Massimo</string>
+    <string-array name="pref_list_max_cast_elements_titles">
+        <item>6 attori</item>
+        <item>8 attori</item>
+        <item>10 attori</item>
+        <item>tutti gli attori</item>
+    </string-array>
+
+    <string name="pref_title_max_movie_elements">Numero massimo di elementi di film</string>
+    <string-array name="pref_list_max_movie_elements_titles">
+        <item>6 film</item>
+        <item>8 film</item>
+        <item>10 film</item>
+        <item>tutti i film</item>
+    </string-array>
+
+    <string name="pref_title_query_language">Ricerca lingua</string>
+
+</resources>
