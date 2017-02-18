@@ -187,6 +187,7 @@ public class TVShowActivity extends AppCompatActivity
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), tvShowTitle);
         showFavoriteButtons();
+        ActivityUtils.showAdMobBanner(this);
     }
 
     @Override

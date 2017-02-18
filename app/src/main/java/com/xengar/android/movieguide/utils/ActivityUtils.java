@@ -26,6 +26,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.graphics.Palette.PaletteAsyncListener;
 import android.text.Html;
@@ -39,6 +40,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -412,5 +415,17 @@ public class ActivityUtils {
         } else {
             view.setImageDrawable(context.getResources().getDrawable(id));
         }
+    }
+
+    /**
+     * Show the AdMob banner
+     * @param activity
+     */
+    public static void showAdMobBanner(final AppCompatActivity activity) {
+        // Load an ad into the AdMob banner view.
+        AdView adView = (AdView) activity.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .setRequestAgent("android_studio:ad_template").build();
+        adView.loadAd(adRequest);
     }
 }
