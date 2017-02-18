@@ -203,6 +203,7 @@ public class MovieActivity extends AppCompatActivity
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), movieTitle);
         showFavoriteButtons();
+        ActivityUtils.showAdMobBanner(this);
     }
 
     @Override

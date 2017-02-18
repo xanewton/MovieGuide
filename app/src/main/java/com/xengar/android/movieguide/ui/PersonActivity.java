@@ -140,6 +140,7 @@ public class PersonActivity extends AppCompatActivity {
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), personTitle);
         showFavoriteButtons();
+        ActivityUtils.showAdMobBanner(this);
     }
 
     @Override
