@@ -28,9 +28,9 @@
     <ImageView
         android:id="@+id/logo"
         android:layout_width="75dp"
-        android:layout_height="55dp"
+        android:layout_height="75dp"
         android:layout_marginTop="30dp"
-        app:srcCompat="@drawable/ic_clapperboard"/>
+        app:srcCompat="@mipmap/ic_launcher"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
