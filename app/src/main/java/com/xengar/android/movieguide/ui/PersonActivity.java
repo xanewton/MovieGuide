@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
@@ -148,6 +149,9 @@ public class PersonActivity extends AppCompatActivity {
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), personTitle);
         showFavoriteButtons();
+
+        // Initialize AdMob
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id_3));
         ActivityUtils.showAdMobBanner(this);
 
         // Obtain the FirebaseAnalytics instance.

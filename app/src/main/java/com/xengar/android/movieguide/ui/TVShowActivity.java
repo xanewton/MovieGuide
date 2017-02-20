@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
@@ -195,6 +196,9 @@ public class TVShowActivity extends AppCompatActivity
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), tvShowTitle);
         showFavoriteButtons();
+
+        // Initialize AdMob
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id_2));
         ActivityUtils.showAdMobBanner(this);
 
         // Obtain the FirebaseAnalytics instance.
