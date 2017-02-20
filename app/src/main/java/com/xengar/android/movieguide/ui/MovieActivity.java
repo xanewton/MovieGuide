@@ -40,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
@@ -212,6 +213,10 @@ public class MovieActivity extends AppCompatActivity
         ActivityUtils.changeCollapsingToolbarLayoutBehaviour(collapsingToolbar,
                 (AppBarLayout) findViewById(R.id.appbar), movieTitle);
         showFavoriteButtons();
+
+        // Initialize AdMob
+        // https://firebase.google.com/docs/admob/android/quick-start
+        MobileAds.initialize(getApplicationContext(), getString(R.string.banner_ad_unit_id_1));
         ActivityUtils.showAdMobBanner(this);
 
         // Obtain the FirebaseAnalytics instance.

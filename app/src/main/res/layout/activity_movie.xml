@@ -386,7 +386,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 ads:adSize="BANNER"
-                ads:adUnitId="@string/banner_ad_unit_id" />
+                ads:adUnitId="@string/banner_ad_unit_id_1" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

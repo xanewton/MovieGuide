@@ -421,13 +421,13 @@ public class ActivityUtils {
 
     /**
      * Show the AdMob banner.
+     * https://firebase.google.com/docs/admob/android/quick-start
      * @param activity activity
      */
     public static void showAdMobBanner(final AppCompatActivity activity) {
         // Load an ad into the AdMob banner view.
         AdView adView = (AdView) activity.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .setRequestAgent("android_studio:ad_template").build();
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
     }
 
