@@ -37,6 +37,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 import com.xengar.android.movieguide.utils.ActivityUtils;
@@ -53,6 +54,14 @@ import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_DISCOVER;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_DISCOVER_RESULTS;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_FAVORITES;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_HOME;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_MOVIES;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_PEOPLE;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_TV_SHOWS;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
@@ -80,6 +89,8 @@ public class MainActivity extends AppCompatActivity
     private DiscoverFragment discoverFragment;
     private DiscoverResultFragment discoverResultFragment;
     private PeopleFragment peopleFragment;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -112,6 +123,9 @@ public class MainActivity extends AppCompatActivity
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         homeFragment = new HomeFragment();
         favoritesFragment = new FavoritesFragment();
@@ -285,18 +299,24 @@ public class MainActivity extends AppCompatActivity
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_home);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, HOME);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                        mFirebaseAnalytics, PAGE_HOME, PAGE_HOME, TYPE_PAGE);
                 launchFragment(HOME);
                 break;
 
             case MOVIES:
                 showTabs(true);
                 getSupportActionBar().setTitle(R.string.menu_option_movies);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                        mFirebaseAnalytics, PAGE_MOVIES, PAGE_MOVIES, TYPE_PAGE);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, MOVIES);
                 break;
 
             case TV_SHOWS:
                 showTabs(true);
                 getSupportActionBar().setTitle(R.string.menu_option_tv_shows);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                        mFirebaseAnalytics, PAGE_TV_SHOWS, PAGE_TV_SHOWS, TYPE_PAGE);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, TV_SHOWS);
                 break;
 
@@ -304,6 +324,8 @@ public class MainActivity extends AppCompatActivity
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_people);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, PEOPLE);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                        mFirebaseAnalytics, PAGE_PEOPLE, PAGE_PEOPLE, TYPE_PAGE);
                 launchFragment(PEOPLE);
                 break;
 
@@ -311,6 +333,8 @@ public class MainActivity extends AppCompatActivity
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_favorites);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, FAVORITES);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                        mFirebaseAnalytics, PAGE_FAVORITES, PAGE_FAVORITES, TYPE_PAGE);
                 launchFragment(FAVORITES);
                 break;
 
@@ -318,6 +342,8 @@ public class MainActivity extends AppCompatActivity
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_discover);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, DISCOVER);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                        mFirebaseAnalytics, PAGE_DISCOVER, PAGE_DISCOVER, TYPE_PAGE);
                 launchFragment(DISCOVER);
                 break;
 
@@ -325,6 +351,8 @@ public class MainActivity extends AppCompatActivity
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_discover);
                 ActivityUtils.saveStringToPreferences(this, ITEM_CATEGORY, DISCOVER_RESULT);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                        mFirebaseAnalytics, PAGE_DISCOVER_RESULTS, PAGE_DISCOVER_RESULTS, TYPE_PAGE);
                 launchFragment(DISCOVER_RESULT);
                 break;
         }

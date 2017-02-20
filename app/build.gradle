@@ -43,4 +43,10 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
     compile 'com.google.android.gms:play-services-ads:10.2.0'
     testCompile 'junit:junit:4.12'
+
+    // Firebase
+    compile 'com.google.firebase:firebase-core:10.2.0'
 }
+
+// Firebase
+apply plugin: 'com.google.gms.google-services'

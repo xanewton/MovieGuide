@@ -20,6 +20,7 @@ This product uses the TMDb API but is not endorsed or certified by TMDb.
 - Gson library https://guides.codepath.com/android/Leveraging-the-Gson-Library
 - Retrofit2 library https://github.com/square/retrofit
 - okhttp3 librabry https://github.com/square/okhttp
+- Firebase https://firebase.google.com/docs/android/setup
 
 ## Getting Started
 The app uses The Movie Database API (posters and information) and YouTubeAndroidPlayerApi (play videos).

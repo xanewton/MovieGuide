@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
@@ -66,11 +67,16 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_PERSON_DETAILS;
+import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_ADD_FAV;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_DEL_FAV;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 
 /**
  * Represents the Person Profile page.
@@ -101,6 +107,8 @@ public class PersonActivity extends AppCompatActivity {
     private LinearLayout creditCrewList;
 
     private FloatingActionButton fabAdd, fabDel;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -141,6 +149,11 @@ public class PersonActivity extends AppCompatActivity {
                 (AppBarLayout) findViewById(R.id.appbar), personTitle);
         showFavoriteButtons();
         ActivityUtils.showAdMobBanner(this);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                mFirebaseAnalytics, PAGE_PERSON_DETAILS, PAGE_PERSON_DETAILS, TYPE_PAGE);
     }
 
     @Override
@@ -202,6 +215,8 @@ public class PersonActivity extends AppCompatActivity {
 
                 fabAdd.setVisibility(View.INVISIBLE);
                 fabDel.setVisibility(View.VISIBLE);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(mFirebaseAnalytics,
+                        PERSON_ID + " " + personId, personData.getActorName(), TYPE_ADD_FAV);
             }
         });
 
@@ -215,6 +230,8 @@ public class PersonActivity extends AppCompatActivity {
 
                 fabAdd.setVisibility(View.VISIBLE);
                 fabDel.setVisibility(View.INVISIBLE);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(mFirebaseAnalytics,
+                        PERSON_ID + " " + personId, personData.getActorName(), TYPE_DEL_FAV);
             }
         });
     }
@@ -270,6 +287,8 @@ public class PersonActivity extends AppCompatActivity {
         PopulateCreditCrew(personData.getMovieCreditCrewList());
         PopulateMovieList(personData);
         defineClickFavoriteButtons(personData);
+        ActivityUtils.firebaseAnalyticsLogEventViewItem(
+                mFirebaseAnalytics, "" + personId, personTitle[0], PEOPLE);
     }
 
     /**

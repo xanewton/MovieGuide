@@ -36,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.model.MultiSearch;
@@ -53,6 +54,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.xengar.android.movieguide.utils.Constants.PAGE_SEARCH;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W154;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W185;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
@@ -68,6 +71,8 @@ public class SearchActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private SearchView mSearchView;
     private SearchAdapter mAdapter;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -87,6 +92,10 @@ public class SearchActivity extends AppCompatActivity {
         mAdapter = new SearchAdapter(searchItems);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        ActivityUtils.firebaseAnalyticsLogEventSelectContent(mFirebaseAnalytics, PAGE_SEARCH, PAGE_SEARCH, TYPE_PAGE);
     }
 
     private void setupSearchView() {
@@ -172,7 +181,7 @@ public class SearchActivity extends AppCompatActivity {
         public Filter getFilter() {
             return new Filter() {
                 @Override
-                protected FilterResults performFiltering(CharSequence charSequence) {
+                protected FilterResults performFiltering(final CharSequence charSequence) {
                     final FilterResults results = new FilterResults();
                     String lang = FragmentUtils.getFormatLocale(SearchActivity.this);
                     SearchService service = ServiceGenerator.createService(SearchService.class);
@@ -192,6 +201,8 @@ public class SearchActivity extends AppCompatActivity {
                                     mMultiSearchItems.addAll(movies);
                                     notifyDataSetChanged();
                                 }
+                                ActivityUtils.firebaseAnalyticsLogEventViewSearchResults(
+                                        mFirebaseAnalytics, charSequence.toString());
                             } else {
                                 Log.i(TAG, "Error: " + response.code());
                             }
@@ -203,6 +214,8 @@ public class SearchActivity extends AppCompatActivity {
                         }
                     });
 
+                    ActivityUtils.firebaseAnalyticsLogEventSearch(
+                            mFirebaseAnalytics, charSequence.toString());
                     return results;
                 }
 

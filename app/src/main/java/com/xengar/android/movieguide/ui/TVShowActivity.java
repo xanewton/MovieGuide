@@ -42,6 +42,7 @@ import android.widget.TextView;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
@@ -84,9 +85,14 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_TV_SHOW_DETAILS;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_ADD_FAV;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_DEL_FAV;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
+import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ID;
 import static com.xengar.android.movieguide.utils.JSONUtils.getArrayValue;
@@ -138,6 +144,8 @@ public class TVShowActivity extends AppCompatActivity
 
     private FloatingActionButton fabAdd, fabDel;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,6 +196,11 @@ public class TVShowActivity extends AppCompatActivity
                 (AppBarLayout) findViewById(R.id.appbar), tvShowTitle);
         showFavoriteButtons();
         ActivityUtils.showAdMobBanner(this);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                mFirebaseAnalytics, PAGE_TV_SHOW_DETAILS, PAGE_TV_SHOW_DETAILS, TYPE_PAGE);
     }
 
     @Override
@@ -270,6 +283,8 @@ public class TVShowActivity extends AppCompatActivity
 
                 fabAdd.setVisibility(View.INVISIBLE);
                 fabDel.setVisibility(View.VISIBLE);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(mFirebaseAnalytics,
+                        TV_SHOW_ID + " " + tvShowId, container.getName(), TYPE_ADD_FAV);
             }
         });
 
@@ -283,6 +298,8 @@ public class TVShowActivity extends AppCompatActivity
 
                 fabAdd.setVisibility(View.VISIBLE);
                 fabDel.setVisibility(View.INVISIBLE);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(mFirebaseAnalytics,
+                        TV_SHOW_ID + " " + tvShowId, container.getName(), TYPE_DEL_FAV);
             }
         });
     }
@@ -331,6 +348,8 @@ public class TVShowActivity extends AppCompatActivity
         PopulateDetailsStatus(container);
         PopulateDetailsDates(container);
         defineClickFavoriteButtons(container);
+        ActivityUtils.firebaseAnalyticsLogEventViewItem(
+                mFirebaseAnalytics, "" + tvShowId, tvShowTitle[0], TV_SHOWS);
     }
 
     /**
