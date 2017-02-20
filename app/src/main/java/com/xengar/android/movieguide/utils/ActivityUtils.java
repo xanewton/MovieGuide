@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
@@ -42,6 +43,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -418,8 +420,8 @@ public class ActivityUtils {
     }
 
     /**
-     * Show the AdMob banner
-     * @param activity
+     * Show the AdMob banner.
+     * @param activity activity
      */
     public static void showAdMobBanner(final AppCompatActivity activity) {
         // Load an ad into the AdMob banner view.
@@ -427,5 +429,67 @@ public class ActivityUtils {
         AdRequest adRequest = new AdRequest.Builder()
                 .setRequestAgent("android_studio:ad_template").build();
         adView.loadAd(adRequest);
+    }
+
+    /**
+     * Logs a Firebase Analytics select content event.
+     * https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event#SELECT_CONTENT
+     * @param analytics FirebaseAnalytics
+     * @param id id
+     * @param name name
+     * @param type type
+     */
+    public static void firebaseAnalyticsLogEventSelectContent(final FirebaseAnalytics analytics,
+                                                              final String id, final String name,
+                                                              final String type) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, type);
+        analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
+    /**
+     * Logs a Firebase Analytics search event.
+     * https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event#SEARCH
+     * @param analytics FirebaseAnalytics
+     * @param search string to search
+     */
+    public static void firebaseAnalyticsLogEventSearch(final FirebaseAnalytics analytics,
+                                                       final String search) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SEARCH_TERM, search);
+        analytics.logEvent(FirebaseAnalytics.Event.SEARCH, bundle);
+    }
+
+    /**
+     * Logs a Firebase Analytics view search results event.
+     * https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event#VIEW_SEARCH_RESULTS
+     * @param analytics FirebaseAnalytics
+     * @param search string to search
+     */
+    public static void firebaseAnalyticsLogEventViewSearchResults(final FirebaseAnalytics analytics,
+                                                                  final String search) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.SEARCH_TERM, search);
+        analytics.logEvent(FirebaseAnalytics.Event.VIEW_SEARCH_RESULTS, bundle);
+    }
+
+    /**
+     * Logs a Firebase Analytics view item event.
+     * https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event#VIEW_ITEM
+     * @param analytics
+     * @param id
+     * @param name
+     * @param category
+     */
+    public static void firebaseAnalyticsLogEventViewItem(final FirebaseAnalytics analytics,
+                                                         final String id, final String name,
+                                                         final String category) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
+        analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
 }

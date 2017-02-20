@@ -44,7 +44,6 @@ public final class  Constants {
     public static final String PERSON_ID = "person_id";
     public static final String TV_SHOW_ID = "movie_id";
     public static final String MOVIE_ID = "movie_id";
-    public static final String MOVIE_BACKGROUND_POSTER = "movie_background_poster";
     public static final String KNOWN_FOR_BACKGROUND_POSTER = "known_for_background_poster";
 
     public static final String IMDB_URI = "http://www.imdb.com/title";
@@ -66,4 +65,23 @@ public final class  Constants {
     public static final String BACKGROUND_BASE_URI = TMDB_IMAGE_URL + SIZE_W500;
 
     public static final String PREF_QUERY_LANGUAGE = "pref_query_language";
+
+    // Firebase strings
+    public static final String PAGE_ID = "0";
+    public static final String PAGE_MOVIE_DETAILS = "Movie Details";
+    public static final String PAGE_TV_SHOW_DETAILS = "TV Show Details";
+    public static final String PAGE_PERSON_DETAILS = "Person Details";
+    public static final String PAGE_SETTINGS = "Settings";
+    public static final String PAGE_MOVIES = "Movies";
+    public static final String PAGE_TV_SHOWS = "TV Shows";
+    public static final String PAGE_PEOPLE = "People";
+    public static final String PAGE_FAVORITES = "Favorites";
+    public static final String PAGE_HOME = "Home";
+    public static final String PAGE_DISCOVER = "Discover";
+    public static final String PAGE_DISCOVER_RESULTS = "Discover Results";
+    public static final String PAGE_SEARCH = "Search";
+    public static final String TYPE_ADD_FAV = "add to Favorites";
+    public static final String TYPE_DEL_FAV = "remove from Favorites";
+    public static final String TYPE_PAGE = "page";
+
 }

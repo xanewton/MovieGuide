@@ -42,14 +42,18 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xengar.android.movieguide.BuildConfig;
 import com.xengar.android.movieguide.R;
+import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.List;
 
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_SETTINGS;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
@@ -67,6 +71,8 @@ import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity
         implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     /**
      * A preference value change listener that updates the preference's summary
@@ -142,6 +148,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity
         super.onCreate(savedInstanceState);
         setupActionBar();
         setupToolBar();
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                mFirebaseAnalytics, PAGE_SETTINGS, PAGE_SETTINGS, TYPE_PAGE);
     }
 
     /**

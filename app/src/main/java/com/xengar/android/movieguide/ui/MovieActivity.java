@@ -43,6 +43,7 @@ import android.widget.TextView;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerFragment;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Callback;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.adapters.ImageAdapter;
@@ -87,11 +88,16 @@ import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.IMDB_URI;
 import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
+import static com.xengar.android.movieguide.utils.Constants.PAGE_MOVIE_DETAILS;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_ADD_FAV;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_DEL_FAV;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.JSONUtils.getDoubleValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getIntValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getListValue;
@@ -154,6 +160,9 @@ public class MovieActivity extends AppCompatActivity
 
     private FloatingActionButton fabAdd, fabDel;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,6 +213,11 @@ public class MovieActivity extends AppCompatActivity
                 (AppBarLayout) findViewById(R.id.appbar), movieTitle);
         showFavoriteButtons();
         ActivityUtils.showAdMobBanner(this);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        ActivityUtils.firebaseAnalyticsLogEventSelectContent(
+                mFirebaseAnalytics, PAGE_MOVIE_DETAILS, PAGE_MOVIE_DETAILS, TYPE_PAGE);
     }
 
     @Override
@@ -275,6 +289,8 @@ public class MovieActivity extends AppCompatActivity
 
                 fabAdd.setVisibility(View.INVISIBLE);
                 fabDel.setVisibility(View.VISIBLE);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(mFirebaseAnalytics,
+                        MOVIE_ID + " " + movieID, container.getTitle(), TYPE_ADD_FAV);
             }
         });
 
@@ -288,6 +304,8 @@ public class MovieActivity extends AppCompatActivity
 
                 fabAdd.setVisibility(View.VISIBLE);
                 fabDel.setVisibility(View.INVISIBLE);
+                ActivityUtils.firebaseAnalyticsLogEventSelectContent(mFirebaseAnalytics,
+                        MOVIE_ID + " " + movieID, container.getTitle(), TYPE_DEL_FAV);
             }
         });
     }
@@ -345,6 +363,8 @@ public class MovieActivity extends AppCompatActivity
         PopulateDetailsStatus(container);
         PopulateDetailsPlot(container);
         defineClickFavoriteButtons(container);
+        ActivityUtils.firebaseAnalyticsLogEventViewItem(
+                mFirebaseAnalytics, "" + movieID, container.getTitle(), MOVIES);
     }
 
     /**
