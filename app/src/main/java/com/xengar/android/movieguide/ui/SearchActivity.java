@@ -54,6 +54,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.PAGE_SEARCH;
 import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W154;
@@ -204,13 +205,17 @@ public class SearchActivity extends AppCompatActivity {
                                 ActivityUtils.firebaseAnalyticsLogEventViewSearchResults(
                                         mFirebaseAnalytics, charSequence.toString());
                             } else {
-                                Log.i(TAG, "Error: " + response.code());
+                                if (LOG) {
+                                    Log.i(TAG, "Error: " + response.code());
+                                }
                             }
                         }
 
                         @Override
                         public void onFailure(Call<MultiSearch> call, Throwable t) {
-                            Log.i(TAG, "Error: " + t.getMessage());
+                            if (LOG) {
+                                Log.i(TAG, "Error: " + t.getMessage());
+                            }
                         }
                     });
 

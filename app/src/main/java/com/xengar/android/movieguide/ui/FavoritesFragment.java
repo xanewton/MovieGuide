@@ -54,6 +54,7 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_PROFILE_PATH;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TITLE;
 import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColumns.COLUMN_TV_SHOW_ID;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
@@ -125,7 +126,9 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         super.onResume();
 
         if (!FragmentUtils.checkInternetConnection(getActivity())) {
-            Log.e(TAG, "Network is not available");
+            if (LOG) {
+                Log.e(TAG, "Network is not available");
+            }
             onLoadFailed(new Throwable(getString(R.string.network_not_available_message)));
             return;
         }
@@ -249,7 +252,9 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
                     posters.add(data);
                 }
             } else {
-                Log.d(TAG, "Cursor is empty");
+                if (LOG) {
+                    Log.d(TAG, "Cursor is empty");
+                }
             }
             if (cursor != null)
                 cursor.close();
@@ -300,7 +305,9 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
                     posters.add(data);
                 }
             } else {
-                Log.d(TAG, "Cursor is empty");
+                if (LOG) {
+                    Log.d(TAG, "Cursor is empty");
+                }
             }
             if (cursor != null)
                 cursor.close();
@@ -353,7 +360,9 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
                     people.add(person);
                 }
             } else {
-                Log.d(TAG, "Cursor is empty");
+                if (LOG) {
+                    Log.d(TAG, "Cursor is empty");
+                }
             }
             if (cursor != null)
                 cursor.close();

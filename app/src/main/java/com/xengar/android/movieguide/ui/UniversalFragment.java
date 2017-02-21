@@ -50,6 +50,7 @@ import retrofit2.Response;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
@@ -204,7 +205,9 @@ public class UniversalFragment extends Fragment {
                     }
                     listener.onFetchCompleted();
                 } else {
-                    Log.i("TAG", "Res: " + response.code());
+                    if (LOG) {
+                        Log.i("TAG", "Res: " + response.code());
+                    }
                     listener.onFetchFailed();
                 }
             }
@@ -265,7 +268,9 @@ public class UniversalFragment extends Fragment {
                     }
                     listener.onFetchCompleted();
                 } else {
-                    Log.i("TAG", "Res: " + response.code());
+                    if (LOG) {
+                        Log.i("TAG", "Res: " + response.code());
+                    }
                     listener.onFetchFailed();
                 }
             }

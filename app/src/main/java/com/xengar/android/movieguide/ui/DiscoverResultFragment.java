@@ -52,6 +52,7 @@ import static com.xengar.android.movieguide.utils.Constants.DISCOVER_GENRES;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_MIN_RATING;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_SORT_TYPE;
 import static com.xengar.android.movieguide.utils.Constants.DISCOVER_TYPE;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W185;
@@ -126,7 +127,9 @@ public class DiscoverResultFragment extends Fragment {
         super.onResume();
 
         if (!FragmentUtils.checkInternetConnection(getActivity())) {
-            Log.e(TAG, "Network is not available");
+            if (LOG) {
+                Log.e(TAG, "Network is not available");
+            }
             onLoadFailed(new Throwable(getString(R.string.network_not_available_message)));
             return;
         }
@@ -177,7 +180,9 @@ public class DiscoverResultFragment extends Fragment {
                     }
                     listener.onFetchCompleted();
                 } else {
-                    Log.i("TAG", "Res: " + response.code());
+                    if (LOG) {
+                        Log.i("TAG", "Res: " + response.code());
+                    }
                     listener.onFetchFailed();
                 }
             }
@@ -219,7 +224,9 @@ public class DiscoverResultFragment extends Fragment {
                     }
                     listener.onFetchCompleted();
                 } else {
-                    Log.i("TAG", "Res: " + response.code());
+                    if (LOG) {
+                        Log.i("TAG", "Res: " + response.code());
+                    }
                     listener.onFetchFailed();
                 }
             }

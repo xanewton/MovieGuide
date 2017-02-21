@@ -68,6 +68,7 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.PAGE_PERSON_DETAILS;
 import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ACTIVITY;
@@ -458,7 +459,9 @@ public class PersonActivity extends AppCompatActivity {
         private void processPersonData(JSONObject jObj) {
             if (jObj != null) {
                 try {
-                    Log.v(TAG, "jObj = " + jObj);
+                    if (LOG) {
+                        Log.v(TAG, "jObj = " + jObj);
+                    }
                     PersonData personData = new PersonData(JSONUtils.getStringValue(jObj, "name"),
                             JSONUtils.getStringValue(jObj, "profile_path"),
                             JSONUtils.getStringValue(jObj, "place_of_birth"),
@@ -488,7 +491,9 @@ public class PersonActivity extends AppCompatActivity {
                     }
 
                 } catch (JSONException e) {
-                    Log.e(TAG, "", e);
+                    if (LOG) {
+                        Log.e(TAG, "", e);
+                    }
                 }
             }
         }
@@ -500,10 +505,14 @@ public class PersonActivity extends AppCompatActivity {
         private void processPersonDataForBiography(JSONObject jObj) {
             if (jObj != null) {
                 try {
-                    Log.v(TAG, "jObj = " + jObj);
+                    if (LOG) {
+                        Log.v(TAG, "jObj = " + jObj);
+                    }
                     biography.setText(JSONUtils.getStringValue(jObj, "biography"));
                 } catch (JSONException e) {
-                    Log.e(TAG, "", e);
+                    if (LOG) {
+                        Log.e(TAG, "", e);
+                    }
                 }
             }
         }

@@ -28,6 +28,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.ON_THE_AIR_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
@@ -117,7 +118,9 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
         try {
             JSONObject jObj = JSONLoader.load(requestType + params[0], apiKey, mLang);
             if (jObj == null) {
-                Log.w(TAG, "Can not load the data from remote service");
+                if (LOG) {
+                    Log.w(TAG, "Can not load the data from remote service");
+                }
                 return null;
             }
 
@@ -131,7 +134,9 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
                         item.getInt("id"), item.getString(itemTitle), null, null));
             }
         } catch (JSONException e) {
-            Log.e(TAG, "Error ", e);
+            if (LOG) {
+                Log.e(TAG, "Error ", e);
+            }
         }
         return posters;
     }

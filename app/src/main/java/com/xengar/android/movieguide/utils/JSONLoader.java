@@ -28,6 +28,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static com.xengar.android.movieguide.utils.Constants.LOG;
+
 /**
  * JSONLoader helper class.
  */
@@ -55,7 +57,9 @@ public class JSONLoader {
             }
             Uri builtUri = uriBuilder.build();
             URL url = new URL(builtUri.toString());
-            Log.v(TAG, "Built URI " + builtUri.toString());
+            if (LOG) {
+                Log.v(TAG, "Built URI " + builtUri.toString());
+            }
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -72,7 +76,9 @@ public class JSONLoader {
             String line;
             while ((line = reader.readLine()) != null) {
                 buffer.append(line);
-                Log.v(TAG, "buffer - " + buffer.toString());
+                if (LOG) {
+                    Log.v(TAG, "buffer - " + buffer.toString());
+                }
             }
 
             if (buffer.length() == 0) {
@@ -81,13 +87,17 @@ public class JSONLoader {
             }
 
             movieJsonStr = buffer.toString();
-            Log.v(TAG, "Movie JSON String: " + movieJsonStr);
             JSONObject jObj = new JSONObject(movieJsonStr);
-            Log.v(TAG, "Movie JSON obj: " + jObj);
+            if (LOG) {
+                Log.v(TAG, "Movie JSON String: " + movieJsonStr);
+                Log.v(TAG, "Movie JSON obj: " + jObj);
+            }
             return jObj;
 
         } catch (IOException | JSONException e) {
-            Log.e(TAG, "Error ", e);
+            if (LOG) {
+                Log.e(TAG, "Error ", e);
+            }
             return null;
 
         } finally {
@@ -98,7 +108,9 @@ public class JSONLoader {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e(TAG, "Error closing stream", e);
+                    if (LOG) {
+                        Log.e(TAG, "Error closing stream", e);
+                    }
                 }
             }
         }

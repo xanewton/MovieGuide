@@ -31,7 +31,8 @@ import com.xengar.android.movieguide.utils.ActivityUtils;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static android.content.ContentValues.TAG;
+import static com.google.android.gms.internal.zzt.TAG;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
@@ -82,7 +83,9 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
      */
     public int add(ImageItem item) {
         if (idSet.contains(item.getImageId())) {
-            Log.w(TAG, "Poster item duplicate found, itemID = " + item.getImageId());
+            if (LOG) {
+                Log.w(TAG, "Poster item duplicate found, itemID = " + item.getImageId());
+            }
             return 0;
         }
         images.add(item);

@@ -52,6 +52,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
@@ -127,7 +128,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         super.onResume();
 
         if (!FragmentUtils.checkInternetConnection(getActivity())) {
-            Log.e(TAG, "Network is not available");
+            if (LOG) {
+                Log.e(TAG, "Network is not available");
+            }
             onLoadFailed(new Throwable(getString(R.string.network_not_available_message)));
             return;
         }
@@ -181,13 +184,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     }
                     FragmentUtils.updateProgressBar(progressBarMovies, false);
                 } else {
-                    Log.i("TAG", "Res: " + response.code());
+                    if (LOG) {
+                        Log.i("TAG", "Res: " + response.code());
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<MovieResults> call, Throwable t) {
-                Log.i("TAG", "Error: " + t.getMessage());
+                if (LOG) {
+                    Log.i("TAG", "Error: " + t.getMessage());
+                }
                 FragmentUtils.updateProgressBar(progressBarMovies, false);
             }
         });
@@ -220,13 +227,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     }
                     FragmentUtils.updateProgressBar(progressBarTV, false);
                 } else {
-                    Log.i("TAG", "Res: " + response.code());
+                    if (LOG) {
+                        Log.i("TAG", "Res: " + response.code());
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<TVResults> call, Throwable t) {
-                Log.i("TAG", "Error: " + t.getMessage());
+                if (LOG) {
+                    Log.i("TAG", "Error: " + t.getMessage());
+                }
                 FragmentUtils.updateProgressBar(progressBarTV, false);
             }
         });
@@ -263,13 +274,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     }
                     FragmentUtils.updateProgressBar(progressBarPeople, false);
                 } else {
-                    Log.i("TAG", "Res: " + response.code());
+                    if (LOG) {
+                        Log.i("TAG", "Res: " + response.code());
+                    }
                 }
             }
 
             @Override
             public void onFailure(Call<PersonResults> call, Throwable t) {
-                Log.i("TAG", "Error: " + t.getMessage());
+                if (LOG) {
+                    Log.i("TAG", "Error: " + t.getMessage());
+                }
                 FragmentUtils.updateProgressBar(progressBarPeople, false);
             }
         });

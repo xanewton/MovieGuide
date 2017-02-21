@@ -44,6 +44,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
@@ -103,7 +104,9 @@ public class PeopleFragment extends Fragment {
         super.onResume();
 
         if (!FragmentUtils.checkInternetConnection(getActivity())) {
-            Log.e(TAG, "Network is not available");
+            if (LOG) {
+                Log.e(TAG, "Network is not available");
+            }
             onLoadFailed(new Throwable(getString(R.string.network_not_available_message)));
             return;
         }
@@ -151,7 +154,9 @@ public class PeopleFragment extends Fragment {
                     }
                     listener.onFetchCompleted();
                 } else {
-                    Log.i("TAG", "Res: " + response.code());
+                    if (LOG) {
+                        Log.i("TAG", "Res: " + response.code());
+                    }
                     listener.onFetchFailed();
                 }
             }
