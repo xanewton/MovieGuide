@@ -28,6 +28,8 @@ import android.util.Log;
 
 import com.xengar.android.movieguide.R;
 
+import static com.xengar.android.movieguide.utils.Constants.LOG;
+
 /**
  * {@link ContentProvider} for MovieGuide app.
  */
@@ -163,7 +165,9 @@ public class FavoritesProvider extends ContentProvider {
         }
 
         long rowId = db.insert(table, null, values);
-        Log.v(TAG, "rowId = " + rowId);
+        if (LOG) {
+            Log.v(TAG, "rowId = " + rowId);
+        }
         Uri returnUri = null;
         if (rowId > 0)
             returnUri = ContentUris.withAppendedId(uri, rowId);

@@ -89,6 +89,7 @@ import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.IMDB_URI;
 import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
@@ -334,7 +335,9 @@ public class MovieActivity extends AppCompatActivity
             FetchMovieTask reviewsTask = new FetchMovieTask(FetchMovieTask.MOVIE_REVIEWS);
             reviewsTask.execute(movieID);
         } else {
-            Log.v(TAG, "data = " + data.getDetailsData());
+            if (LOG) {
+                Log.v(TAG, "data = " + data.getDetailsData());
+            }
             populateDetails(detailsData = data.getDetailsData());
             populateTrailerList(trailerData = data.getTrailersData());
             populateCastList(castData = data.getCastData());
@@ -577,7 +580,9 @@ public class MovieActivity extends AppCompatActivity
      * @param data List of Trailer data
      */
     private void populateTrailerList(List<TrailerData> data) {
-        Log.v(TAG, "populateTrailerList - data = " + data);
+        if (LOG) {
+            Log.v(TAG, "populateTrailerList - data = " + data);
+        }
 
         for (final TrailerData trailer : data) {
             View view = getLayoutInflater().inflate(R.layout.trailer_list_item, null);
@@ -615,11 +620,15 @@ public class MovieActivity extends AppCompatActivity
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                         YouTubePlayer youTubePlayer, boolean wasRestored) {
         if (!wasRestored) {
-            Log.v(TAG, "trailerData " + trailerData);
+            if (LOG) {
+                Log.v(TAG, "trailerData " + trailerData);
+            }
             if (trailerData != null && !trailerData.isEmpty()) {
                 Uri uri = trailerData.get(0).getTrailerUri();
 
-                Log.v(TAG, "trailerData " + trailerData.size());
+                if (LOG) {
+                    Log.v(TAG, "trailerData " + trailerData.size());
+                }
                 String trailerCode = uri.getQueryParameter("v");
                 if (trailerCode != null) {
                     this.youTubePlayer = youTubePlayer;
@@ -665,15 +674,21 @@ public class MovieActivity extends AppCompatActivity
                 reviewContentEnd.setText(
                         ActivityUtils.fromHtml(buildStart.substring(0, buildStart.length())
                                 + LONG_TEXT_PREVIEW));
-                Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
-                Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
+                if (LOG) {
+                    Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
+                    Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
+                }
 
             } else {
                 reviewContentStart.setText(buildStart);
                 reviewContentEnd.setText(ActivityUtils.fromHtml(buildStart + END_TEXT_PREVIEW));
-                Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
+                if (LOG) {
+                    Log.v(TAG, "reviewContentstart" + reviewContentStart.getText());
+                }
             }
-            Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
+            if (LOG) {
+                Log.v(TAG, "reviewContentEnd" + reviewContentEnd.getText());
+            }
             reviewContentStart.setVisibility(View.VISIBLE);
             reviewContentEnd.setVisibility(View.GONE);
             reviewList.addView(view);
@@ -684,8 +699,10 @@ public class MovieActivity extends AppCompatActivity
 
                     TextView contentStart = (TextView) v.findViewById(R.id.review_content_start);
                     TextView contentEnd = (TextView) v.findViewById(R.id.review_content_end);
-                    Log.v(TAG, "reviewContentstart ON" + contentStart.getText());
-                    Log.v(TAG, "reviewContentEnd ON" + contentEnd.getText());
+                    if (LOG) {
+                        Log.v(TAG, "reviewContentstart ON" + contentStart.getText());
+                        Log.v(TAG, "reviewContentEnd ON" + contentEnd.getText());
+                    }
                     if (!isReviewShown) {
                         contentEnd.setVisibility(View.VISIBLE);
                         contentStart.setVisibility(View.GONE);
@@ -816,7 +833,9 @@ public class MovieActivity extends AppCompatActivity
                             getStringValue(jObj, "homepage"), getStringValue(jObj, "tagline"));
                     populateDetails(detailsData);
                 } catch (JSONException e) {
-                    Log.e(TAG, "", e);
+                    if (LOG) {
+                        Log.e(TAG, "", e);
+                    }
                 }
 
             } else {
@@ -831,7 +850,9 @@ public class MovieActivity extends AppCompatActivity
                         null, null, null);
 
                 if (cursor.getCount() != 0) {
-                    Log.d(TAG, "Cursor = " + cursor.getCount());
+                    if (LOG) {
+                        Log.d(TAG, "Cursor = " + cursor.getCount());
+                    }
                     cursor.moveToFirst();
                     // Note: Better if it matches the query order
                     detailsData = new MovieData(cursor.getString(0), movieID,
@@ -864,7 +885,9 @@ public class MovieActivity extends AppCompatActivity
                                             object.getString("name")));
                     }
                 } catch (JSONException e) {
-                    Log.e(TAG, "", e);
+                    if (LOG) {
+                        Log.e(TAG, "", e);
+                    }
                 }
                 populateTrailerList(trailerData);
             }
@@ -885,7 +908,9 @@ public class MovieActivity extends AppCompatActivity
                                 object.getString("content")));
                     }
                 } catch (JSONException e) {
-                    Log.e(TAG, "", e);
+                    if (LOG) {
+                        Log.e(TAG, "", e);
+                    }
                 }
                 populateReviewList(reviewData, isReviewShown);
             }
@@ -911,7 +936,9 @@ public class MovieActivity extends AppCompatActivity
                                         object.getInt("order")));
                     }
                 } catch (JSONException e) {
-                    Log.e(TAG, "", e);
+                    if (LOG) {
+                        Log.e(TAG, "", e);
+                    }
                 }
                 populateCastList(castData);
             }

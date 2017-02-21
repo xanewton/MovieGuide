@@ -55,6 +55,7 @@ import com.xengar.android.movieguide.ui.SettingsActivity;
 import com.xengar.android.movieguide.ui.TVShowActivity;
 
 import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.MOVIE_ID;
 import static com.xengar.android.movieguide.utils.Constants.PERSON_ID;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -136,7 +137,9 @@ public class ActivityUtils {
             @SuppressLint("NewApi")
             @Override
             public void onGenerated(Palette palette) {
-                Log.v(TAG, "textSwatch.PaletteAsyncListener");
+                if (LOG) {
+                    Log.v(TAG, "textSwatch.PaletteAsyncListener");
+                }
                 Palette.Swatch textSwatch = palette.getMutedSwatch();
                 Palette.Swatch bgSwatch = palette.getDarkVibrantSwatch();
 
@@ -195,7 +198,9 @@ public class ActivityUtils {
             }
             @Override
             public void onError() {
-                Log.v(TAG, "Callback error");
+                if (LOG) {
+                    Log.v(TAG, "Callback error");
+                }
                 Bitmap bitmapBg = ((BitmapDrawable) backgroundPoster.getDrawable()).getBitmap();
                 Palette.from(bitmapBg).generate(paletteAsyncListener);
             }

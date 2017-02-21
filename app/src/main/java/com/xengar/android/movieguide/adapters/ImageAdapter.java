@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 
@@ -173,7 +174,9 @@ public class ImageAdapter extends BaseAdapter {
      */
     public int add(ImageItem item) {
         if (idSet.contains(item.getImageId())) {
-            Log.w(TAG, "Poster item duplicate found, itemID = " + item.getImageId());
+            if (LOG) {
+                Log.w(TAG, "Poster item duplicate found, itemID = " + item.getImageId());
+            }
             return 0;
         }
         images.add(item);

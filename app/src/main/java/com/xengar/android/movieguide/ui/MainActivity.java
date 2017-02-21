@@ -50,6 +50,7 @@ import static com.xengar.android.movieguide.utils.Constants.FAVORITES;
 import static com.xengar.android.movieguide.utils.Constants.HOME;
 import static com.xengar.android.movieguide.utils.Constants.ITEM_CATEGORY;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.MAIN_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.NOW_PLAYING_MOVIES;
@@ -272,7 +273,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onItemSelectionClick(String itemType, int itemId) {
-        Log.v(TAG, "onItemSelectionClick itemId = " + itemId + " itemType = " + itemType);
+        if (LOG) {
+            Log.v(TAG, "onItemSelectionClick itemId = " + itemId + " itemType = " + itemType);
+        }
         switch (itemType) {
             case TV_SHOWS:
             case POPULAR_TV_SHOWS:

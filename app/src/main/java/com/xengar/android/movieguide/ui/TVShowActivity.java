@@ -86,6 +86,7 @@ import static com.xengar.android.movieguide.data.FavoritesContract.FavoriteColum
 import static com.xengar.android.movieguide.utils.Constants.BACKGROUND_BASE_URI;
 import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND_POSTER;
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
+import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.PAGE_TV_SHOW_DETAILS;
 import static com.xengar.android.movieguide.utils.Constants.TYPE_ADD_FAV;
 import static com.xengar.android.movieguide.utils.Constants.TYPE_DEL_FAV;
@@ -323,7 +324,9 @@ public class TVShowActivity extends AppCompatActivity
             FetchTVShowTask castTask = new FetchTVShowTask(FetchTVShowTask.TV_SHOW_CAST);
             castTask.execute(tvShowId);
         } else {
-            Log.v(TAG, "data = " + data.getDetailsData());
+            if (LOG) {
+                Log.v(TAG, "data = " + data.getDetailsData());
+            }
             populateDetails(detailsData = data.getDetailsData());
             populateTrailerList(trailerData = data.getTrailersData());
             populateCastList(castData = data.getCastData());
@@ -506,7 +509,9 @@ public class TVShowActivity extends AppCompatActivity
      * @param data list of trailer data
      */
     private void populateTrailerList(List<TrailerData> data) {
-        Log.v(TAG, "populateTrailerList - data = " + data);
+        if (LOG) {
+            Log.v(TAG, "populateTrailerList - data = " + data);
+        }
 
         for (final TrailerData trailer : data) {
             View view = getLayoutInflater().inflate(R.layout.trailer_list_item, null);
@@ -544,11 +549,15 @@ public class TVShowActivity extends AppCompatActivity
     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                         YouTubePlayer youTubePlayer, boolean wasRestored) {
         if (!wasRestored) {
-            Log.v(TAG, "trailerData " + trailerData);
+            if (LOG) {
+                Log.v(TAG, "trailerData " + trailerData);
+            }
             if (trailerData != null && !trailerData.isEmpty()) {
                 Uri uri = trailerData.get(0).getTrailerUri();
 
-                Log.v(TAG, "trailerData " + trailerData.size());
+                if (LOG) {
+                    Log.v(TAG, "trailerData " + trailerData.size());
+                }
                 String trailerCode = uri.getQueryParameter("v");
                 if (trailerCode != null) {
                     this.youTubePlayer = youTubePlayer;
@@ -667,7 +676,9 @@ public class TVShowActivity extends AppCompatActivity
                             getIntValue(jObj, "number_of_seasons", 0));
                     populateDetails(detailsData);
                 } catch (JSONException e) {
-                    Log.e(TAG, "", e);
+                    if (LOG) {
+                        Log.e(TAG, "", e);
+                    }
                 }
 
             } else {
@@ -682,7 +693,9 @@ public class TVShowActivity extends AppCompatActivity
                         null, null, null);
 
                 if (cursor.getCount() != 0) {
-                    Log.d(TAG, "Cursor = " + cursor.getCount());
+                    if (LOG) {
+                        Log.d(TAG, "Cursor = " + cursor.getCount());
+                    }
                     cursor.moveToFirst();
                     // Note: Better if it matches the query order
                     detailsData = new TVShowData(tvShowId, cursor.getString(0), cursor.getString(1),
@@ -713,7 +726,9 @@ public class TVShowActivity extends AppCompatActivity
                                 object.getString("name")));
                     }
                 } catch (JSONException e) {
-                    Log.e(TAG, "", e);
+                    if (LOG) {
+                        Log.e(TAG, "", e);
+                    }
                 }
                 populateTrailerList(trailerData);
             }
@@ -738,7 +753,9 @@ public class TVShowActivity extends AppCompatActivity
                                         object.getInt("order")));
                     }
                 } catch (JSONException e) {
-                    Log.e(TAG, "", e);
+                    if (LOG) {
+                        Log.e(TAG, "", e);
+                    }
                 }
                 populateCastList(castData);
             }
