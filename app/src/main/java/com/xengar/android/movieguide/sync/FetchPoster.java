@@ -57,7 +57,7 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
     private final String apiKey;
     private final String itemType;
     private String requestType;
-    private String mLang;
+    private final String mLang;
 
     // Constructor
     public FetchPoster(String itemType, ImageAdapter adapter,
@@ -68,7 +68,7 @@ public class FetchPoster extends AsyncTask<Integer, Void, ArrayList<ImageItem>> 
         this.posterBaseUri = posterBaseUri;
         this.adapter = adapter;
         this.apiKey = apiKey;
-        this.mLang =language;
+        this.mLang = language;
 
         // assign the category to query
         switch (itemType){

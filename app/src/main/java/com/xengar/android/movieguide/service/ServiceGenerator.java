@@ -20,6 +20,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.xengar.android.movieguide.utils.Constants.LOG;
+
 /**
  * ServiceGenerator
  */
@@ -28,9 +30,10 @@ public class ServiceGenerator {
     public static final String ENDPOINT = "https://api.themoviedb.org/3/";
     //public static final String API_KEY = "a103367a91b648e561c12948632c9d88";
 
-    private static final OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
-            .addInterceptor(
-                    new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY));
+    private static final OkHttpClient.Builder httpClient =
+            (LOG)? new OkHttpClient.Builder().addInterceptor(
+                        new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            : new OkHttpClient.Builder();
 
     private static final Retrofit.Builder builder =
             new Retrofit.Builder()

@@ -96,7 +96,7 @@ public class FavoritesProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        String table = null;
+        String table;
         switch (sUriMatcher.match(uri)) {
             case MOVIES:
             case MOVIE_ID:
@@ -145,7 +145,7 @@ public class FavoritesProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        String table = null;
+        String table;
         switch (sUriMatcher.match(uri)) {
             case MOVIES:
             case MOVIE_ID:
@@ -168,7 +168,7 @@ public class FavoritesProvider extends ContentProvider {
         if (LOG) {
             Log.v(TAG, "rowId = " + rowId);
         }
-        Uri returnUri = null;
+        Uri returnUri;
         if (rowId > 0)
             returnUri = ContentUris.withAppendedId(uri, rowId);
         else
@@ -229,7 +229,7 @@ public class FavoritesProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        String table = null;
+        String table;
         switch (sUriMatcher.match(uri)) {
             case MOVIES:
             case MOVIE_ID:

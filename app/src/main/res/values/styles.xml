@@ -28,7 +28,9 @@
     </style>
 
     <!-- Settings activity theme. -->
-    <style name="AppTheme.Settings" parent="@style/AppTheme" />
+    <style name="AppTheme.Settings" parent="@style/AppTheme" >
+        <item name="android:colorPrimary" tools:targetApi="21" >@color/colorAccent</item>
+    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

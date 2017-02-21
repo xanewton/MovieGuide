@@ -157,8 +157,8 @@ public class UniversalFragment extends Fragment {
      * @param itemType type of item
      */
     private void loadMovies(final FetchItemListener listener, String itemType) {
-        DiscoverService discoverService = null;
-        MovieService movieService = null;
+        DiscoverService discoverService;
+        MovieService movieService;
         Call<MovieResults> call = null;
         switch(itemType) {
             case NOW_PLAYING_MOVIES:
@@ -225,8 +225,8 @@ public class UniversalFragment extends Fragment {
      * @param itemType type of item
      */
     private void loadTVShows(final FetchItemListener listener, String itemType) {
-        DiscoverService discoverService = null;
-        TVService tvService = null;
+        DiscoverService discoverService;
+        TVService tvService;
         Call<TVResults> call = null;
         switch(itemType) {
             case POPULAR_TV_SHOWS:

@@ -67,7 +67,6 @@ public final class  Constants {
     public static final String PREF_QUERY_LANGUAGE = "pref_query_language";
 
     // Firebase strings
-    public static final String PAGE_ID = "0";
     public static final String PAGE_MOVIE_DETAILS = "Movie Details";
     public static final String PAGE_TV_SHOW_DETAILS = "TV Show Details";
     public static final String PAGE_PERSON_DETAILS = "Person Details";

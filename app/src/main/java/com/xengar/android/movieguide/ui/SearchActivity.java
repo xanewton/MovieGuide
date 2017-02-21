@@ -228,6 +228,7 @@ public class SearchActivity extends AppCompatActivity {
                 protected void publishResults(CharSequence charSequence,
                                               FilterResults filterResults) {
                     if (filterResults.values != null) {
+                        //noinspection unchecked
                         mMultiSearchItems.addAll(
                                 (Collection<? extends MultiSearch.MultiSearchItem>)
                                         filterResults.values);
