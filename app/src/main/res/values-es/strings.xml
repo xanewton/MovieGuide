@@ -74,8 +74,14 @@
     <string name="reviews">Revisiones</string>
     <string name="episodes">episodios</string>
     <string name="seasons">temporadas</string>
-    <string name="details_episodes">%d episodios</string>
-    <string name="details_seasons">%d temporadas</string>
+    <plurals name="details_episodes">
+        <item quantity="one">%d episodio</item>
+        <item quantity="other">%d episodios</item>
+    </plurals>
+    <plurals name="details_seasons">
+        <item quantity="one">%d temporada</item>
+        <item quantity="other">%d temporadas</item>
+    </plurals>
 
     <!-- Discover strings -->
     <string name="discover_type">Tipo</string>

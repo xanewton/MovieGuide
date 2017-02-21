@@ -148,6 +148,7 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
                             android:layout_marginLeft="10dp"
                             android:orientation="vertical">
 
@@ -178,7 +179,7 @@
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:gravity="left"
+                                    android:gravity="start"
                                     android:text="@string/movie_duration" />
                                 <TextView
                                     android:id="@+id/text_language"
@@ -186,7 +187,7 @@
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:gravity="left" />
+                                    android:gravity="start" />
                             </LinearLayout>
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -198,7 +199,7 @@
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:gravity="left" />
+                                    android:gravity="start" />
 
                                 <TextView
                                     android:id="@+id/status"
@@ -206,7 +207,7 @@
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:gravity="left"
+                                    android:gravity="start"
                                     android:text="@string/status"
                                     android:visibility="gone" />
                             </LinearLayout>
@@ -220,7 +221,7 @@
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:gravity="left"
+                                    android:gravity="start"
                                     android:text="@string/budget"/>
 
                                 <TextView
@@ -229,7 +230,7 @@
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
                                     android:layout_height="wrap_content"
-                                    android:gravity="left"
+                                    android:gravity="start"
                                     android:text="@string/revenue" />
                             </LinearLayout>
 

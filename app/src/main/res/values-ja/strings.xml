@@ -75,8 +75,12 @@
     <string name="reviews">レビュー</string>
     <string name="episodes">エピソード</string>
     <string name="seasons">季節</string>
-    <string name="details_episodes">%d つのエピソード</string>
-    <string name="details_seasons">%d シーズン</string>
+    <plurals name="details_episodes">
+        <item quantity="other">%d つのエピソード</item>
+    </plurals>
+    <plurals name="details_seasons">
+        <item quantity="other">%d シーズン</item>
+    </plurals>
 
     <!-- Discover strings -->
     <string name="discover_type">タイプ</string>

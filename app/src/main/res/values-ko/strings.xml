@@ -75,8 +75,12 @@
     <string name="reviews">리뷰</string>
     <string name="episodes">에피소드</string>
     <string name="seasons">계절</string>
-    <string name="details_episodes">%d 편</string>
-    <string name="details_seasons">%d 계절</string>
+    <plurals name="details_episodes">
+        <item quantity="other">%d 편</item>
+    </plurals>
+    <plurals name="details_seasons">
+        <item quantity="other">%d 계절</item>
+    </plurals>
 
     <!-- Discover strings -->
     <string name="discover_type">유형</string>

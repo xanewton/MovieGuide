@@ -75,8 +75,12 @@
     <string name="reviews">评论</string>
     <string name="episodes">情节</string>
     <string name="seasons">季节</string>
-    <string name="details_episodes">%d 集</string>
-    <string name="details_seasons">%d 个季节</string>
+    <plurals name="details_episodes">
+        <item quantity="other">%d 集</item>
+    </plurals>
+    <plurals name="details_seasons">
+        <item quantity="other">%d 个季节</item>
+    </plurals>
 
     <!-- Discover strings -->
     <string name="discover_type">类型</string>

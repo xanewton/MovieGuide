@@ -140,7 +140,8 @@
                     android:layout_alignParentRight="true"
                     android:textColor="@color/colorAccent"
                     android:textSize="18sp"
-                    android:text="0" />
+                    android:text="0"
+                    tools:ignore="HardcodedText" />
 
                 <android.support.v7.widget.AppCompatSeekBar
                     android:id="@+id/discover_rating_bar"

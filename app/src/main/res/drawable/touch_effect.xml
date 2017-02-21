@@ -15,7 +15,9 @@
      limitations under the License.
  -->
 <ripple
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="#FFFFFF">
+    android:color="#FFFFFF"
+    tools:targetApi="21" >
     <item android:drawable="@color/trailerColor" />
 </ripple>
