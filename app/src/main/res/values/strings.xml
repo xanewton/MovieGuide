@@ -105,9 +105,15 @@
     <string name="reviews">Reviews</string>
     <string name="episodes">episodes</string>
     <string name="seasons">seasons</string>
-    <string name="details_episodes">%d episodes</string>
-    <string name="details_seasons">%d seasons</string>
-
+    <!-- https://developer.android.com/guide/topics/resources/string-resource.html#Plurals -->
+    <plurals name="details_episodes">
+        <item quantity="one">%d episode</item>
+        <item quantity="other">%d episodes</item>
+    </plurals>
+    <plurals name="details_seasons">
+        <item quantity="one">%d season</item>
+        <item quantity="other">%d seasons</item>
+    </plurals>
 
     <!-- Discover strings -->
     <string name="discover_type">Type</string>
@@ -294,8 +300,8 @@
         <item name="ukrainian">Українська</item>
         <item name="turkish">Türkçe</item>
     </string-array>
-    <!--suppress CheckTagEmptyBody -->
     <string-array name="query_languages_values" translatable="false">
+        <!--suppress CheckTagEmptyBody -->
         <item name="default"></item>
         <item name="albanian">sq_AL</item>
         <item name="arabic">ar_AR</item>

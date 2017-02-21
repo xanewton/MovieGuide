@@ -75,8 +75,18 @@
     <string name="reviews">отзывы</string>
     <string name="episodes">эпизоды</string>
     <string name="seasons">сезона</string>
-    <string name="details_episodes">%d эпизода</string>
-    <string name="details_seasons">%d сезона</string>
+    <plurals name="details_episodes">
+        <item quantity="one">%d эпизод</item>
+        <item quantity="few">%d эпизодов</item>
+        <item quantity="many">%d эпизоды</item>
+        <item quantity="other">%d эпизода</item>
+    </plurals>
+    <plurals name="details_seasons">
+        <item quantity="one">%d сезон</item>
+        <item quantity="few">%d сезонов</item>
+        <item quantity="many">%d сезонов</item>
+        <item quantity="other">%d сезона</item>
+    </plurals>
 
     <!-- Discover strings -->
     <string name="discover_type">тип</string>

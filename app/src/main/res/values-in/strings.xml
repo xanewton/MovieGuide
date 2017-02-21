@@ -76,8 +76,12 @@
     <string name="reviews">Ulasan</string>
     <string name="episodes">episode</string>
     <string name="seasons">musim</string>
-    <string name="details_episodes">%d episode</string>
-    <string name="details_seasons">%d musim</string>
+    <plurals name="details_episodes">
+        <item quantity="other">%d episode</item>
+    </plurals>
+    <plurals name="details_seasons">
+        <item quantity="other">%d musim</item>
+    </plurals>
 
     <!-- Discover strings -->
     <string name="discover_type">Mengetik</string>

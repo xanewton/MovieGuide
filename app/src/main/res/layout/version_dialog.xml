@@ -40,7 +40,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:layout_toRightOf="@id/logo"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="RtlHardcoded">
 
         <TextView
             android:layout_width="wrap_content"
@@ -94,6 +95,7 @@
         android:layout_below="@id/copyright"
         android:layout_toEndOf="@id/tmdb_logo"
         android:layout_toRightOf="@id/tmdb_logo"
+        android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         android:ellipsize="end"
         android:textColor="@color/colorGray"

@@ -493,12 +493,16 @@ public class TVShowActivity extends AppCompatActivity
         }
 
         if (container.getNumEpisodes() != 0) {
-            textNumEpisodes.setText(getString(R.string.details_episodes, container.getNumEpisodes()));
+            textNumEpisodes.setText(
+                    getResources().getQuantityString(R.plurals.details_episodes,
+                            container.getNumEpisodes(), container.getNumEpisodes()));
         } else {
             textNumEpisodes.setVisibility(View.GONE);
         }
         if (container.getNumSeasons() != 0) {
-            textNumSeasons.setText(getString(R.string.details_seasons, container.getNumSeasons()));
+            textNumSeasons.setText(
+                    getResources().getQuantityString(R.plurals.details_seasons,
+                            container.getNumSeasons(), container.getNumSeasons()));
         } else {
             textNumSeasons.setVisibility(View.GONE);
         }

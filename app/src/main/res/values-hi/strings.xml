@@ -76,8 +76,14 @@
     <string name="reviews">समीक्षा</string>
     <string name="episodes">कड़ियां</string>
     <string name="seasons">सत्रों</string>
-    <string name="details_episodes">%d कड़ियां</string>
-    <string name="details_seasons">%d सत्रों</string>
+    <plurals name="details_episodes">
+        <item quantity="one">%d कड़ियां</item>
+        <item quantity="other">%d कड़ियां</item>
+    </plurals>
+    <plurals name="details_seasons">
+        <item quantity="one">%d सत्रों</item>
+        <item quantity="other">%d सत्रों</item>
+    </plurals>
 
     <!-- Discover strings -->
     <string name="discover_type">प्रकार</string>
