@@ -341,7 +341,7 @@ public class MovieActivity extends AppCompatActivity
             populateDetails(detailsData = data.getDetailsData());
             populateTrailerList(trailerData = data.getTrailersData());
             populateCastList(castData = data.getCastData());
-            populateReviewList(reviewData = data.getReviewsData(), isReviewShown);
+            populateReviewList(reviewData = data.getReviewsData());
         }
     }
 
@@ -652,9 +652,8 @@ public class MovieActivity extends AppCompatActivity
     /**
      * Populates the list of reviews in screen.
      * @param data list of review data
-     * @param showReview boolean
      */
-    private void populateReviewList(final List<ReviewData> data, boolean showReview) {
+    private void populateReviewList(final List<ReviewData> data) {
         if (data == null || data.isEmpty()) {
             reviewList.setVisibility(View.GONE);
         }
@@ -700,8 +699,8 @@ public class MovieActivity extends AppCompatActivity
                     TextView contentStart = (TextView) v.findViewById(R.id.review_content_start);
                     TextView contentEnd = (TextView) v.findViewById(R.id.review_content_end);
                     if (LOG) {
-                        Log.v(TAG, "reviewContentstart ON" + contentStart.getText());
-                        Log.v(TAG, "reviewContentEnd ON" + contentEnd.getText());
+                        Log.v(TAG, "review Content start ON " + contentStart.getText());
+                        Log.v(TAG, "review Content End ON " + contentEnd.getText());
                     }
                     if (!isReviewShown) {
                         contentEnd.setVisibility(View.VISIBLE);
@@ -912,7 +911,7 @@ public class MovieActivity extends AppCompatActivity
                         Log.e(TAG, "", e);
                     }
                 }
-                populateReviewList(reviewData, isReviewShown);
+                populateReviewList(reviewData);
             }
         }
 

@@ -30,7 +30,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingLeft="@dimen/movie_details_review_author_paddingLeft"
+        android:paddingStart="@dimen/movie_details_review_author_paddingLeft"
+        android:paddingEnd="@dimen/movie_details_review_author_paddingLeft"
         android:paddingTop="@dimen/movie_details_review_author_paddingTop" />
 
     <TextView
@@ -39,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingLeft="@dimen/movie_details_review_content_paddingLeft"
+        android:paddingStart="@dimen/movie_details_review_content_paddingLeft"
+        android:paddingEnd="@dimen/movie_details_review_content_paddingLeft"
         android:paddingTop="@dimen/movie_details_review_content_paddingTop" />
 
     <TextView
@@ -48,6 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:paddingLeft="@dimen/movie_details_review_content_paddingLeft"
+        android:paddingStart="@dimen/movie_details_review_content_paddingLeft"
+        android:paddingEnd="@dimen/movie_details_review_content_paddingLeft"
         android:paddingTop="@dimen/movie_details_review_content_paddingTop" />
 </LinearLayout>

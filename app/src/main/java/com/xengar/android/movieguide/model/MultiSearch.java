@@ -196,8 +196,8 @@ public class MultiSearch extends BaseResults {
         }
 
         /**
-         * Returns the background poster
-         * @return
+         * Returns the background poster.
+         * @return First known for string
          */
         public String getFirstKnownFor() {
             String backgroundPath = null;

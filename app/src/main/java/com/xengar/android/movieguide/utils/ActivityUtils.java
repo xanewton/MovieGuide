@@ -483,10 +483,10 @@ public class ActivityUtils {
     /**
      * Logs a Firebase Analytics view item event.
      * https://firebase.google.com/docs/reference/android/com/google/firebase/analytics/FirebaseAnalytics.Event#VIEW_ITEM
-     * @param analytics
-     * @param id
-     * @param name
-     * @param category
+     * @param analytics FirebaseAnalytics
+     * @param id id
+     * @param name name
+     * @param category category
      */
     public static void firebaseAnalyticsLogEventViewItem(final FirebaseAnalytics analytics,
                                                          final String id, final String name,

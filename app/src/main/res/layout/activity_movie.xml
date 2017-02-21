@@ -110,7 +110,8 @@
                 android:fontFamily="Roboto"
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/movie_details_title_min_height"
-                android:paddingLeft="@dimen/movie_details_title_padding_left"
+                android:paddingStart="@dimen/movie_details_title_padding_left"
+                android:paddingEnd="@dimen/movie_details_title_padding_left"
                 android:text="@string/movie_title"
                 android:textSize="@dimen/movie_details_title_text_size"
                 android:textStyle="normal" />
