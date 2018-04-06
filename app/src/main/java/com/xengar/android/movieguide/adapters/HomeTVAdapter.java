@@ -51,7 +51,6 @@ public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> 
     private final List<TV> mTVs;
     private SharedPreferences mPrefs;
     private InterstitialAd mInterstitialAd;
-    private TVHolder mHolder;
     private Context mContext;
 
     public HomeTVAdapter(List<TV> tvs, final Context context) {
@@ -70,7 +69,6 @@ public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> 
             public void onAdClosed() {
                 // Load the next interstitial.
                 mInterstitialAd.loadAd(new AdRequest.Builder().build());
-                mHolder.showDetails();
             }
 
         });
@@ -88,7 +86,6 @@ public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> 
     public void onBindViewHolder(TVHolder holder, int position) {
         TV tv = mTVs.get(position);
         holder.bindTv(tv);
-        mHolder = holder;
     }
 
     @Override
@@ -130,6 +127,7 @@ public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> 
         // Handles the item click.
         @Override
         public void onClick(View view) {
+            showDetails();
 
             int gridCounter = mPrefs.getInt("gridCounter", 0);
             if (gridCounter % 2 == 0) {
@@ -137,9 +135,7 @@ public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> 
                     mInterstitialAd.show();
                 }
             }
-            else {
-                showDetails();
-            }
+
             SharedPreferences.Editor editor = mPrefs.edit();
             gridCounter++;
             editor.putInt("gridCounter", gridCounter);

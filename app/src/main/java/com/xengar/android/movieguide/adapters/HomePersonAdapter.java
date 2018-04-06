@@ -50,7 +50,6 @@ public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.Pe
     private final List<PersonPopular> people;
     private SharedPreferences mPrefs;
     private InterstitialAd mInterstitialAd;
-    private PersonHolder mHolder;
     private Context mContext;
 
     public HomePersonAdapter(List<PersonPopular> people, final Context context) {
@@ -69,7 +68,6 @@ public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.Pe
             public void onAdClosed() {
                 // Load the next interstitial.
                 mInterstitialAd.loadAd(new AdRequest.Builder().build());
-                mHolder.showDetails();
             }
 
         });
@@ -86,7 +84,6 @@ public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.Pe
     public void onBindViewHolder(PersonHolder holder, int position) {
         PersonPopular person = people.get(position);
         holder.bindMovie(person);
-        mHolder = holder;
     }
 
     @Override
@@ -130,15 +127,15 @@ public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.Pe
         // Handles the item click.
         @Override
         public void onClick(View view) {
+            showDetails();
+
             int gridCounter = mPrefs.getInt("gridCounter", 0);
             if (gridCounter % 2 == 0) {
                 if (mInterstitialAd.isLoaded()) {
                     mInterstitialAd.show();
                 }
             }
-            else {
-                showDetails();
-            }
+
             SharedPreferences.Editor editor = mPrefs.edit();
             gridCounter++;
             editor.putInt("gridCounter", gridCounter);

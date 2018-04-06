@@ -49,7 +49,6 @@ public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.Movi
     private final List<Movie> mMovies;
     private SharedPreferences mPrefs;
     private InterstitialAd mInterstitialAd;
-    private MovieHolder mHolder;
     private Context mContext;
 
     public HomeMovieAdapter(List<Movie> movies, final Context context) {
@@ -68,7 +67,6 @@ public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.Movi
             public void onAdClosed() {
                 // Load the next interstitial.
                 mInterstitialAd.loadAd(new AdRequest.Builder().build());
-                mHolder.showDetails();
             }
 
         });
@@ -85,7 +83,6 @@ public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.Movi
     public void onBindViewHolder(MovieHolder holder, int position) {
         Movie movie = mMovies.get(position);
         holder.bindMovie(movie);
-        mHolder = holder;
     }
 
     @Override
@@ -130,14 +127,16 @@ public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.Movi
         @Override
         public void onClick(View view) {
 
+            showDetails();
+
             int gridCounter = mPrefs.getInt("gridCounter", 0);
             if (gridCounter % 2 == 0) {
+                Log.d("count", "counter");
                 if (mInterstitialAd.isLoaded()) {
                     mInterstitialAd.show();
                 }
-            } else {
-                showDetails();
             }
+
             SharedPreferences.Editor editor = mPrefs.edit();
             gridCounter++;
             editor.putInt("gridCounter", gridCounter);

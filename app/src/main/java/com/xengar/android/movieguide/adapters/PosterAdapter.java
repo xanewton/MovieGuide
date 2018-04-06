@@ -24,6 +24,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.data.ImageItem;
@@ -38,11 +41,6 @@ import static com.xengar.android.movieguide.utils.Constants.MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * PosterAdapter
@@ -55,7 +53,6 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
     private final String type;
     private SharedPreferences mPrefs;
     private InterstitialAd mInterstitialAd;
-    private ViewHolder mViewHolder;
 
     public PosterAdapter(final Context context, String type) {
         this.type = type;
@@ -73,9 +70,7 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
             public void onAdClosed() {
                 // Load the next interstitial.
                 mInterstitialAd.loadAd(new AdRequest.Builder().build());
-                mViewHolder.showDetails();
             }
-
         });
     }
 
@@ -96,7 +91,6 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
                 .error(R.drawable.disk_reel)
                 .resize(342, 513)
                 .into(viewHolder.imageView);
-        mViewHolder = viewHolder;
     }
 
     @Override
@@ -138,15 +132,17 @@ public class PosterAdapter extends RecyclerView.Adapter<PosterAdapter.ViewHolder
 
         @Override
         public void onClick(View view) {
+
+            showDetails();
+
             int gridCounter = mPrefs.getInt("gridCounter", 0);
             if (gridCounter % 2 == 0) {
                 if (mInterstitialAd.isLoaded()) {
                     mInterstitialAd.show();
                 }
+
             }
-            else {
-                showDetails();
-            }
+
             SharedPreferences.Editor editor = mPrefs.edit();
             gridCounter++;
             editor.putInt("gridCounter", gridCounter);
