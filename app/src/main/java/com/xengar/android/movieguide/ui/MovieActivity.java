@@ -19,6 +19,7 @@ package com.xengar.android.movieguide.ui;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -236,8 +237,10 @@ public class MovieActivity extends AppCompatActivity
         fabPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mInterstitialAd.isLoaded())
-                    mInterstitialAd.show();
+//                if(mInterstitialAd.isLoaded())
+//                    mInterstitialAd.show();
+                Intent intent = new Intent(getApplicationContext(), YoutubeActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -286,6 +289,7 @@ public class MovieActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * Defines if add or remove from Favorites should be initially visible for this movieId.

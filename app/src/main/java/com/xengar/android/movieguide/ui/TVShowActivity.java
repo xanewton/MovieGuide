@@ -235,7 +235,7 @@ public class TVShowActivity extends AppCompatActivity
                 new android.os.Handler().postDelayed(
                         new Runnable() {
                             public void run() {
-                                ActivityUtils.showRatingDialog(mContext);
+                                ActivityUtils.showRatingDialog(getApplicationContext());
                             }
                         }, 5000);
                 }
