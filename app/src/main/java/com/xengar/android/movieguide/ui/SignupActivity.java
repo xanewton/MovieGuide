@@ -22,7 +22,6 @@ public class SignupActivity extends AppCompatActivity {
     EditText emailText;
     EditText nameText;
     EditText passwordText;
-    EditText reEnterPasswordText;
     Button signupButton;
     TextView loginLink;
 
@@ -34,7 +33,6 @@ public class SignupActivity extends AppCompatActivity {
         emailText = (EditText) findViewById((R.id.input_email));
         nameText = (EditText) findViewById(R.id.input_name);
         passwordText = (EditText) findViewById(R.id.input_password);
-        reEnterPasswordText = (EditText) findViewById(R.id.input_reEnterPassword);
         signupButton = (Button) findViewById(R.id.btn_signup);
         loginLink = (TextView) findViewById(R.id.link_login);
 
@@ -90,7 +88,6 @@ public class SignupActivity extends AppCompatActivity {
         String email = emailText.getText().toString();
         String name = nameText.getText().toString();
         String password = passwordText.getText().toString();
-        String reEnterPassword = reEnterPasswordText.getText().toString();
 
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -110,7 +107,6 @@ public class SignupActivity extends AppCompatActivity {
         String name = nameText.getText().toString();
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
-        String reEnterPassword = reEnterPasswordText.getText().toString();
 
         if (name.isEmpty()) {
             nameText.setError(getString(R.string.validate_name));
@@ -131,13 +127,6 @@ public class SignupActivity extends AppCompatActivity {
             valid = false;
         } else {
             passwordText.setError(null);
-        }
-
-        if (reEnterPassword.isEmpty() || !(reEnterPassword.equals(password))) {
-            reEnterPasswordText.setError(getString(R.string.validate_password));
-            valid = false;
-        } else {
-            reEnterPasswordText.setError(null);
         }
 
         return valid;

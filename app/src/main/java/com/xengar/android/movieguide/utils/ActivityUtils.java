@@ -41,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.codemybrainsout.ratingdialog.RatingDialog;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -497,4 +498,30 @@ public class ActivityUtils {
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, category);
         analytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle);
     }
+
+    public static void showRatingDialog(final Context context) {
+
+        final RatingDialog ratingDialog = new RatingDialog.Builder(context)
+                .session(1)
+                .threshold(1)
+                .ratingBarColor(R.color.colorRed)
+                .playstoreUrl("")
+                .onThresholdCleared(new RatingDialog.Builder.RatingThresholdClearedListener() {
+                    @Override
+                    public void onThresholdCleared(RatingDialog ratingDialog, float rating, boolean thresholdCleared) {
+                        //do something
+                        if(rating >= 4) {
+                            SharedPreferences prefs = context.getSharedPreferences(SHARED_PREF_NAME, 0);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putBoolean("showRate", false);
+                            editor.commit();
+                        }
+                        ratingDialog.dismiss();
+                    }
+                })
+                .build();
+
+        ratingDialog.show();
+    }
+
 }

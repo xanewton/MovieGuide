@@ -365,13 +365,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/appbar"
+        android:layout_margin="@dimen/fab_margin"
         app:layout_anchorGravity="bottom|right|end">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginRight="8dp"
             android:clickable="true"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
@@ -380,7 +381,6 @@
             android:id="@+id/fab_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
             android:layout_toRightOf="@id/fab_play"
             android:clickable="true"
             android:visibility="invisible"
@@ -392,7 +392,6 @@
             android:id="@+id/fab_minus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
             android:layout_toRightOf="@id/fab_play"
             android:clickable="true"
             android:visibility="invisible"

@@ -168,7 +168,9 @@ public class MainActivity extends AppCompatActivity
             peopleFragment = new PeopleFragment();
             showPage(page);
             assignCheckedItem(page);
-            showRatingDialog();
+
+            if (mPrefs.getBoolean("showRate", true))
+                ActivityUtils.showRatingDialog(this);
         } else {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivityForResult(intent, 0);
@@ -465,24 +467,6 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.commit();
                 break;
         }
-    }
-
-    private void showRatingDialog() {
-
-        final RatingDialog ratingDialog = new RatingDialog.Builder(this)
-                .session(3)
-                .threshold(3)
-                .ratingBarColor(R.color.colorRed)
-                .playstoreUrl("")
-                .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
-                    @Override
-                    public void onFormSubmitted(String feedback) {
-                        Log.i(TAG, "Feedback:" + feedback);
-                    }
-                })
-                .build();
-
-        ratingDialog.show();
     }
 
     /**
