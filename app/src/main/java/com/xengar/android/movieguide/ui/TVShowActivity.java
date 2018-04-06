@@ -39,6 +39,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
@@ -144,9 +147,10 @@ public class TVShowActivity extends AppCompatActivity
     private GridView gridview; // Cast list
     private final boolean[] gridViewResized = {false}; // boolean for resize gridview hack
 
-    private FloatingActionButton fabAdd, fabDel;
+    private FloatingActionButton fabAdd, fabDel, fabPlay;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+    private InterstitialAd mInterstitialAd;
 
 
     @Override
@@ -185,6 +189,7 @@ public class TVShowActivity extends AppCompatActivity
         textNumSeasons = (TextView) findViewById(R.id.num_seasons);
         gridview = (GridView) findViewById(R.id.cast_data);
         trailerList = (LinearLayout) findViewById(R.id.tvshow_trailers);
+        fabPlay = (FloatingActionButton) findViewById(R.id.fab_play);
 
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
         getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
@@ -206,6 +211,15 @@ public class TVShowActivity extends AppCompatActivity
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         ActivityUtils.firebaseAnalyticsLogEventSelectContent(
                 mFirebaseAnalytics, PAGE_TV_SHOW_DETAILS, PAGE_TV_SHOW_DETAILS, TYPE_PAGE);
+
+        setupInterstitialAd();
+        fabPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mInterstitialAd.isLoaded())
+                    mInterstitialAd.show();
+            }
+        });
     }
 
     @Override
@@ -236,6 +250,19 @@ public class TVShowActivity extends AppCompatActivity
         }
     }
 
+    private void setupInterstitialAd() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
+        });
+    }
     /**
      * Defines if add or remove from Favorites should be initially visible for this movieId.
      */

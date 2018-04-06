@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2017 Angel Garcia
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +14,7 @@
      limitations under the License.
  -->
 
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -27,33 +25,33 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/movie_details_background_poster_min_height"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorAccent"
+            app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:expandedTitleMarginEnd="64dp">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/background_poster"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/movie_details_background_poster_min_height"
-                android:gravity="center_horizontal"
                 android:fitsSystemWindows="true"
+                android:gravity="center_horizontal"
                 app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
@@ -67,7 +65,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/rating"
@@ -88,15 +86,15 @@
                     android:id="@+id/text_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="5dp"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:gravity="center_vertical" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="15dp"
                     android:layout_marginLeft="15dp"
+                    android:layout_marginStart="15dp"
                     android:gravity="center_vertical"
                     android:text="@string/raiting" />
 
@@ -110,8 +108,8 @@
                 android:fontFamily="Roboto"
                 android:gravity="center_vertical"
                 android:minHeight="@dimen/movie_details_title_min_height"
-                android:paddingStart="@dimen/movie_details_title_padding_left"
                 android:paddingEnd="@dimen/movie_details_title_padding_left"
+                android:paddingStart="@dimen/movie_details_title_padding_left"
                 android:text="@string/movie_title"
                 android:textSize="@dimen/movie_details_title_text_size"
                 android:textStyle="normal" />
@@ -142,14 +140,14 @@
                             android:id="@+id/movie_poster"
                             android:layout_width="@dimen/movie_details_image_layout_width"
                             android:layout_height="@dimen/movie_details_image_layout_height"
-                            app:srcCompat="@drawable/disk_reel"
-                            android:layout_marginBottom="1dp" />
+                            android:layout_marginBottom="1dp"
+                            app:srcCompat="@drawable/disk_reel" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginStart="10dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -173,63 +171,69 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/movie_duration"
                                     style="@style/DetailViewTextSmall"
                                     android:layout_width="0dp"
-                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:gravity="start"
                                     android:text="@string/movie_duration" />
+
                                 <TextView
                                     android:id="@+id/text_language"
                                     style="@style/DetailViewTextSmall"
                                     android:layout_width="0dp"
-                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:gravity="start" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/movie_date"
                                     style="@style/DetailViewTextSmall"
                                     android:layout_width="0dp"
-                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:gravity="start" />
 
                                 <TextView
                                     android:id="@+id/status"
                                     style="@style/DetailViewTextSmall"
                                     android:layout_width="0dp"
-                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:gravity="start"
                                     android:text="@string/status"
                                     android:visibility="gone" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/budget"
                                     style="@style/DetailViewTextSmall"
                                     android:layout_width="0dp"
-                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:gravity="start"
-                                    android:text="@string/budget"/>
+                                    android:text="@string/budget" />
 
                                 <TextView
                                     android:id="@+id/revenue"
                                     style="@style/DetailViewTextSmall"
                                     android:layout_width="0dp"
-                                    android:layout_weight="1"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:gravity="start"
                                     android:text="@string/revenue" />
                             </LinearLayout>
@@ -239,29 +243,29 @@
                                 style="@style/DetailViewTextSmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
+                                android:autoLink="web"
                                 android:gravity="center_vertical"
                                 android:text="@string/homepage"
-                                android:autoLink="web"
-                                android:textColorLink="@color/colorLink"/>
+                                android:textColorLink="@color/colorLink" />
 
                             <TextView
                                 android:id="@+id/prod_companies"
                                 style="@style/DetailViewTextSmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:gravity="center_vertical"
                                 android:layout_marginTop="5dp"
+                                android:gravity="center_vertical"
                                 android:text="@string/production_companies" />
 
                             <TextView
                                 android:id="@+id/tagline"
                                 style="@style/DetailViewTextSmallGray"
-                                android:textStyle="italic"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_marginTop="5dp"
                                 android:gravity="center_vertical"
-                                android:text="@string/production_companies" />
+                                android:text="@string/production_companies"
+                                android:textStyle="italic" />
 
                             <TextView
                                 android:id="@+id/imdb_id"
@@ -315,7 +319,7 @@
                         android:id="@+id/movie_trailers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"/>
+                        android:orientation="vertical" />
 
                 </LinearLayout>
 
@@ -393,28 +397,43 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add"
-        app:fabSize="mini"
-        android:layout_height="wrap_content"
+    <RelativeLayout
         android:layout_width="wrap_content"
-        app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right|end"
-        app:srcCompat="@drawable/fab_plus"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        android:visibility="invisible" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_minus"
-        app:fabSize="mini"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
         app:layout_anchor="@id/appbar"
-        app:layout_anchorGravity="bottom|right|end"
-        app:srcCompat="@drawable/fab_minus"
-        android:layout_margin="@dimen/fab_margin"
-        android:clickable="true"
-        android:visibility="invisible" />
+        app:layout_anchorGravity="bottom|right|end">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:clickable="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:clickable="true"
+            android:visibility="invisible"
+            android:layout_toRightOf="@id/fab_play"
+            app:fabSize="mini"
+            app:layout_anchorGravity="bottom|right|end"
+            app:srcCompat="@drawable/fab_plus" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_minus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:clickable="true"
+            android:visibility="invisible"
+            app:fabSize="mini"
+            android:layout_toRightOf="@id/fab_play"
+            app:layout_anchorGravity="bottom|right|end"
+            app:srcCompat="@drawable/fab_minus" />
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
