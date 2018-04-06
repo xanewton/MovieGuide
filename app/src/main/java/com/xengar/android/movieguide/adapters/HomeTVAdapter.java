@@ -16,9 +16,11 @@
 package com.xengar.android.movieguide.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +34,14 @@ import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.List;
 
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * HomeTVAdapter
@@ -41,10 +49,33 @@ import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> {
 
     private final List<TV> mTVs;
+    private SharedPreferences mPrefs;
+    private InterstitialAd mInterstitialAd;
+    private TVHolder mHolder;
+    private Context mContext;
 
-    public HomeTVAdapter(List<TV> tvs) {
+    public HomeTVAdapter(List<TV> tvs, final Context context) {
         mTVs = tvs;
+        mPrefs = context.getSharedPreferences(SHARED_PREF_NAME, 0);
+        mContext = context;
+        setupInterstitialAd();
     }
+
+    private void setupInterstitialAd() {
+        mInterstitialAd = new InterstitialAd(mContext);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                mHolder.showDetails();
+            }
+
+        });
+    }
+
 
     @Override
     public TVHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -57,6 +88,7 @@ public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> 
     public void onBindViewHolder(TVHolder holder, int position) {
         TV tv = mTVs.get(position);
         holder.bindTv(tv);
+        mHolder = holder;
     }
 
     @Override
@@ -98,6 +130,26 @@ public class HomeTVAdapter extends RecyclerView.Adapter<HomeTVAdapter.TVHolder> 
         // Handles the item click.
         @Override
         public void onClick(View view) {
+
+            int gridCounter = mPrefs.getInt("gridCounter", 0);
+            if (gridCounter % 2 == 0) {
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+            }
+            else {
+                showDetails();
+            }
+            SharedPreferences.Editor editor = mPrefs.edit();
+            gridCounter++;
+            editor.putInt("gridCounter", gridCounter);
+            editor.commit();
+
+        }
+
+        public void showDetails(){
+
+            Log.d("he", "onClick: tv clicked");
             int position = getAdapterPosition(); // gets item position
             // Check if an item was deleted, but the user clicked it before the UI removed it
             if (position != RecyclerView.NO_POSITION) {

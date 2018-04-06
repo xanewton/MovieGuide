@@ -16,6 +16,7 @@
 package com.xengar.android.movieguide.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
@@ -32,8 +33,14 @@ import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.List;
 
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 /**
  * HomePersonAdapter
@@ -41,9 +48,31 @@ import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.PersonHolder> {
 
     private final List<PersonPopular> people;
+    private SharedPreferences mPrefs;
+    private InterstitialAd mInterstitialAd;
+    private PersonHolder mHolder;
+    private Context mContext;
 
-    public HomePersonAdapter(List<PersonPopular> people) {
+    public HomePersonAdapter(List<PersonPopular> people, final Context context) {
         this.people = people;
+        mPrefs = context.getSharedPreferences(SHARED_PREF_NAME, 0);
+        mContext = context;
+        setupInterstitialAd();
+    }
+
+    private void setupInterstitialAd() {
+        mInterstitialAd = new InterstitialAd(mContext);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                mHolder.showDetails();
+            }
+
+        });
     }
 
     @Override
@@ -57,6 +86,7 @@ public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.Pe
     public void onBindViewHolder(PersonHolder holder, int position) {
         PersonPopular person = people.get(position);
         holder.bindMovie(person);
+        mHolder = holder;
     }
 
     @Override
@@ -100,6 +130,22 @@ public class HomePersonAdapter extends RecyclerView.Adapter<HomePersonAdapter.Pe
         // Handles the item click.
         @Override
         public void onClick(View view) {
+            int gridCounter = mPrefs.getInt("gridCounter", 0);
+            if (gridCounter % 2 == 0) {
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+            }
+            else {
+                showDetails();
+            }
+            SharedPreferences.Editor editor = mPrefs.edit();
+            gridCounter++;
+            editor.putInt("gridCounter", gridCounter);
+            editor.commit();
+        }
+
+        private void showDetails(){
             int position = getAdapterPosition(); // gets item position
             // Check if an item was deleted, but the user clicked it before the UI removed it
             if (position != RecyclerView.NO_POSITION) {
