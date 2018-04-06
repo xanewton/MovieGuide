@@ -34,11 +34,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Advanceable;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codemybrainsout.ratingdialog.RatingDialog;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -68,7 +68,6 @@ import static com.xengar.android.movieguide.utils.Constants.PAGE_HOME;
 import static com.xengar.android.movieguide.utils.Constants.PAGE_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.PAGE_PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.PAGE_TV_SHOWS;
-import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.Constants.PEOPLE;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.POPULAR_TV_SHOWS;
@@ -76,6 +75,7 @@ import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_MOVIES;
 import static com.xengar.android.movieguide.utils.Constants.TOP_RATED_TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.Constants.UPCOMING_MOVIES;
 
 /**
@@ -106,10 +106,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         mPrefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-        String userEmail = mPrefs.getString("Email",null);
+        String userEmail = mPrefs.getString("Email", null);
         setupInterstitialAd();
 
-        if(userEmail != null) {
+        if (userEmail != null) {
 
             setContentView(R.layout.activity_main);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
                 public void onDrawerOpened(View drawerView) {
                     super.onDrawerOpened(drawerView);
@@ -168,8 +168,8 @@ public class MainActivity extends AppCompatActivity
             peopleFragment = new PeopleFragment();
             showPage(page);
             assignCheckedItem(page);
-        }
-        else {
+            showRatingDialog();
+        } else {
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivityForResult(intent, 0);
         }
@@ -189,11 +189,11 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void assignCheckedItem(String page){
+    public void assignCheckedItem(String page) {
         // set selected
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        switch (page){
+        switch (page) {
             case HOME:
                 navigationView.setCheckedItem(R.id.nav_home);
                 break;
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        switch(id) {
+        switch (id) {
             case R.id.nav_home:
                 showPage(HOME);
                 break;
@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Send feedback email.
      */
-    private void sendFeedback(){
+    private void sendFeedback() {
         Intent sendMessage = new Intent(Intent.ACTION_SEND);
         sendMessage.setType("message/rfc822");
         sendMessage.putExtra(Intent.EXTRA_EMAIL, new String[]{
@@ -316,7 +316,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void switchPagerAdapter(String page){
+    public void switchPagerAdapter(String page) {
         if (!mSectionsPagerAdapter.getType().equals(page)) {
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), page);
             mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity
      * @param page name of page
      */
     public void showPage(String page) {
-        switch (page){
+        switch (page) {
             case HOME:
                 showTabs(false);
                 getSupportActionBar().setTitle(R.string.menu_option_home);
@@ -414,8 +414,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void showTabs(boolean show){
-        if (show){
+    private void showTabs(boolean show) {
+        if (show) {
             fragmentLayout.setVisibility(View.GONE);
             tabLayout.setVisibility(View.VISIBLE);
             mViewPager.setVisibility(View.VISIBLE);
@@ -428,6 +428,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Launches the selected fragment.
+     *
      * @param category The type of search
      */
     private void launchFragment(String category) {
@@ -466,8 +467,23 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void showRatingDialog() {
 
+        final RatingDialog ratingDialog = new RatingDialog.Builder(this)
+                .session(3)
+                .threshold(3)
+                .ratingBarColor(R.color.colorRed)
+                .playstoreUrl("")
+                .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
+                    @Override
+                    public void onFormSubmitted(String feedback) {
+                        Log.i(TAG, "Feedback:" + feedback);
+                    }
+                })
+                .build();
 
+        ratingDialog.show();
+    }
 
     /**
      * A {@link FragmentStatePagerAdapter} that returns a fragment corresponding to
@@ -481,26 +497,27 @@ public class MainActivity extends AppCompatActivity
                 = {POPULAR_TV_SHOWS, TOP_RATED_TV_SHOWS, ON_THE_AIR_TV_SHOWS};
 
         private final String TITLE_CATEGORY_MOVIES[]
-                = { getString(R.string.title_top_rated), getString(R.string.title_upcomming),
-                    getString(R.string.title_now_playing), getString(R.string.title_popular)};
+                = {getString(R.string.title_top_rated), getString(R.string.title_upcomming),
+                getString(R.string.title_now_playing), getString(R.string.title_popular)};
         private final String TITLE_CATEGORY_TV_SHOWS[]
-                = { getString(R.string.title_popular), getString(R.string.title_top_rated),
-                    getString(R.string.title_on_the_air)};
+                = {getString(R.string.title_popular), getString(R.string.title_top_rated),
+                getString(R.string.title_on_the_air)};
 
         private final ArrayList<UniversalFragment> fragments;
+        private final String type;
         private String tabs[] = null;
         private String titleTabs[] = null;
-        private final String type;
 
         /**
          * Constructor.
-         * @param fm FragmentManager
+         *
+         * @param fm   FragmentManager
          * @param type type of item
          */
         public SectionsPagerAdapter(FragmentManager fm, String type) {
             super(fm);
             this.type = type;
-            switch(type){
+            switch (type) {
                 case MOVIES:
                     tabs = CATEGORY_MOVIES;
                     titleTabs = TITLE_CATEGORY_MOVIES;
@@ -512,12 +529,12 @@ public class MainActivity extends AppCompatActivity
             }
 
             fragments = new ArrayList<>();
-            for (int i = 0; tabs != null && i < tabs.length; i++){
+            for (int i = 0; tabs != null && i < tabs.length; i++) {
                 UniversalFragment fragment = new UniversalFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(ITEM_CATEGORY, tabs[i]);
                 fragment.setArguments(bundle);
-                fragments.add( fragment );
+                fragments.add(fragment);
             }
         }
 
@@ -533,12 +550,12 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public int getCount() {
-            return (tabs != null)? tabs.length : 0;
+            return (tabs != null) ? tabs.length : 0;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return (position < titleTabs.length)? titleTabs[position]: null;
+            return (position < titleTabs.length) ? titleTabs[position] : null;
         }
     }
 
