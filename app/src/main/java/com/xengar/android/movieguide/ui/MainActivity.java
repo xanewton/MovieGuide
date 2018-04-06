@@ -15,6 +15,7 @@
  */
 package com.xengar.android.movieguide.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -35,12 +36,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 import com.xengar.android.movieguide.utils.ActivityUtils;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -97,44 +102,57 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Save name of activity, in case of calling SettingsActivity
-        ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
-                MAIN_ACTIVITY);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
 
         SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-        String page = prefs.getString(ITEM_CATEGORY, MOVIES);
+        String userEmail = prefs.getString("Email",null);
 
-        fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), page);
+        if(userEmail != null) {
+            setContentView(R.layout.activity_main);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+            // Save name of activity, in case of calling SettingsActivity
+            ActivityUtils.saveStringToPreferences(getApplicationContext(), LAST_ACTIVITY,
+                    MAIN_ACTIVITY);
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            View layout = (View) navigationView.getHeaderView(0);
+            TextView user = (TextView) layout.findViewById(R.id.user);
+            user.setText(getString(R.string.welcome) + " " + userEmail);
 
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+            prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+            String page = prefs.getString(ITEM_CATEGORY, MOVIES);
 
-        homeFragment = new HomeFragment();
-        favoritesFragment = new FavoritesFragment();
-        discoverFragment = new DiscoverFragment();
-        discoverResultFragment = new DiscoverResultFragment();
-        peopleFragment = new PeopleFragment();
-        showPage(page);
-        assignCheckedItem(page);
+            fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), page);
+
+            // Set up the ViewPager with the sections adapter.
+            mViewPager = (ViewPager) findViewById(R.id.container);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(mViewPager);
+
+            // Obtain the FirebaseAnalytics instance.
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+            homeFragment = new HomeFragment();
+            favoritesFragment = new FavoritesFragment();
+            discoverFragment = new DiscoverFragment();
+            discoverResultFragment = new DiscoverResultFragment();
+            peopleFragment = new PeopleFragment();
+            showPage(page);
+            assignCheckedItem(page);
+        }
+        else {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivityForResult(intent, 0);
+        }
     }
 
 

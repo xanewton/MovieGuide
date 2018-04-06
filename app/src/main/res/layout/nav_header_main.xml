@@ -15,11 +15,21 @@
      limitations under the License.
  -->
 <LinearLayout
+    android:id="@+id/header_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/movies"
+    android:background="@color/colorBackground"
     android:gravity="bottom"
     android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/user"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textAppearance="@color/colorPrimary"
+        android:textSize="24sp" />
 
 </LinearLayout>

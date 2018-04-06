@@ -361,5 +361,15 @@
     <string name="banner_ad_unit_id_1" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="banner_ad_unit_id_2" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
     <string name="banner_ad_unit_id_3" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="login">Sign In</string>
+    <string name="sign_up">No account yet? Create a new one</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="validate_email">Enter a valid email address</string>
+    <string name="validate_password">Password doesn\'t match requirements</string>
+    <string name="login_fail">Login failed</string>
+    <string name="create_account">Creating Account...</string>
+    <string name="welcome">Welcome</string>
+    <string name="validate_name">Enter valid name</string>
 
 </resources>
