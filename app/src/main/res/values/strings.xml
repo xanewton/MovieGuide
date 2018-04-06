@@ -372,5 +372,6 @@
     <string name="welcome">Welcome</string>
     <string name="validate_name">Enter valid name</string>
     <string name="sigining_in">Signing In</string>
+    <string name="user_name">Username</string>
 
 </resources>

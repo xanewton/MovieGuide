@@ -22,7 +22,7 @@ import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-    EditText emailText;
+    EditText usernameText;
     EditText passwordText;
     Button loginButton;
     private InterstitialAd mInterstitialAd;
@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        emailText = (EditText) findViewById((R.id.input_email));
+        usernameText = (EditText) findViewById((R.id.input_name));
         passwordText = (EditText) findViewById((R.id.input_password));
         loginButton = (Button) findViewById((R.id.btn_login));
         TextView signupLink = (TextView) findViewById((R.id.link_signup));
@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         loginButton.setEnabled(false);
-        String email = emailText.getText().toString();
+        String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
 
         final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
@@ -140,15 +140,15 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        String email = emailText.getText().toString();
+        String username = usernameText.getText().toString();
         String password = passwordText.getText().toString();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError(getString(R.string.validate_email));
+        if (username.isEmpty()) {
+            usernameText.setError(getString(R.string.validate_email));
             valid = false;
         } else {
-            emailText.setError(null);
-            editor.putString("Email", email);
+            usernameText.setError(null);
+            editor.putString("UserName", username);
             editor.commit();
 
         }
@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity {
             valid = false;
         } else {
             passwordText.setError(null);
-            editor.putString("Password", email);
+            editor.putString("Password", password);
             editor.commit();
         }
 

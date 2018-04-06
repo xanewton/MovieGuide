@@ -88,15 +88,13 @@ public class SignupActivity extends AppCompatActivity {
         setResult(RESULT_OK, null);
 
         String email = emailText.getText().toString();
-//        String address = addressText.getText().toString();
         String name = nameText.getText().toString();
-//        String mobile = mobileText.getText().toString();
         String password = passwordText.getText().toString();
         String reEnterPassword = reEnterPasswordText.getText().toString();
 
         SharedPreferences sharedPref = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("Email", email);
+        editor.putString("UserName", name);
         editor.commit();
         finish();
     }
@@ -110,9 +108,7 @@ public class SignupActivity extends AppCompatActivity {
         boolean valid = true;
 
         String name = nameText.getText().toString();
-//        String address = _addressText.getText().toString();
         String email = emailText.getText().toString();
-//        String mobile = _mobileText.getText().toString();
         String password = passwordText.getText().toString();
         String reEnterPassword = reEnterPasswordText.getText().toString();
 
@@ -123,26 +119,12 @@ public class SignupActivity extends AppCompatActivity {
             nameText.setError(null);
         }
 
-//        if (address.isEmpty()) {
-//            _addressText.setError("Enter Valid Address");
-//            valid = false;
-//        } else {
-//            _addressText.setError(null);
-//        }
-
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             emailText.setError(getString(R.string.validate_email));
             valid = false;
         } else {
             emailText.setError(null);
         }
-
-//        if (mobile.isEmpty() || mobile.length()!=10) {
-//            _mobileText.setError("Enter Valid Mobile Number");
-//            valid = false;
-//        } else {
-//            _mobileText.setError(null);
-//        }
 
         if (password.isEmpty()) {
             passwordText.setError(getString(R.string.validate_password));

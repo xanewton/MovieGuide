@@ -106,10 +106,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         mPrefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-        String userEmail = mPrefs.getString("Email", null);
+        String userName = mPrefs.getString("UserName", null);
         setupInterstitialAd();
 
-        if (userEmail != null) {
+        if (userName != null) {
 
             setContentView(R.layout.activity_main);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             View layout = (View) navigationView.getHeaderView(0);
             TextView user = (TextView) layout.findViewById(R.id.user);
-            user.setText(getString(R.string.welcome) + " " + userEmail);
+            user.setText(getString(R.string.welcome) + " " + userName);
 
             mPrefs = getSharedPreferences(SHARED_PREF_NAME, 0);
             String page = mPrefs.getString(ITEM_CATEGORY, MOVIES);
