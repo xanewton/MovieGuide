@@ -15,7 +15,6 @@
  */
 package com.xengar.android.movieguide.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -35,17 +34,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Advanceable;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.sync.OnItemClickListener;
 import com.xengar.android.movieguide.utils.ActivityUtils;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -97,16 +98,19 @@ public class MainActivity extends AppCompatActivity
     private PeopleFragment peopleFragment;
 
     private FirebaseAnalytics mFirebaseAnalytics;
-
+    private InterstitialAd mInterstitialAd;
+    private SharedPreferences mPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-        String userEmail = prefs.getString("Email",null);
+        mPrefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+        String userEmail = mPrefs.getString("Email",null);
+        setupInterstitialAd();
 
         if(userEmail != null) {
+
             setContentView(R.layout.activity_main);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -117,16 +121,26 @@ public class MainActivity extends AppCompatActivity
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+
+                public void onDrawerOpened(View drawerView) {
+                    super.onDrawerOpened(drawerView);
+                    if (mInterstitialAd.isLoaded()) {
+                        mInterstitialAd.show();
+                    }
+                }
+            };
+
             drawer.addDrawerListener(toggle);
             toggle.syncState();
+
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             View layout = (View) navigationView.getHeaderView(0);
             TextView user = (TextView) layout.findViewById(R.id.user);
             user.setText(getString(R.string.welcome) + " " + userEmail);
 
-            prefs = getSharedPreferences(SHARED_PREF_NAME, 0);
-            String page = prefs.getString(ITEM_CATEGORY, MOVIES);
+            mPrefs = getSharedPreferences(SHARED_PREF_NAME, 0);
+            String page = mPrefs.getString(ITEM_CATEGORY, MOVIES);
 
             fragmentLayout = (FrameLayout) findViewById(R.id.fragment_container);
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), page);
@@ -137,6 +151,12 @@ public class MainActivity extends AppCompatActivity
 
             tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
+
+            AdView adView = (AdView) findViewById(R.id.adView);
+            AdView adBanner = (AdView) findViewById(R.id.adBanner);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+            adBanner.loadAd(adRequest);
 
             // Obtain the FirebaseAnalytics instance.
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -155,6 +175,19 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void setupInterstitialAd() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
+        });
+    }
 
     public void assignCheckedItem(String page){
         // set selected
@@ -219,6 +252,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -294,6 +328,7 @@ public class MainActivity extends AppCompatActivity
         if (LOG) {
             Log.v(TAG, "onItemSelectionClick itemId = " + itemId + " itemType = " + itemType);
         }
+
         switch (itemType) {
             case TV_SHOWS:
             case POPULAR_TV_SHOWS:

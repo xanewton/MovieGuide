@@ -1,5 +1,6 @@
 package com.xengar.android.movieguide.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.xengar.android.movieguide.R;
 
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
@@ -18,20 +22,20 @@ import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-
     EditText emailText;
     EditText passwordText;
     Button loginButton;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        emailText = (EditText)findViewById((R.id.input_email));
-        passwordText = (EditText)findViewById((R.id.input_password));
-        loginButton = (Button)findViewById((R.id.btn_login));
-        TextView signupLink = (TextView)findViewById((R.id.link_signup));
+        emailText = (EditText) findViewById((R.id.input_email));
+        passwordText = (EditText) findViewById((R.id.input_password));
+        loginButton = (Button) findViewById((R.id.btn_login));
+        TextView signupLink = (TextView) findViewById((R.id.link_signup));
 
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -41,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-       signupLink.setOnClickListener(new View.OnClickListener() {
+        signupLink.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -49,6 +53,21 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
+        });
+
+        setupInterstitialAd();
+    }
+
+    private void setupInterstitialAd() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                startMainActivity();
+            }
+
         });
     }
 
@@ -58,12 +77,20 @@ public class LoginActivity extends AppCompatActivity {
             onLoginFailed();
             return;
         }
+        loginButton.setEnabled(false);
         String email = emailText.getText().toString();
         String password = passwordText.getText().toString();
+
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(getString(R.string.sigining_in));
+        progressDialog.show();
+
 
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
+                        progressDialog.dismiss();
                         onLoginSuccess();
                     }
                 }, 3000);
@@ -97,11 +124,13 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         loginButton.setEnabled(true);
-        startMainActivity();
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), R.string.login_fail , Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), R.string.login_fail, Toast.LENGTH_LONG).show();
         loginButton.setEnabled(true);
     }
 

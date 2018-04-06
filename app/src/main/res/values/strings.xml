@@ -371,5 +371,6 @@
     <string name="create_account">Creating Account...</string>
     <string name="welcome">Welcome</string>
     <string name="validate_name">Enter valid name</string>
+    <string name="sigining_in">Signing In</string>
 
 </resources>
