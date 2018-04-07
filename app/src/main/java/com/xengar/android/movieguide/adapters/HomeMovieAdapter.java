@@ -16,15 +16,20 @@
 package com.xengar.android.movieguide.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
 import com.xengar.android.movieguide.model.Movie;
@@ -32,6 +37,7 @@ import com.xengar.android.movieguide.utils.ActivityUtils;
 
 import java.util.List;
 
+import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 
@@ -41,9 +47,29 @@ import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.MovieHolder> {
 
     private final List<Movie> mMovies;
+    private SharedPreferences mPrefs;
+    private InterstitialAd mInterstitialAd;
+    private Context mContext;
 
-    public HomeMovieAdapter(List<Movie> movies) {
+    public HomeMovieAdapter(List<Movie> movies, final Context context) {
         mMovies = movies;
+        mPrefs = context.getSharedPreferences(SHARED_PREF_NAME, 0);
+        mContext = context;
+        setupInterstitialAd();
+    }
+
+    private void setupInterstitialAd() {
+        mInterstitialAd = new InterstitialAd(mContext);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            }
+
+        });
     }
 
     @Override
@@ -68,12 +94,12 @@ public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.Movi
     /**
      * MovieHolder
      */
-    public class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private final Context mContext;
-        private Movie mMovie;
         final ImageView moviePoster;
         final TextView movieTitle;
+        private final Context mContext;
+        private Movie mMovie;
 
         public MovieHolder(View itemView) {
             super(itemView);
@@ -100,6 +126,26 @@ public class HomeMovieAdapter extends RecyclerView.Adapter<HomeMovieAdapter.Movi
         // Handles the item click.
         @Override
         public void onClick(View view) {
+
+            showDetails();
+
+            int gridCounter = mPrefs.getInt("gridCounter", 0);
+            if (gridCounter % 2 == 0) {
+                Log.d("count", "counter");
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                }
+            }
+
+            SharedPreferences.Editor editor = mPrefs.edit();
+            gridCounter++;
+            editor.putInt("gridCounter", gridCounter);
+            editor.commit();
+        }
+
+        public void showDetails() {
+
+            Log.d("here", "onClick: movie clicked");
             int position = getAdapterPosition(); // gets item position
             // Check if an item was deleted, but the user clicked it before the UI removed it
             if (position != RecyclerView.NO_POSITION) {

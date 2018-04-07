@@ -69,6 +69,28 @@
         </activity>
 
         <activity
+            android:name=".ui.YoutubeActivity"
+            android:parentActivityName=".ui.MovieActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MovieActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".ui.SignupActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+
+        <activity
             android:name=".ui.PersonActivity"
             android:parentActivityName=".ui.MovieActivity">
             <meta-data

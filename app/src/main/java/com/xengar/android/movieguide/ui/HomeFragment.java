@@ -60,7 +60,7 @@ import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 /**
  * HomeFragment
  */
-public class HomeFragment extends Fragment implements View.OnClickListener{
+public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private static final int MAX_ITEMS = 25;
 
@@ -84,7 +84,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private List<PersonPopular> mPeople;
 
 
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -104,21 +103,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mRecyclerViewMovies = (RecyclerView) view.findViewById(R.id.recycler_view_movies);
         progressBarMovies = (CircularProgressBar) view.findViewById(R.id.progress_bar_movies);
         mMovies = new ArrayList<>();
-        mAdapterMovies = new HomeMovieAdapter(mMovies);
+        mAdapterMovies = new HomeMovieAdapter(mMovies, getContext());
 
         LinearLayout moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
         moreTV.setOnClickListener(this);
         mRecyclerViewTV = (RecyclerView) view.findViewById(R.id.recycler_view_tv);
         progressBarTV = (CircularProgressBar) view.findViewById(R.id.progress_bar_tv);
         mTVList = new ArrayList<>();
-        mAdapterTV = new HomeTVAdapter(mTVList);
+        mAdapterTV = new HomeTVAdapter(mTVList, getContext());
 
         LinearLayout morePeople = (LinearLayout) view.findViewById(R.id.home_people);
         morePeople.setOnClickListener(this);
         mRecyclerViewPeople = (RecyclerView) view.findViewById(R.id.recycler_view_people);
         progressBarPeople = (CircularProgressBar) view.findViewById(R.id.progress_bar_people);
         mPeople = new ArrayList<>();
-        mAdapterPeople = new HomePersonAdapter(mPeople);
+        mAdapterPeople = new HomePersonAdapter(mPeople, getContext());
 
         return view;
     }
@@ -155,7 +154,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     /**
      * Fills the Movies section.
      */
-    private void fillMoviesSection(){
+    private void fillMoviesSection() {
         mRecyclerViewMovies.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewMovies.setAdapter(mAdapterMovies);
@@ -203,7 +202,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     /**
      * Fills the TV section.
      */
-    private void fillTVSection(){
+    private void fillTVSection() {
         mRecyclerViewTV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewTV.setAdapter(mAdapterTV);
 
@@ -219,7 +218,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                     List<TV> tvs = response.body().getTVs();
                     mTVList.clear();
                     if (tvs != null) {
-                        for (int i = 0; i < MAX_ITEMS && i < tvs.size() ; i++) {
+                        for (int i = 0; i < MAX_ITEMS && i < tvs.size(); i++) {
                             TV tv = tvs.get(i);
                             mTVList.add(tv);
                         }
@@ -246,7 +245,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     /**
      * Fills the People section.
      */
-    private void fillPeopleSection(){
+    private void fillPeopleSection() {
         mRecyclerViewPeople.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewPeople.setAdapter(mAdapterPeople);
@@ -292,12 +291,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     /**
      * Changes activity to the correct page.
+     *
      * @param view view
      */
     @Override
     public void onClick(View view) {
         MainActivity activity = (MainActivity) getActivity();
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.home_in_theaters:
                 activity.switchPagerAdapter(MOVIES);
                 activity.showPage(MOVIES);

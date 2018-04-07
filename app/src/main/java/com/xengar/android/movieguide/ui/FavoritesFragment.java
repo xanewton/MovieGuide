@@ -62,7 +62,7 @@ import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 /**
  * FavoritesFragment
  */
-public class FavoritesFragment extends Fragment implements View.OnClickListener{
+public class FavoritesFragment extends Fragment implements View.OnClickListener {
 
     private CustomErrorView mCustomErrorView;
 
@@ -100,7 +100,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         TextView moviesTitle = (TextView) view.findViewById(R.id.movies_title);
         moviesTitle.setText(getText(R.string.menu_option_movies));
         mMovies = new ArrayList<>();
-        mAdapterMovies = new HomeMovieAdapter(mMovies);
+        mAdapterMovies = new HomeMovieAdapter(mMovies, getContext());
 
         LinearLayout moreTV = (LinearLayout) view.findViewById(R.id.home_on_tv);
         moreTV.setOnClickListener(this);
@@ -109,14 +109,14 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         TextView tvTitle = (TextView) view.findViewById(R.id.tv_title);
         tvTitle.setText(getText(R.string.menu_option_tv_shows));
         mTVList = new ArrayList<>();
-        mAdapterTV = new HomeTVAdapter(mTVList);
+        mAdapterTV = new HomeTVAdapter(mTVList, getContext());
 
         LinearLayout morePeople = (LinearLayout) view.findViewById(R.id.home_people);
         morePeople.setOnClickListener(this);
         mRecyclerViewPeople = (RecyclerView) view.findViewById(R.id.recycler_view_people);
         progressBarPeople = (CircularProgressBar) view.findViewById(R.id.progress_bar_people);
         mPeople = new ArrayList<>();
-        mAdapterPeople = new HomePersonAdapter(mPeople);
+        mAdapterPeople = new HomePersonAdapter(mPeople, getContext());
 
         return view;
     }
@@ -152,7 +152,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
     /**
      * Fills the Movies section.
      */
-    private void fillMoviesSection(){
+    private void fillMoviesSection() {
         mRecyclerViewMovies.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewMovies.setAdapter(mAdapterMovies);
@@ -166,7 +166,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
     /**
      * Fills the TV section.
      */
-    private void fillTVSection(){
+    private void fillTVSection() {
         mRecyclerViewTV.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewTV.setAdapter(mAdapterTV);
 
@@ -179,7 +179,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
     /**
      * Fills the People section.
      */
-    private void fillPeopleSection(){
+    private void fillPeopleSection() {
         mRecyclerViewPeople.setLayoutManager(
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         mRecyclerViewPeople.setAdapter(mAdapterPeople);
@@ -193,12 +193,13 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
 
     /**
      * Changes activity to the correct page.
+     *
      * @param view view
      */
     @Override
     public void onClick(View view) {
         MainActivity activity = (MainActivity) getActivity();
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.home_in_theaters:
                 activity.switchPagerAdapter(MOVIES);
                 activity.showPage(MOVIES);
@@ -237,7 +238,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         @Override
         protected ArrayList<Movie> doInBackground(Void... voids) {
             ArrayList<Movie> posters = new ArrayList<>();
-            String[] columns = new String[]{ COLUMN_POSTER_PATH, COLUMN_MOVIE_ID, COLUMN_TITLE};
+            String[] columns = new String[]{COLUMN_POSTER_PATH, COLUMN_MOVIE_ID, COLUMN_TITLE};
 
             final Cursor cursor = contentResolver.query(FavoritesContract.FavoriteColumns.uriMovie,
                     columns, null, null, null);
@@ -290,7 +291,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         @Override
         protected ArrayList<TV> doInBackground(Void... voids) {
             ArrayList<TV> posters = new ArrayList<>();
-            String[] columns = new String[]{ COLUMN_POSTER_PATH, COLUMN_TV_SHOW_ID, COLUMN_NAME};
+            String[] columns = new String[]{COLUMN_POSTER_PATH, COLUMN_TV_SHOW_ID, COLUMN_NAME};
 
             final Cursor cursor = contentResolver.query(FavoritesContract.FavoriteColumns.uriTVShow,
                     columns, null, null, null);
@@ -343,7 +344,7 @@ public class FavoritesFragment extends Fragment implements View.OnClickListener{
         @Override
         protected ArrayList<PersonPopular> doInBackground(Void... voids) {
             ArrayList<PersonPopular> people = new ArrayList<>();
-            String[] columns = new String[]{ COLUMN_PROFILE_PATH, COLUMN_PERSON_ID,
+            String[] columns = new String[]{COLUMN_PROFILE_PATH, COLUMN_PERSON_ID,
                     COLUMN_NAME, COLUMN_KNOWNFOR_POSTER_PATH};
 
             final Cursor cursor = contentResolver.query(FavoritesContract.FavoriteColumns.uriPerson,

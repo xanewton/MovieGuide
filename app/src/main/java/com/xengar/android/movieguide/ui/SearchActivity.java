@@ -36,6 +36,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.squareup.picasso.Picasso;
 import com.xengar.android.movieguide.R;
@@ -74,6 +77,7 @@ public class SearchActivity extends AppCompatActivity {
     private SearchAdapter mAdapter;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+    private InterstitialAd mInterstitialAd;
 
 
     @Override
@@ -97,8 +101,8 @@ public class SearchActivity extends AppCompatActivity {
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         ActivityUtils.firebaseAnalyticsLogEventSelectContent(mFirebaseAnalytics, PAGE_SEARCH, PAGE_SEARCH, TYPE_PAGE);
-    }
 
+    }
     private void setupSearchView() {
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -272,6 +276,21 @@ public class SearchActivity extends AppCompatActivity {
             voteCount = (TextView) itemView.findViewById(R.id.search_vote_count);
             layout = (LinearLayout) itemView.findViewById(R.id.search_root);
             layout.setOnClickListener(this);
+            setupInterstitialAd();
+        }
+
+        private void setupInterstitialAd() {
+            mInterstitialAd = new InterstitialAd(mContext);
+            mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
+            mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdClosed() {
+                    // Load the next interstitial.
+                    mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                }
+
+            });
         }
 
         void bindItem(MultiSearch.MultiSearchItem item) {
@@ -342,6 +361,11 @@ public class SearchActivity extends AppCompatActivity {
                             Integer.parseInt(mItem.getId()), mItem.getFirstKnownFor());
                     break;
             }
+
+            if (mInterstitialAd.isLoaded()) {
+                mInterstitialAd.show();
+            }
+
         }
 
         @Override

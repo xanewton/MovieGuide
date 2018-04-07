@@ -17,6 +17,7 @@ package com.xengar.android.movieguide.ui;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -88,35 +89,37 @@ import static com.xengar.android.movieguide.utils.Constants.KNOWN_FOR_BACKGROUND
 import static com.xengar.android.movieguide.utils.Constants.LAST_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.LOG;
 import static com.xengar.android.movieguide.utils.Constants.PAGE_TV_SHOW_DETAILS;
-import static com.xengar.android.movieguide.utils.Constants.TYPE_ADD_FAV;
-import static com.xengar.android.movieguide.utils.Constants.TYPE_DEL_FAV;
-import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.Constants.SHARED_PREF_NAME;
 import static com.xengar.android.movieguide.utils.Constants.SIZE_W342;
 import static com.xengar.android.movieguide.utils.Constants.TMDB_IMAGE_URL;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOWS;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ACTIVITY;
 import static com.xengar.android.movieguide.utils.Constants.TV_SHOW_ID;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_ADD_FAV;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_DEL_FAV;
+import static com.xengar.android.movieguide.utils.Constants.TYPE_PAGE;
 import static com.xengar.android.movieguide.utils.JSONUtils.getArrayValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getDoubleValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getIntValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getListValue;
 import static com.xengar.android.movieguide.utils.JSONUtils.getStringValue;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 public class TVShowActivity extends AppCompatActivity
         implements YouTubePlayer.OnInitializedListener {
 
     private static final String TAG = TVShowActivity.class.getSimpleName();
     private static final Uri URI = FavoritesContract.FavoriteColumns.uriTVShow;
+    private final String[] tvShowTitle = {" "};
+    private final boolean[] gridViewResized = {false}; // boolean for resize gridview hack
     private int tvShowId;
     private CollapsingToolbarLayout collapsingToolbar;
-    private final String[] tvShowTitle = {" "};
-
     private String mLang;
     private TVShowDetails data = null;
     private TVShowData detailsData;
     private List<TrailerData> trailerData;
-
     // Details components
     private TextView title;
     private LinearLayout rating;
@@ -135,19 +138,16 @@ public class TVShowActivity extends AppCompatActivity
     private TextView textLastAirDate;
     private TextView textNumEpisodes;
     private TextView textNumSeasons;
-
     private YouTubePlayerFragment youTubePlayerFragment;
     private YouTubePlayer youTubePlayer;
     private LinearLayout trailerList;
-
     private List<CastData> castData;
     private GridView gridview; // Cast list
-    private final boolean[] gridViewResized = {false}; // boolean for resize gridview hack
-
-    private FloatingActionButton fabAdd, fabDel;
+    private FloatingActionButton fabAdd, fabDel, fabPlay;
 
     private FirebaseAnalytics mFirebaseAnalytics;
-
+    private InterstitialAd mInterstitialAd;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +185,7 @@ public class TVShowActivity extends AppCompatActivity
         textNumSeasons = (TextView) findViewById(R.id.num_seasons);
         gridview = (GridView) findViewById(R.id.cast_data);
         trailerList = (LinearLayout) findViewById(R.id.tvshow_trailers);
+        fabPlay = (FloatingActionButton) findViewById(R.id.fab_play);
 
         youTubePlayerFragment = YouTubePlayerFragment.newInstance();
         getFragmentManager().beginTransaction().add(R.id.youtube_fragment, youTubePlayerFragment).commit();
@@ -206,6 +207,41 @@ public class TVShowActivity extends AppCompatActivity
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         ActivityUtils.firebaseAnalyticsLogEventSelectContent(
                 mFirebaseAnalytics, PAGE_TV_SHOW_DETAILS, PAGE_TV_SHOW_DETAILS, TYPE_PAGE);
+
+        setupInterstitialAd();
+        fabPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mInterstitialAd.isLoaded())
+                    mInterstitialAd.show();
+            }
+        });
+
+        mContext = this;
+    }
+
+    private void setupInterstitialAd() {
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+                SharedPreferences prefs = getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+                if (prefs.getBoolean("showRate", true)) {
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                ActivityUtils.showRatingDialog(getApplicationContext());
+                            }
+                        }, 5000);
+                }
+            }
+
+        });
     }
 
     @Override
@@ -256,6 +292,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Defines what to do when click on add/remove from Favorites buttons.
+     *
      * @param container TVShowData
      */
     private void defineClickFavoriteButtons(final TVShowData container) {
@@ -299,7 +336,7 @@ public class TVShowActivity extends AppCompatActivity
                 Snackbar.make(view, getString(R.string.favorites_del_message), DURATION)
                         .setAction("Action", null).show();
                 getContentResolver().delete(URI, COLUMN_TV_SHOW_ID + " = ?",
-                        new String[]{Integer.toString(tvShowId)} );
+                        new String[]{Integer.toString(tvShowId)});
 
                 fabAdd.setVisibility(View.VISIBLE);
                 fabDel.setVisibility(View.INVISIBLE);
@@ -335,6 +372,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Fills the TV Show Details in screen.
+     *
      * @param container TVShowData
      */
     private void populateDetails(final TVShowData container) {
@@ -361,6 +399,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates Title in screen.
+     *
      * @param container TVShowData
      */
     private void PopulateDetailsTitle(final TVShowData container) {
@@ -377,8 +416,9 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates poster in screen.
+     *
      * @param container TVShowData
-     * @param callback callback
+     * @param callback  callback
      */
     private void PopulateDetailsPoster(final TVShowData container, Callback callback) {
 
@@ -401,23 +441,24 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates genres and countries in screen.
+     *
      * @param container TVShowData
      */
     private void PopulateDetailsGenresCountries(final TVShowData container) {
-        if(!container.getGenres().isEmpty()) {
+        if (!container.getGenres().isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            for(String genre: container.getGenres() ) {
+            for (String genre : container.getGenres()) {
                 builder.append(genre);
                 builder.append(" | ");
             }
-            builder.delete(builder.length()-3, builder.length());
+            builder.delete(builder.length() - 3, builder.length());
             textGenres.setText(builder.toString());
             textGenres.setVisibility(View.VISIBLE);
-        } else{
+        } else {
             textGenres.setVisibility(View.GONE);
         }
 
-        if(!container.getOriginalCountries().isEmpty()) {
+        if (!container.getOriginalCountries().isEmpty()) {
             textCountries.setText(container.getOriginalCountries());
         } else {
             textCountries.setVisibility(View.GONE);
@@ -426,26 +467,27 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates Production Companies in screen.
+     *
      * @param container TVShowData
      */
     private void PopulateDetailsProdCompanies(final TVShowData container) {
-        if(!container.getProductionCompanies().isEmpty()) {
+        if (!container.getProductionCompanies().isEmpty()) {
             StringBuilder builder = new StringBuilder();
-            for(String podCompany: container.getProductionCompanies() ) {
+            for (String podCompany : container.getProductionCompanies()) {
                 builder.append(podCompany);
                 builder.append(" | ");
             }
-            builder.delete(builder.length()-3, builder.length());
+            builder.delete(builder.length() - 3, builder.length());
             textProdCompanies.setText(builder.toString());
             textProdCompanies.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             textProdCompanies.setVisibility(View.GONE);
         }
     }
 
     /**
      * Populates status, homepage, overview and languages in screen.
+     *
      * @param container TVShowData
      */
     private void PopulateDetailsStatus(final TVShowData container) {
@@ -468,7 +510,7 @@ public class TVShowActivity extends AppCompatActivity
             overview.setText(container.getOverview());
         }
 
-        if (container.getOriginalLanguage() != null){
+        if (container.getOriginalLanguage() != null) {
             textLanguage.setText(container.getOriginalLanguage());
         } else {
             textLanguage.setVisibility(View.GONE);
@@ -477,6 +519,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates first air date, last air date, episodes and seasons in screen.
+     *
      * @param container TVShowData
      */
     private void PopulateDetailsDates(final TVShowData container) {
@@ -510,6 +553,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates the trailers list in screen.
+     *
      * @param data list of trailer data
      */
     private void populateTrailerList(List<TrailerData> data) {
@@ -575,6 +619,7 @@ public class TVShowActivity extends AppCompatActivity
 
     /**
      * Populates the Cast list in screen.
+     *
      * @param data list of cast data
      */
     private void populateCastList(final List<CastData> data) {
@@ -594,7 +639,7 @@ public class TVShowActivity extends AppCompatActivity
             }
             index++;
             adds += adapter.add(new ImageItem(cast.getCastImagePath(), cast.getPersonId(),
-                        cast.getCastName(), cast.getCharacter(), null));
+                    cast.getCastName(), cast.getCharacter(), null));
         }
         if (adds != 0)
             adapter.notifyDataSetChanged();
@@ -603,8 +648,6 @@ public class TVShowActivity extends AppCompatActivity
 
         ActivityUtils.changeGridViewHeight(gridview, adapter.getCount(), gridViewResized);
     }
-
-
 
 
     /**
@@ -619,14 +662,14 @@ public class TVShowActivity extends AppCompatActivity
         private String requestType = null;
 
         // Constructor
-        public FetchTVShowTask(String requestType){
+        public FetchTVShowTask(String requestType) {
             this.requestType = requestType;
         }
 
         @Override
         protected JSONObject doInBackground(Integer... params) {
             String request = null;
-            switch(requestType){
+            switch (requestType) {
                 case TV_SHOW_DETAILS:
                     request = "/tv/" + params[0];
                     break;
@@ -645,7 +688,7 @@ public class TVShowActivity extends AppCompatActivity
         protected void onPostExecute(final JSONObject jObj) {
             super.onPostExecute(jObj);
 
-            switch(requestType){
+            switch (requestType) {
                 case TV_SHOW_DETAILS:
                     processTVShowDetails(jObj);
                     break;
@@ -660,6 +703,7 @@ public class TVShowActivity extends AppCompatActivity
 
         /**
          * Process the Movie Details data.
+         *
          * @param jObj object
          */
         private void processTVShowDetails(JSONObject jObj) {
@@ -688,7 +732,7 @@ public class TVShowActivity extends AppCompatActivity
             } else {
                 final Cursor cursor = getContentResolver().query(
                         ContentUris.withAppendedId(URI, tvShowId),
-                        new String[]{ COLUMN_NAME, COLUMN_OVERVIEW, COLUMN_POSTER_PATH,
+                        new String[]{COLUMN_NAME, COLUMN_OVERVIEW, COLUMN_POSTER_PATH,
                                 COLUMN_BACKGROUND_PATH, COLUMN_VOTE_AVERAGE, COLUMN_VOTE_COUNT,
                                 COLUMN_ORIGINAL_LANGUAGE, COLUMN_ORIGINAL_COUNTRIES, COLUMN_GENRES,
                                 COLUMN_STATUS, COLUMN_PROD_COMPANIES, COLUMN_HOMEPAGE,
@@ -716,6 +760,7 @@ public class TVShowActivity extends AppCompatActivity
 
         /**
          * Process the TVShow Trailers data.
+         *
          * @param jObj object
          */
         private void processTVShowTrailers(JSONObject jObj) {
@@ -740,6 +785,7 @@ public class TVShowActivity extends AppCompatActivity
 
         /**
          * Process the TVShow cast data.
+         *
          * @param jObj object
          */
         private void processTVShowCast(JSONObject jObj) {

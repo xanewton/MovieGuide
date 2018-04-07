@@ -82,7 +82,7 @@ public final class  Constants {
     public static final String TYPE_ADD_FAV = "add to Favorites";
     public static final String TYPE_DEL_FAV = "remove from Favorites";
     public static final String TYPE_PAGE = "page";
-
+    public static final String GRID_COUNTER_KEY = "grid counter";
     /**
      * Boolean used to log or not lines
      * Usage:
