@@ -39,7 +39,7 @@ Create a new resources file (using this path:/app/src/main/res/values/api_keys.x
 
 ## License
 
-Copyright 2017 Angel Garcia
+Copyright 2017 Angel Newton
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
